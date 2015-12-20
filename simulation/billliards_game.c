@@ -12,64 +12,68 @@
 #define NUM_BALLS 9
 
 BilliardsGame* create_billiards_game(GLint shader_program) {
-    BilliardsGame* billiards_game = malloc(sizeof(BilliardsGame));
+    BilliardsGame* game = malloc(sizeof(BilliardsGame));
 
-    billiards_game->table = malloc(sizeof(BilliardsTable));
-    billiards_game->balls = malloc(sizeof(BilliardsBall*) * NUM_BALLS);
+    game->table = malloc(sizeof(BilliardsTable));
+    game->balls = malloc(sizeof(BilliardsBall*) * NUM_BALLS);
     for (int i = 0; i < NUM_BALLS; i++) {
-        billiards_game->balls[i] = malloc(sizeof(BilliardsBall));
+        game->balls[i] = malloc(sizeof(BilliardsBall));
     }
+    game->cue_ball_arrow = malloc(sizeof(CueBallArrow));
 
-    billiards_game->table->model = create_model("objects/models/table.obj", shader_program);
+    game->table->model = create_model("objects/models/table.obj", shader_program);
 
-    billiards_game->balls[0]->model = create_model("objects/models/ball_1.obj", shader_program);
-    billiards_game->balls[0]->position = create_vec(-0.20, 0.28, -0.12, 0.0);
-    billiards_game->balls[0]->velocity = create_vec(0.0, 0.0, 0.0, 0.0);
-    billiards_game->balls[0]->theta = 0.0;
+    game->balls[0]->model = create_model("objects/models/cue_ball.obj", shader_program);
+    game->balls[0]->position = create_vec(-0.20, 0.28, -0.12, 0.0);
+    game->balls[0]->velocity = create_vec(0.0, 0.0, 0.0, 0.0);
+    game->balls[0]->theta = 0.0;
 
-    billiards_game->balls[1]->model = create_model("objects/models/ball_1.obj", shader_program);
-    billiards_game->balls[1]->position = create_vec(-0.20, 0.28, 0.0, 0.0);
-    billiards_game->balls[1]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
-    billiards_game->balls[1]->theta = 0.0;
+    game->balls[1]->model = create_model("objects/models/ball_1.obj", shader_program);
+    game->balls[1]->position = create_vec(-0.20, 0.28, 0.0, 0.0);
+    game->balls[1]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
+    game->balls[1]->theta = 0.0;
 
-    billiards_game->balls[2]->model = create_model("objects/models/ball_2.obj", shader_program);
-    billiards_game->balls[2]->position = create_vec(-0.10, 0.28, 0.0, 0.0);
-    billiards_game->balls[2]->velocity = create_vec(0.5, 0.0, 0.4, 0.0);
-    billiards_game->balls[2]->theta = 0.0;
+    game->balls[2]->model = create_model("objects/models/ball_2.obj", shader_program);
+    game->balls[2]->position = create_vec(-0.10, 0.28, 0.0, 0.0);
+    game->balls[2]->velocity = create_vec(0.5, 0.0, 0.4, 0.0);
+    game->balls[2]->theta = 0.0;
 
-    billiards_game->balls[3]->model = create_model("objects/models/ball_3.obj", shader_program);
-    billiards_game->balls[3]->position = create_vec(0.00, 0.28, 0.1, 0.0);
-    billiards_game->balls[3]->velocity = create_vec(0.0, 0.0, 0.4, 0.0);
-    billiards_game->balls[3]->theta = 0.0;
+    game->balls[3]->model = create_model("objects/models/ball_3.obj", shader_program);
+    game->balls[3]->position = create_vec(0.00, 0.28, 0.1, 0.0);
+    game->balls[3]->velocity = create_vec(0.0, 0.0, 0.4, 0.0);
+    game->balls[3]->theta = 0.0;
 
-    billiards_game->balls[4]->model = create_model("objects/models/ball_4.obj", shader_program);
-    billiards_game->balls[4]->position = create_vec(0.10, 0.28, 0.0, 0.0);
-    billiards_game->balls[4]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
-    billiards_game->balls[4]->theta = 0.0;
+    game->balls[4]->model = create_model("objects/models/ball_4.obj", shader_program);
+    game->balls[4]->position = create_vec(0.10, 0.28, 0.0, 0.0);
+    game->balls[4]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
+    game->balls[4]->theta = 0.0;
 
-    billiards_game->balls[5]->model = create_model("objects/models/ball_5.obj", shader_program);
-    billiards_game->balls[5]->position = create_vec(0.20, 0.28, 0.0, 0.0);
-    billiards_game->balls[5]->velocity = create_vec(0.2, 0.0, 0.3, 0.0);
-    billiards_game->balls[5]->theta = 0.0;
+    game->balls[5]->model = create_model("objects/models/ball_5.obj", shader_program);
+    game->balls[5]->position = create_vec(0.20, 0.28, 0.0, 0.0);
+    game->balls[5]->velocity = create_vec(0.2, 0.0, 0.3, 0.0);
+    game->balls[5]->theta = 0.0;
 
-    billiards_game->balls[6]->model = create_model("objects/models/ball_6.obj", shader_program);
-    billiards_game->balls[6]->position = create_vec(0.30, 0.28, 0.0, 0.0);
-    billiards_game->balls[6]->velocity = create_vec(0.2, 0.0, 0.1, 0.0);
-    billiards_game->balls[6]->theta = 0.0;
+    game->balls[6]->model = create_model("objects/models/ball_6.obj", shader_program);
+    game->balls[6]->position = create_vec(0.30, 0.28, 0.0, 0.0);
+    game->balls[6]->velocity = create_vec(0.2, 0.0, 0.1, 0.0);
+    game->balls[6]->theta = 0.0;
 
-    billiards_game->balls[7]->model = create_model("objects/models/ball_7.obj", shader_program);
-    billiards_game->balls[7]->position = create_vec(0.40, 0.28, 0.0, 0.0);
-    billiards_game->balls[7]->velocity = create_vec(0.2, 0.0, 0.3, 0.0);
-    billiards_game->balls[7]->theta = 0.0;
+    game->balls[7]->model = create_model("objects/models/ball_7.obj", shader_program);
+    game->balls[7]->position = create_vec(0.40, 0.28, 0.0, 0.0);
+    game->balls[7]->velocity = create_vec(0.2, 0.0, 0.3, 0.0);
+    game->balls[7]->theta = 0.0;
 
-    billiards_game->balls[8]->model = create_model("objects/models/ball_8.obj", shader_program);
-    billiards_game->balls[8]->position = create_vec(0.50, 0.28, 0.0, 0.0);
-    billiards_game->balls[8]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
-    billiards_game->balls[8]->theta = 0.0;
+    game->balls[8]->model = create_model("objects/models/ball_8.obj", shader_program);
+    game->balls[8]->position = create_vec(0.50, 0.28, 0.0, 0.0);
+    game->balls[8]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
+    game->balls[8]->theta = 0.0;
 
-    billiards_game->last_draw_time = glfwGetTime();
+    game->cue_ball_arrow->model = create_model("objects/models/arrow.obj", shader_program);
+    game->cue_ball_arrow->theta = 0.0;
 
-    return billiards_game;
+    game->last_draw_time = glfwGetTime();
+
+    return game;
 }
 
 static void handle_collision_for_ball_with_edge(BilliardsBall* ball) {
@@ -174,7 +178,7 @@ static void handle_friction(BilliardsBall* ball, double elapsed_time) {
 }
 
 static void move_ball(BilliardsBall* ball, double elapsed_time) {
-    handle_friction(ball, elapsed_time);
+    //handle_friction(ball, elapsed_time);
     Vec* velocity = ball->velocity;
     Vec* old_position = ball->position;
     ball->theta += sqrt(dot_vec(ball->velocity, ball->velocity)) * elapsed_time * 20;
@@ -195,14 +199,32 @@ static void draw_balls(BilliardsGame* game, double elapsed_time) {
     }
 }
 
-static void draw_table(BilliardsGame* billiards_game) {
-    draw_model(billiards_game->table->model);
+static void draw_table(BilliardsGame* game) {
+    draw_model(game->table->model);
 }
 
-void draw_billiards_game(BilliardsGame* billiards_game) {
+static void draw_arrow(BilliardsGame* game) {
+    CueBallArrow* cue_ball_arrow = game->cue_ball_arrow;
+    BilliardsBall* cue_ball = game->balls[0];
+    Mat* scale = create_scale_mat(0.006, 0.012, 0.006);
+    Mat* rotate_sideways = create_rotation_mat(&x_axis, M_PI / 2.0);
+    Mat* move_outside_sphere = create_translation_mat(0, 0, -0.05);
+    Mat* rotate_around_sphere = create_rotation_mat(&y_axis, cue_ball_arrow->theta += 0.01);
+    Mat* move_to_sphere = create_translation_mat(cue_ball->position->x, cue_ball->position->y, cue_ball->position->z);
+
+    cue_ball_arrow->model->model_mat = mat_times_mat(move_to_sphere,
+                                                     mat_times_mat(mat_times_mat(rotate_around_sphere,
+                                                                                 move_outside_sphere),
+                                                                   mat_times_mat(rotate_sideways,
+                                                                                 scale)));
+    draw_model(cue_ball_arrow->model);
+}
+
+void draw_billiards_game(BilliardsGame* game) {
     double current_time = glfwGetTime();
-    double elapsed_time = current_time - billiards_game->last_draw_time;
-    billiards_game->last_draw_time = current_time;
-    draw_balls(billiards_game, elapsed_time);
-    draw_table(billiards_game);
+    double elapsed_time = current_time - game->last_draw_time;
+    game->last_draw_time = current_time;
+    draw_balls(game, elapsed_time);
+    draw_table(game);
+    draw_arrow(game);
 }

@@ -9,10 +9,16 @@ typedef struct BilliardsBall {
     double theta;
 } BilliardsBall;
 
+typedef struct CueBallArrow {
+    Model* model;
+    double theta;
+} CueBallArrow;
+
 typedef struct BilliardsGame {
     double last_draw_time;
     BilliardsTable* table;
     BilliardsBall** balls;
+    CueBallArrow* cue_ball_arrow;
 } BilliardsGame;
 
 BilliardsGame* create_billiards_game(GLint shader_program);
