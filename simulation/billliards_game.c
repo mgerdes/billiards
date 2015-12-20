@@ -25,7 +25,7 @@ BilliardsGame* create_billiards_game(GLint shader_program) {
 
     game->balls[0]->model = create_model("objects/models/cue_ball.obj", shader_program);
     game->balls[0]->position = create_vec(-0.20, 0.28, -0.12, 0.0);
-    game->balls[0]->velocity = create_vec(0.0, 0.0, 0.0, 0.0);
+    game->balls[0]->velocity = create_vec(0.01, 0.0, 0.0, 0.0);
     game->balls[0]->theta = 0.0;
 
     game->balls[1]->model = create_model("objects/models/ball_1.obj", shader_program);
@@ -109,9 +109,11 @@ static void handle_collision_for_ball_with_other_balls(BilliardsGame* game, Bill
         double y_o = other_ball->position->y;
         double z_o = other_ball->position->z;
 
-        if (fabs(x - x_o) < 0.03 &&
-            fabs(y - y_o) < 0.03 &&
-            fabs(z - z_o) < 0.03) {
+        double distance = sqrt((x-x_o)*(x-x_o) + (y-y_o)*(y-y_o) + (z-z_o)*(z-z_o));
+
+        double radius = 0.03613;
+
+        if (distance < radius) {
             Vec* x1 = create_vec(x,y,z,0);
             Vec* x2 = create_vec(x_o,y_o,z_o,0);
             Vec* v1 =  ball->velocity;
@@ -129,13 +131,10 @@ static void handle_collision_for_ball_with_other_balls(BilliardsGame* game, Bill
             double scale_temp2 = dot_vec(temp21, temp22) / divisor2;
             Vec* temp23 = scale_vec(temp21, scale_temp2);
 
-            Vec* v1_p = vec_minus_vec(v1, temp13);
-            Vec* v2_p = vec_minus_vec(v2, temp23);
+            ball->velocity = vec_minus_vec(v1, temp13);
+            other_ball->velocity = vec_minus_vec(v2, temp23);
 
-            ball->velocity = v1_p;
-            other_ball->velocity = v2_p;
         }
-
     }
 }
 
@@ -156,36 +155,17 @@ static Mat* set_model_mat_for_ball(BilliardsBall* ball) {
     ball->model->model_mat = mat_times_mat(translation_mat, rotation_mat);
 }
 
-static void handle_friction(BilliardsBall* ball, double elapsed_time) {
-    if (fabs(ball->velocity->x) > 0.01) {
-        if (ball->velocity->x > 0) {
-            ball->velocity->x -= 0.05 * elapsed_time;
-        } else {
-            ball->velocity->x += 0.05 * elapsed_time;
-        }
-    } else {
-        ball->velocity->x = 0;
-    }
-
-    if (fabs(ball->velocity->z) > 0.01) {
-        if (ball->velocity->z > 0) {
-            ball->velocity->z -= 0.05 * elapsed_time;
-        } else {
-            ball->velocity->z += 0.05 * elapsed_time;
-        }
-    } else {
-        ball->velocity->z = 0;
-    }
-}
-
 static void move_ball(BilliardsBall* ball, double elapsed_time) {
-    handle_friction(ball, elapsed_time);
     Vec* velocity = ball->velocity;
-    Vec* old_position = ball->position;
-    ball->theta += sqrt(dot_vec(ball->velocity, ball->velocity)) * elapsed_time * 20;
-    ball->position = create_vec(old_position->x + velocity->x * elapsed_time,
-                                old_position->y + velocity->y * elapsed_time,
-                                old_position->z + velocity->z * elapsed_time, 0);
+    if (sqrt(dot_vec(velocity, velocity)) > 0.001) {
+        Vec* position = ball->position;
+        Vec* acceleration = scale_vec(normalize_vec(velocity), -0.1);
+
+        ball->velocity = vec_plus_vec(velocity, scale_vec(acceleration, elapsed_time));
+        ball->position = vec_plus_vec(position, scale_vec(vec_plus_vec(velocity, ball->velocity), elapsed_time / 2.0));
+
+        ball->theta += sqrt(dot_vec(ball->velocity, ball->velocity)) * elapsed_time * 20;
+    }
 }
 
 static void draw_balls(BilliardsGame* game, double elapsed_time) {

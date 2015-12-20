@@ -40,6 +40,10 @@ Vec* vec_minus_vec(Vec* v1, Vec* v2) {
     return create_vec(v1->x - v2->x, v1->y - v2->y, v1->z - v2->z, 1.0);
 }
 
+Vec* vec_plus_vec(Vec* v1, Vec* v2) {
+    return create_vec(v1->x + v2->x, v1->y + v2->y, v1->z + v2->z, 1.0);
+}
+
 Vec* normalize_vec(Vec* v) {
     double length = sqrt(dot_vec(v, v));
     return create_vec(v->x / length, v->y / length, v->z / length, v->w);
