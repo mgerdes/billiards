@@ -10,6 +10,7 @@ typedef struct BilliardsBall {
 } BilliardsBall;
 
 typedef struct BilliardsGame {
+    double last_draw_time;
     BilliardsTable* table;
     BilliardsBall** balls;
 } BilliardsGame;
