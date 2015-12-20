@@ -12,6 +12,7 @@ typedef struct BilliardsBall {
 typedef struct CueBallArrow {
     Model* model;
     double theta;
+    double magnitude;
 } CueBallArrow;
 
 typedef struct BilliardsGame {
@@ -23,3 +24,4 @@ typedef struct BilliardsGame {
 
 BilliardsGame* create_billiards_game(GLint shader_program);
 void draw_billiards_game(BilliardsGame* billiards_game);
+void hit_cue_ball(BilliardsGame* game);

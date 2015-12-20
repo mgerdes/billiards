@@ -12,28 +12,45 @@
 
 Camera* camera;
 
-void handle_input() {
+void handle_input(BilliardsGame* game) {
     double current_seconds = glfwGetTime();
     static double last_key_press;
 
+    if (glfwGetKey(window, GLFW_KEY_A)) {
+        rotate_camera_left(camera, 0.04);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D)) {
+        rotate_camera_left(camera, -0.04);
+    }
+    if (glfwGetKey(window, GLFW_KEY_W)) {
+        rotate_camera_up(camera, -0.04);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S)) {
+        rotate_camera_up(camera, 0.04);
+    }
+    if (glfwGetKey(window, GLFW_KEY_COMMA)) {
+        zoom_camera(camera, 1.01);
+    }
+    if (glfwGetKey(window, GLFW_KEY_PERIOD)) {
+        zoom_camera(camera, 0.99);
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT)) {
+        game->cue_ball_arrow->theta += 0.02;
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
+        game->cue_ball_arrow->theta -= 0.02;
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP)) {
+        game->cue_ball_arrow->magnitude += 0.02;
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN)) {
+        game->cue_ball_arrow->magnitude -= 0.02;
+    }
+
     if (current_seconds > last_key_press + 0.15) {
-        if (glfwGetKey(window, GLFW_KEY_A)) {
-            rotate_camera_left(camera, 0.04);
-        }
-        if (glfwGetKey(window, GLFW_KEY_D)) {
-            rotate_camera_left(camera, -0.04);
-        }
-        if (glfwGetKey(window, GLFW_KEY_W)) {
-            rotate_camera_up(camera, -0.04);
-        }
-        if (glfwGetKey(window, GLFW_KEY_S)) {
-            rotate_camera_up(camera, 0.04);
-        }
-        if (glfwGetKey(window, GLFW_KEY_COMMA)) {
-            zoom_camera(camera, 1.01);
-        }
-        if (glfwGetKey(window, GLFW_KEY_PERIOD)) {
-            zoom_camera(camera, 0.99);
+        if (glfwGetKey(window, GLFW_KEY_SPACE)) {
+            hit_cue_ball(game);
+            last_key_press = current_seconds;
         }
     }
 }
@@ -62,7 +79,7 @@ int main() {
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        handle_input();
+        handle_input(billiards_game);
 
         view_mat = create_look_at_mat(camera);
         glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat->m);

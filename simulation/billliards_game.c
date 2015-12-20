@@ -70,6 +70,7 @@ BilliardsGame* create_billiards_game(GLint shader_program) {
 
     game->cue_ball_arrow->model = create_model("objects/models/arrow.obj", shader_program);
     game->cue_ball_arrow->theta = 0.0;
+    game->cue_ball_arrow->magnitude = 1.0;
 
     game->last_draw_time = glfwGetTime();
 
@@ -178,7 +179,7 @@ static void handle_friction(BilliardsBall* ball, double elapsed_time) {
 }
 
 static void move_ball(BilliardsBall* ball, double elapsed_time) {
-    //handle_friction(ball, elapsed_time);
+    handle_friction(ball, elapsed_time);
     Vec* velocity = ball->velocity;
     Vec* old_position = ball->position;
     ball->theta += sqrt(dot_vec(ball->velocity, ball->velocity)) * elapsed_time * 20;
@@ -206,10 +207,10 @@ static void draw_table(BilliardsGame* game) {
 static void draw_arrow(BilliardsGame* game) {
     CueBallArrow* cue_ball_arrow = game->cue_ball_arrow;
     BilliardsBall* cue_ball = game->balls[0];
-    Mat* scale = create_scale_mat(0.006, 0.012, 0.006);
+    Mat* scale = create_scale_mat(0.006, 0.012 * game->cue_ball_arrow->magnitude, 0.006);
     Mat* rotate_sideways = create_rotation_mat(&x_axis, M_PI / 2.0);
     Mat* move_outside_sphere = create_translation_mat(0, 0, -0.05);
-    Mat* rotate_around_sphere = create_rotation_mat(&y_axis, cue_ball_arrow->theta += 0.01);
+    Mat* rotate_around_sphere = create_rotation_mat(&y_axis, cue_ball_arrow->theta);
     Mat* move_to_sphere = create_translation_mat(cue_ball->position->x, cue_ball->position->y, cue_ball->position->z);
 
     cue_ball_arrow->model->model_mat = mat_times_mat(move_to_sphere,
@@ -218,6 +219,11 @@ static void draw_arrow(BilliardsGame* game) {
                                                                    mat_times_mat(rotate_sideways,
                                                                                  scale)));
     draw_model(cue_ball_arrow->model);
+}
+
+void hit_cue_ball(BilliardsGame* game) {
+    game->balls[0]->velocity = rotate_vec_y(create_vec(0.0, 0.0, -0.4 * game->cue_ball_arrow->magnitude, 0.0),
+                                            game->cue_ball_arrow->theta);
 }
 
 void draw_billiards_game(BilliardsGame* game) {
