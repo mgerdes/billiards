@@ -19,7 +19,7 @@ BilliardsGame* create_billiards_game(GLint shader_program) {
     for (int i = 0; i < NUM_BALLS; i++) {
         game->balls[i] = malloc(sizeof(BilliardsBall));
     }
-    game->cue_ball_arrow = malloc(sizeof(CueBallArrow));
+    game->cue_stick = malloc(sizeof(CueStick));
 
     game->table->model = create_model("objects/models/table.obj", shader_program);
 
@@ -68,9 +68,9 @@ BilliardsGame* create_billiards_game(GLint shader_program) {
     game->balls[8]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
     game->balls[8]->theta = 0.0;
 
-    game->cue_ball_arrow->model = create_model("objects/models/arrow.obj", shader_program);
-    game->cue_ball_arrow->theta = 0.0;
-    game->cue_ball_arrow->magnitude = 1.0;
+    game->cue_stick->model = create_model("objects/models/cue.obj", shader_program);
+    game->cue_stick->theta = 0.0;
+    game->cue_stick->magnitude = 1.0;
 
     game->last_draw_time = glfwGetTime();
 
@@ -133,7 +133,6 @@ static void handle_collision_for_ball_with_other_balls(BilliardsGame* game, Bill
 
             ball->velocity = vec_minus_vec(v1, temp13);
             other_ball->velocity = vec_minus_vec(v2, temp23);
-
         }
     }
 }
@@ -185,12 +184,12 @@ static void draw_table(BilliardsGame* game) {
 }
 
 static void draw_arrow(BilliardsGame* game) {
-    CueBallArrow* cue_ball_arrow = game->cue_ball_arrow;
+    CueStick* cue_ball_arrow = game->cue_stick;
     BilliardsBall* cue_ball = game->balls[0];
-    Mat* scale = create_scale_mat(0.006, 0.012 * game->cue_ball_arrow->magnitude, 0.006);
+    Mat* scale = create_scale_mat(0.4, 0.4, 0.4);
     Mat* rotate_sideways = create_rotation_mat(&x_axis, M_PI / 2.0);
-    Mat* move_outside_sphere = create_translation_mat(0, 0, -0.05);
-    Mat* rotate_around_sphere = create_rotation_mat(&y_axis, cue_ball_arrow->theta);
+    Mat* move_outside_sphere = create_translation_mat(-0.34 * cue_ball_arrow->magnitude, 0, 0.0);
+    Mat* rotate_around_sphere = create_rotation_mat(&y_axis, cue_ball_arrow->theta - (M_PI / 2.0));
     Mat* move_to_sphere = create_translation_mat(cue_ball->position->x, cue_ball->position->y, cue_ball->position->z);
 
     cue_ball_arrow->model->model_mat = mat_times_mat(move_to_sphere,
@@ -202,8 +201,8 @@ static void draw_arrow(BilliardsGame* game) {
 }
 
 void hit_cue_ball(BilliardsGame* game) {
-    game->balls[0]->velocity = rotate_vec_y(create_vec(0.0, 0.0, -0.4 * game->cue_ball_arrow->magnitude, 0.0),
-                                            game->cue_ball_arrow->theta);
+    game->balls[0]->velocity = rotate_vec_y(create_vec(0.0, 0.0, -0.4 * game->cue_stick->magnitude, 0.0),
+                                            game->cue_stick->theta);
 }
 
 void draw_billiards_game(BilliardsGame* game) {

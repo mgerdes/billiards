@@ -35,16 +35,16 @@ void handle_input(BilliardsGame* game) {
         zoom_camera(camera, 0.99);
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT)) {
-        game->cue_ball_arrow->theta += 0.02;
+        game->cue_stick->theta += 0.02;
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT)) {
-        game->cue_ball_arrow->theta -= 0.02;
+        game->cue_stick->theta -= 0.02;
     }
     if (glfwGetKey(window, GLFW_KEY_UP)) {
-        game->cue_ball_arrow->magnitude += 0.02;
+        game->cue_stick->magnitude += 0.02;
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN)) {
-        game->cue_ball_arrow->magnitude -= 0.02;
+        game->cue_stick->magnitude -= 0.02;
     }
 
     if (current_seconds > last_key_press + 0.15) {

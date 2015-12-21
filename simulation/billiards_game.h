@@ -9,17 +9,17 @@ typedef struct BilliardsBall {
     double theta;
 } BilliardsBall;
 
-typedef struct CueBallArrow {
+typedef struct CueStick {
     Model* model;
     double theta;
     double magnitude;
-} CueBallArrow;
+} CueStick;
 
 typedef struct BilliardsGame {
     double last_draw_time;
     BilliardsTable* table;
     BilliardsBall** balls;
-    CueBallArrow* cue_ball_arrow;
+    CueStick* cue_stick;
 } BilliardsGame;
 
 BilliardsGame* create_billiards_game(GLint shader_program);
