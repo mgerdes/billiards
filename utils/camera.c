@@ -19,15 +19,13 @@ Camera* create_camera(double center_x, double center_y, double center_z,
 
 void rotate_camera_up(Camera* cam, double degrees) {
     Vec* old_camera_pos = cam->position;
-    Vec* old_up = cam->up;
-    Vec* cross = cross_vec(old_camera_pos, old_up);
+    Vec* up = cam->up;
+    Vec* cross = cross_vec(old_camera_pos, up);
     Vec* u_hat = normalize_vec(cross);
 
     cam->position = rotate_vec(old_camera_pos, u_hat, degrees);
-    cam->up = rotate_vec(old_up, u_hat, degrees);
 
     delete_vec(old_camera_pos);
-    delete_vec(old_up);
     delete_vec(cross);
     delete_vec(u_hat);
 }
