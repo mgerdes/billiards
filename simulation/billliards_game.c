@@ -10,6 +10,9 @@
 #include "billiards_game.h"
 
 #define NUM_BALLS 9
+#define EPSILON 0.001
+#define MAX_HIT_MAGNITUDE 1.0
+#define MIN_HIT_MAGNITUDE 0.1
 
 BilliardsGame* create_billiards_game(GLint shader_program) {
     BilliardsGame* game = malloc(sizeof(BilliardsGame));
@@ -70,7 +73,7 @@ BilliardsGame* create_billiards_game(GLint shader_program) {
 
     game->cue_stick->model = create_model("objects/models/cue.obj", shader_program);
     game->cue_stick->theta = 0.0;
-    game->cue_stick->magnitude = 1.0;
+    game->cue_stick->hit_magnitude = 0.5;
 
     game->last_draw_time = glfwGetTime();
 
@@ -156,7 +159,7 @@ static Mat* set_model_mat_for_ball(BilliardsBall* ball) {
 
 static void move_ball(BilliardsBall* ball, double elapsed_time) {
     Vec* velocity = ball->velocity;
-    if (sqrt(dot_vec(velocity, velocity)) > 0.001) {
+    if (sqrt(dot_vec(velocity, velocity)) > EPSILON) {
         Vec* position = ball->position;
         Vec* acceleration = scale_vec(normalize_vec(velocity), -0.1);
 
@@ -183,26 +186,53 @@ static void draw_table(BilliardsGame* game) {
     draw_model(game->table->model);
 }
 
-static void draw_arrow(BilliardsGame* game) {
-    CueStick* cue_ball_arrow = game->cue_stick;
+static void draw_cue_stick(BilliardsGame* game) {
+    CueStick* cue_stick = game->cue_stick;
     BilliardsBall* cue_ball = game->balls[0];
     Mat* scale = create_scale_mat(0.4, 0.4, 0.4);
     Mat* rotate_sideways = create_rotation_mat(&x_axis, M_PI / 2.0);
-    Mat* move_outside_sphere = create_translation_mat(-0.34 * cue_ball_arrow->magnitude, 0, 0.0);
-    Mat* rotate_around_sphere = create_rotation_mat(&y_axis, cue_ball_arrow->theta - (M_PI / 2.0));
+    double offset =  0.33 + (0.08 / 0.9) * (cue_stick->hit_magnitude - 0.1);
+    Mat* move_outside_sphere = create_translation_mat(-offset, 0, 0.0);
+    Mat* rotate_around_sphere = create_rotation_mat(&y_axis, cue_stick->theta - (M_PI / 2.0));
     Mat* move_to_sphere = create_translation_mat(cue_ball->position->x, cue_ball->position->y, cue_ball->position->z);
 
-    cue_ball_arrow->model->model_mat = mat_times_mat(move_to_sphere,
+    cue_stick->model->model_mat = mat_times_mat(move_to_sphere,
                                                      mat_times_mat(mat_times_mat(rotate_around_sphere,
                                                                                  move_outside_sphere),
                                                                    mat_times_mat(rotate_sideways,
                                                                                  scale)));
-    draw_model(cue_ball_arrow->model);
+    draw_model(cue_stick->model);
+}
+
+static int no_balls_moving(BilliardsGame* game) {
+    for (int i = 0; i < NUM_BALLS; i++) {
+        BilliardsBall* ball = game->balls[i];
+        double speed_sqrd = dot_vec(ball->velocity, ball->velocity);
+        if (speed_sqrd > EPSILON) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 void hit_cue_ball(BilliardsGame* game) {
-    game->balls[0]->velocity = rotate_vec_y(create_vec(0.0, 0.0, -0.4 * game->cue_stick->magnitude, 0.0),
+    game->balls[0]->velocity = rotate_vec_y(create_vec(0.0, 0.0, -1.0 * game->cue_stick->hit_magnitude, 0.0),
                                             game->cue_stick->theta);
+    game->cue_stick->hit_magnitude = 0.50;
+}
+
+void increase_hit_magnitude(BilliardsGame* game) {
+    game->cue_stick->hit_magnitude += 0.006;
+    if (game->cue_stick->hit_magnitude > MAX_HIT_MAGNITUDE) {
+        game->cue_stick->hit_magnitude = MAX_HIT_MAGNITUDE;
+    }
+}
+
+void decrease_hit_magnitude(BilliardsGame* game) {
+    game->cue_stick->hit_magnitude -= 0.006;
+    if (game->cue_stick->hit_magnitude < MIN_HIT_MAGNITUDE) {
+        game->cue_stick->hit_magnitude = MIN_HIT_MAGNITUDE;
+    }
 }
 
 void draw_billiards_game(BilliardsGame* game) {
@@ -211,5 +241,7 @@ void draw_billiards_game(BilliardsGame* game) {
     game->last_draw_time = current_time;
     draw_balls(game, elapsed_time);
     draw_table(game);
-    draw_arrow(game);
+    if (no_balls_moving(game)) {
+        draw_cue_stick(game);
+    }
 }

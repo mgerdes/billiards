@@ -41,10 +41,10 @@ void handle_input(BilliardsGame* game) {
         game->cue_stick->theta -= 0.02;
     }
     if (glfwGetKey(window, GLFW_KEY_UP)) {
-        game->cue_stick->magnitude += 0.02;
+        increase_hit_magnitude(game);
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN)) {
-        game->cue_stick->magnitude -= 0.02;
+        decrease_hit_magnitude(game);
     }
 
     if (current_seconds > last_key_press + 0.15) {
