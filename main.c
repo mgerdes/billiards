@@ -57,7 +57,9 @@ void handle_input(BilliardsGame* game) {
 
 void init() {
     window_height = window_width = 1000;
-    camera = create_default_camera();
+    camera = create_camera(0, 0, 0,
+                           0, 1, 1,
+                           0, 1, 0);
 }
 
 int main() {
@@ -69,7 +71,7 @@ int main() {
 	GLint view_mat_location = glGetUniformLocation(shader_program, "view_mat");
 
     Mat* proj_mat = create_perspective_mat(67.0, 1.0, 0.1, 1000.0);
-    Mat* view_mat = create_look_at_mat(camera);
+    Mat* view_mat = mat_times_mat(create_look_at_mat(camera), create_translation_mat(-0.15, -0.15, 0.0));
 
 	glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, proj_mat->m);
     glUniformMatrix4fv(view_mat_location,1, GL_FALSE, view_mat->m);
@@ -81,7 +83,21 @@ int main() {
 
         handle_input(billiards_game);
 
-        view_mat = create_look_at_mat(camera);
+        Vec* cue_ball_position = billiards_game->balls[0]->position;
+
+        camera->position->x -= camera->center->x;
+        camera->position->y -= camera->center->y;
+        camera->position->z -= camera->center->z;
+
+        camera->center->x = cue_ball_position->x;
+        camera->center->y = cue_ball_position->y;
+        camera->center->z = cue_ball_position->z;
+
+        camera->position->x += camera->center->x;
+        camera->position->y += camera->center->y;
+        camera->position->z += camera->center->z;
+
+        view_mat = mat_times_mat(create_look_at_mat(camera), create_translation_mat(-0.15, -0.15, 0.0));
         glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat->m);
 
         draw_billiards_game(billiards_game);
