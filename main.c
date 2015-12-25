@@ -83,20 +83,6 @@ int main() {
 
         handle_input(billiards_game);
 
-        Vec* cue_ball_position = billiards_game->balls[0]->position;
-
-        camera->position->x -= camera->center->x;
-        camera->position->y -= camera->center->y;
-        camera->position->z -= camera->center->z;
-
-        camera->center->x = cue_ball_position->x;
-        camera->center->y = cue_ball_position->y;
-        camera->center->z = cue_ball_position->z;
-
-        camera->position->x += camera->center->x;
-        camera->position->y += camera->center->y;
-        camera->position->z += camera->center->z;
-
         view_mat = mat_times_mat(create_look_at_mat(camera), create_translation_mat(-0.15, -0.15, 0.0));
         glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat->m);
 

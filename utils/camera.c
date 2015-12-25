@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
 #include "camera.h"
 #include "maths.h"
 
@@ -19,15 +21,23 @@ Camera* create_camera(double center_x, double center_y, double center_z,
 
 void rotate_camera_up(Camera* cam, double degrees) {
     Vec* old_camera_pos = cam->position;
-    Vec* old_up = cam->up;
-    Vec* cross = cross_vec(old_camera_pos, old_up);
+    Vec* cross = cross_vec(old_camera_pos, cam->up);
     Vec* u_hat = normalize_vec(cross);
 
-    cam->position = rotate_vec(old_camera_pos, u_hat, degrees);
-    cam->up = rotate_vec(old_up, u_hat, degrees);
+    Vec* new_position = rotate_vec(old_camera_pos, u_hat, degrees);
+    Vec* normalized = normalize_vec(new_position);
 
+    if (normalized->y < 0.2 || normalized->y > 0.95) {
+        delete_vec(normalized);
+        delete_vec(new_position);
+        delete_vec(cross);
+        delete_vec(u_hat);
+        return;
+    }
+    cam->position = new_position;
+
+    delete_vec(normalized);
     delete_vec(old_camera_pos);
-    delete_vec(old_up);
     delete_vec(cross);
     delete_vec(u_hat);
 }
