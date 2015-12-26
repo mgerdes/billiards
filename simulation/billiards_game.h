@@ -7,6 +7,7 @@ typedef struct BilliardsBall {
     Vec* position;
     Vec* velocity;
     double theta;
+    int is_in_hole;
 } BilliardsBall;
 
 typedef struct CueStick {

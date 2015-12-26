@@ -14,6 +14,17 @@
 #define MAX_HIT_MAGNITUDE 1.0
 #define MIN_HIT_MAGNITUDE 0.1
 
+double hole_delta = 0.010;
+
+double holes[] = {
+    -0.299, -0.179,
+    -0.299,  0.179,
+     0.599, -0.179,
+     0.599,  0.179,
+     0.15,   -0.179,
+     0.15,    0.179
+};
+
 BilliardsGame* create_billiards_game(GLint shader_program) {
     BilliardsGame* game = malloc(sizeof(BilliardsGame));
 
@@ -30,46 +41,55 @@ BilliardsGame* create_billiards_game(GLint shader_program) {
     game->balls[0]->position = create_vec(-0.20, 0.28, -0.12, 0.0);
     game->balls[0]->velocity = create_vec(0.01, 0.0, 0.0, 0.0);
     game->balls[0]->theta = 0.0;
+    game->balls[0]->is_in_hole = 0;
 
     game->balls[1]->model = create_model("objects/models/ball_1.obj", shader_program);
     game->balls[1]->position = create_vec(-0.20, 0.28, 0.0, 0.0);
     game->balls[1]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
     game->balls[1]->theta = 0.0;
+    game->balls[1]->is_in_hole = 0;
 
     game->balls[2]->model = create_model("objects/models/ball_2.obj", shader_program);
     game->balls[2]->position = create_vec(-0.10, 0.28, 0.0, 0.0);
     game->balls[2]->velocity = create_vec(0.5, 0.0, 0.4, 0.0);
     game->balls[2]->theta = 0.0;
+    game->balls[2]->is_in_hole = 0;
 
     game->balls[3]->model = create_model("objects/models/ball_3.obj", shader_program);
     game->balls[3]->position = create_vec(0.00, 0.28, 0.1, 0.0);
     game->balls[3]->velocity = create_vec(0.0, 0.0, 0.4, 0.0);
     game->balls[3]->theta = 0.0;
+    game->balls[3]->is_in_hole = 0;
 
     game->balls[4]->model = create_model("objects/models/ball_4.obj", shader_program);
     game->balls[4]->position = create_vec(0.10, 0.28, 0.0, 0.0);
     game->balls[4]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
     game->balls[4]->theta = 0.0;
+    game->balls[4]->is_in_hole = 0;
 
     game->balls[5]->model = create_model("objects/models/ball_5.obj", shader_program);
     game->balls[5]->position = create_vec(0.20, 0.28, 0.0, 0.0);
     game->balls[5]->velocity = create_vec(0.2, 0.0, 0.3, 0.0);
     game->balls[5]->theta = 0.0;
+    game->balls[5]->is_in_hole = 0;
 
     game->balls[6]->model = create_model("objects/models/ball_6.obj", shader_program);
     game->balls[6]->position = create_vec(0.30, 0.28, 0.0, 0.0);
     game->balls[6]->velocity = create_vec(0.2, 0.0, 0.1, 0.0);
     game->balls[6]->theta = 0.0;
+    game->balls[6]->is_in_hole = 0;
 
     game->balls[7]->model = create_model("objects/models/ball_7.obj", shader_program);
     game->balls[7]->position = create_vec(0.40, 0.28, 0.0, 0.0);
     game->balls[7]->velocity = create_vec(0.2, 0.0, 0.3, 0.0);
     game->balls[7]->theta = 0.0;
+    game->balls[7]->is_in_hole = 0;
 
     game->balls[8]->model = create_model("objects/models/ball_8.obj", shader_program);
     game->balls[8]->position = create_vec(0.50, 0.28, 0.0, 0.0);
     game->balls[8]->velocity = create_vec(0.2, 0.0, 0.2, 0.0);
     game->balls[8]->theta = 0.0;
+    game->balls[8]->is_in_hole = 0;
 
     game->cue_stick->model = create_model("objects/models/cue.obj", shader_program);
     game->cue_stick->theta = 0.0;
@@ -170,10 +190,38 @@ static void move_ball(BilliardsBall* ball, double elapsed_time) {
     }
 }
 
+static void handle_ball_in_pocket(BilliardsBall* ball) {
+    for (int i = 0; i < 6; i++) {
+        double hole_x = holes[i*2];
+        double hole_z = holes[i*2+1];
+
+        double ball_x = ball->position->x;
+        double ball_z = ball->position->z;
+
+        double dist = sqrt((hole_x - ball_x)*(hole_x - ball_x)
+                           + (hole_z - ball_z)*(hole_z - ball_z));
+
+        if (dist <= hole_delta) {
+            ball->is_in_hole = 1;
+            ball->velocity = create_vec(0, 0, 0, 1);
+            ball->position = create_vec(1, 1, 1, 1);
+        }
+    }
+}
+
 static void draw_balls(BilliardsGame* game, double elapsed_time) {
     for (int i = 0; i < NUM_BALLS; i++) {
-        BilliardsBall* ball = game->balls[i];
+        BilliardsBall *ball = game->balls[i];
 
+        if (ball->is_in_hole) {
+            if (i == 0) {
+                ball->is_in_hole = 0;
+                game->balls[0]->position = create_vec(-0.20, 0.28, -0.12, 0.0);
+            }
+            continue;
+        }
+
+        handle_ball_in_pocket(ball);
         move_ball(ball, elapsed_time);
         handle_collisions_for_ball(game, ball);
         set_model_mat_for_ball(ball);
