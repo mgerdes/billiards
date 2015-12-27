@@ -1,3 +1,16 @@
+#ifndef BILLIARDS_GAME_H
+#define BILLIARDS_GAME_H
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include "camera.h"
+#include "maths.h"
+#include "mesh.h"
+#include "model.h"
+
 typedef struct BilliardsTable {
     Model* model;
 } BilliardsTable;
@@ -28,3 +41,5 @@ void draw_billiards_game(BilliardsGame* billiards_game);
 void hit_cue_ball(BilliardsGame* game);
 void increase_hit_magnitude(BilliardsGame* game);
 void decrease_hit_magnitude(BilliardsGame* game);
+
+#endif

@@ -13,8 +13,6 @@ set(SOURCE_FILES
         utils/camera.h
         utils/gl_utils.c
         utils/gl_utils.h
-        utils/mesh_import.c
-        utils/mesh_import.h
         simulation/billiards_game.h
         simulation/billliards_game.c
         main.c)

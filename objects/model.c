@@ -1,14 +1,3 @@
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "gl_utils.h"
-#include "camera.h"
-#include "maths.h"
-#include "mesh.h"
 #include "model.h"
 
 static Mesh* process_mesh(struct aiMesh* mesh, struct aiScene* scene) {

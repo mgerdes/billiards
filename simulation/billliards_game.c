@@ -1,12 +1,3 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include "camera.h"
-#include "maths.h"
-#include "mesh.h"
-#include "model.h"
 #include "billiards_game.h"
 
 #define NUM_BALLS 9

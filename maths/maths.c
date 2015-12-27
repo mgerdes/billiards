@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include "camera.h"
 #include "maths.h"
 
 Vec x_axis = {.x = 1, .y = 0, .z = 0, .w = 1};
@@ -204,11 +200,7 @@ Mat* mat_times_mat(Mat* m1, Mat* m2) {
     return m;
 }
 
-Mat* create_look_at_mat(Camera* camera) {
-    Vec* cam_pos = camera->position;
-    Vec* targ_pos = camera->center;
-    Vec* up = camera->up;
-
+Mat* create_look_at_mat(Vec* cam_pos, Vec* targ_pos, Vec* up) {
     Mat* p = create_translation_mat(-cam_pos->x, -cam_pos->y, -cam_pos->z);
     Vec* d = vec_minus_vec(targ_pos, cam_pos);
     Vec* f = normalize_vec(d);

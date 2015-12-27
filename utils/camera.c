@@ -1,8 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
 #include "camera.h"
-#include "maths.h"
 
 Camera* create_default_camera() {
     return create_camera(0,0,0,

@@ -1,12 +1,3 @@
-#include <assimp/cimport.h>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "camera.h"
-#include "maths.h"
 #include "mesh.h"
 
 Mesh* create_mesh(Vertex** vertices, int num_vertices, Texture* texture, Material* material) {

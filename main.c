@@ -5,7 +5,6 @@
 #include "gl_utils.h"
 #include "camera.h"
 #include "maths.h"
-#include "mesh_import.h"
 #include "mesh.h"
 #include "model.h"
 #include "billiards_game.h"
@@ -71,7 +70,7 @@ int main() {
 	GLint view_mat_location = glGetUniformLocation(shader_program, "view_mat");
 
     Mat* proj_mat = create_perspective_mat(67.0, 1.0, 0.1, 1000.0);
-    Mat* view_mat = mat_times_mat(create_look_at_mat(camera), create_translation_mat(-0.15, -0.15, 0.0));
+    Mat* view_mat = mat_times_mat(create_look_at_mat(camera->position, camera->center, camera->up), create_translation_mat(-0.15, -0.15, 0.0));
 
 	glUniformMatrix4fv(proj_mat_location, 1, GL_FALSE, proj_mat->m);
     glUniformMatrix4fv(view_mat_location,1, GL_FALSE, view_mat->m);
@@ -83,7 +82,7 @@ int main() {
 
         handle_input(billiards_game);
 
-        view_mat = mat_times_mat(create_look_at_mat(camera), create_translation_mat(-0.15, -0.15, 0.0));
+        Mat* view_mat = mat_times_mat(create_look_at_mat(camera->position, camera->center, camera->up), create_translation_mat(-0.15, -0.15, 0.0));
         glUniformMatrix4fv(view_mat_location, 1, GL_FALSE, view_mat->m);
 
         draw_billiards_game(billiards_game);

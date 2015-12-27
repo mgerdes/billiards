@@ -1,3 +1,10 @@
+#ifndef MATHS_H
+#define MATHS_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
 #define ONE_DEG_IN_RAD (2.0 * M_PI) / 360.0 // 0.017444444
 #define ONE_RAD_IN_DEG 360.0 / (2.0 * M_PI) //57.2957795
 
@@ -37,8 +44,10 @@ Mat* identity_mat();
 Mat* create_rotation_mat(Vec*, double);
 Mat* mat_times_mat(Mat*, Mat*);
 Mat* create_perspective_mat(double, double, double, double);
-Mat* create_look_at_mat(Camera*);
+Mat* create_look_at_mat(Vec*, Vec*, Vec*);
 Mat* create_translation_mat(double, double, double);
 Mat* create_scale_mat(double, double, double);
 Mat* invert_matrix(Mat*);
 void print_mat(Mat*);
+
+#endif

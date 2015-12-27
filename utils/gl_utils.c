@@ -1,18 +1,7 @@
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <time.h>
 #include "gl_utils.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "camera.h"
-#include "maths.h"
-
-#define COLOR_RED "\x1b[31m"
-#define COLOR_RESET "\x1b[0m"
 
 void gl_log(int severity_level, char* message, ...) {
     va_list argptr;
