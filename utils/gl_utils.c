@@ -41,29 +41,6 @@ void gl_log(int severity_level, char* message, ...) {
     fclose(file);
 }
 
-void init_gl(char* window_title) {
-    if (!glfwInit()) {
-        gl_log(ERROR, "Could not start GLFW3");
-    } 
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    window = glfwCreateWindow(window_width, window_height, window_title, NULL, NULL);
-
-    if (!window) {
-        gl_log(ERROR, "Could not create window");
-    }
-
-    glfwMakeContextCurrent(window);
-    glewExperimental = GL_TRUE;
-    glewInit();
-    glEnable(GL_DEPTH_TEST); 
-    glDepthFunc(GL_LESS);
-}
-
 GLuint compile_shader(char* filename, GLenum shader_type) {
     gl_log(INFO, "Started compiling shader: %s", filename);
 

@@ -9,6 +9,8 @@ set(SOURCE_FILES
         objects/mesh.h
         objects/model.c
         objects/model.h
+        window/window.c
+        window/window.h
         utils/camera.c
         utils/camera.h
         utils/gl_utils.c
@@ -17,7 +19,7 @@ set(SOURCE_FILES
         simulation/billliards_game.c
         main.c)
 
-include_directories(image_reader maths objects simulation utils)
+include_directories(image_reader maths objects simulation utils window)
 
 add_executable(billiards ${SOURCE_FILES})
 
