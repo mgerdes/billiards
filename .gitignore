@@ -1,6 +1,7 @@
 *.swp
 *.o
 *.out
+testRunner
 billiards
 CMakeCache.txt
 CMakeFiles
