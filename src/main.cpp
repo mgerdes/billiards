@@ -1,7 +1,8 @@
 #include <vector>
 #include "Shader.h"
-#include "Vec.h"
 #include "Mesh.h"
+#include "GeometricObjects.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -29,23 +30,35 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
+    Camera camera = Camera(Vector(2, 2, 2), Vector(0, 0, 0), Vector(0, 1, 0));
+
+    Light light = Light(Vector(0, 0, -2), Vector(0.6, 0.6, 0.6), Vector(0.3, 0.3, 0.3), Vector(0.0, 0.0, 0.0));
+    Material material = Material(Vector(1, 1, 0), Vector(1, 1, 0), Vector(1, 1, 0), 0.2);
+
     Shader shader = Shader("resources/shaders/vert.glsl", "resources/shaders/frag.glsl");
-    shader.setVec3Property("in_color", 1, 1, 0.5);
+    shader.setLightProperty(light);
+    shader.setVec3Property("camera_position", camera.position);
 
-    vector<Vec> trianglePositions;
-    trianglePositions.push_back(Vec(0, 1, 0));
-    trianglePositions.push_back(Vec(1, 0, 0));
-    trianglePositions.push_back(Vec(-1, 0, 0));
-    trianglePositions.push_back(Vec(0, -1, 0));
-    trianglePositions.push_back(Vec(1, 0, 0));
-    trianglePositions.push_back(Vec(-1, 0, 0));
+    Mesh square = Mesh(GeometricObjects::getCubeVertices(),
+                       GeometricObjects::getCubeNormals(),
+                       material, shader);
 
-    Mesh triangle = Mesh(trianglePositions, shader);
+    float theta = 0;
+    Matrix modelMatrix;
+    Matrix rotationMatrix;
+    Matrix translationMatrix;
+    Matrix scaleMatrix;
 
     while (!glfwWindowShouldClose(window)) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        triangle.draw();
+        translationMatrix = Matrix(Vector(0.0, 0.0, 0.0));
+        rotationMatrix = Matrix(Vector(0, 1, 0), theta += 0.01);
+        scaleMatrix = Matrix(0.2);
+        modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
+
+        shader.setMatProperty("model_mat", modelMatrix.m);
+        square.draw();
 
         glfwPollEvents();
         glfwSwapBuffers(window);

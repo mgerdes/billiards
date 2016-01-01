@@ -8,7 +8,9 @@
 #include <unordered_map>
 #include <vector>
 #include "Util.h"
-#include "Vec.h"
+#include "Vector.h"
+#include "Material.h"
+#include "Light.h"
 
 using namespace std;
 
@@ -19,7 +21,23 @@ private:
 public:
     Shader(string vertexShaderLocation, string fragmentShaderLocation);
 
-    void setVec3Property(string propertyName, double x, double y, double z);
+    void enable();
+
+    void disable();
+
+    void addProperty(string propertyName);
+
+    void setMaterialProperty(Material &material);
+
+    void setLightProperty(Light &light);
+
+    void setMatProperty(string propertyName, float m[16]);
+
+    void setVec3Property(string propertyName, Vector &v);
+
+    void setVec3Property(string propertyName, float x, float y, float z);
+
+    void setFloatProperty(string propertyName, float f);
 };
 
 

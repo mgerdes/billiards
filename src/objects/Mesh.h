@@ -4,8 +4,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <vector>
-#include "Vec.h"
+#include "Vector.h"
 #include "Shader.h"
+#include "Material.h"
 
 using namespace std;
 
@@ -13,9 +14,10 @@ class Mesh {
 private:
     GLuint vao;
     int numberOfVertices;
-    const Shader &shader;
+    Material material;
+    Shader &shader;
 public:
-    Mesh(vector<Vec> vertices, const Shader &shader);
+    Mesh(vector<Vector> vertices, vector<Vector> normals, Material material, Shader &shader);
 
     void draw();
 };

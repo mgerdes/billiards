@@ -14,6 +14,8 @@ enum Severity {
 
 class Util {
 public:
+    static constexpr double EPSILON = 0.00001;
+
     static string readFile(string file);
 
     static void log(Severity type, string error);
