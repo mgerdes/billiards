@@ -16,5 +16,5 @@ void main () {
     frag_position = vert_position;
     frag_normal = temp.xyz;
 
-    gl_Position = model_mat * vec4(vert_position, 1.0);
+    gl_Position = proj_mat * view_mat * model_mat * vec4(vert_position, 1.0);
 }

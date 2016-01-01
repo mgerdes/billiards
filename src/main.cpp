@@ -32,12 +32,14 @@ int main() {
 
     Camera camera = Camera(Vector(2, 2, 2), Vector(0, 0, 0), Vector(0, 1, 0));
 
-    Light light = Light(Vector(0, 0, -2), Vector(0.6, 0.6, 0.6), Vector(0.3, 0.3, 0.3), Vector(0.0, 0.0, 0.0));
+    Light light = Light(Vector(2, 2, 2), Vector(0.6, 0.6, 0.6), Vector(0.3, 0.3, 0.3), Vector(0.0, 0.0, 0.0));
     Material material = Material(Vector(1, 1, 0), Vector(1, 1, 0), Vector(1, 1, 0), 0.2);
 
     Shader shader = Shader("resources/shaders/vert.glsl", "resources/shaders/frag.glsl");
     shader.setLightProperty(light);
     shader.setVec3Property("camera_position", camera.position);
+    shader.setMatProperty("proj_mat", camera.projectionMatrix.m);
+    shader.setMatProperty("view_mat", camera.viewMatrix.m);
 
     Mesh square = Mesh(GeometricObjects::getCubeVertices(),
                        GeometricObjects::getCubeNormals(),
@@ -54,8 +56,8 @@ int main() {
 
         translationMatrix = Matrix(Vector(0.0, 0.0, 0.0));
         rotationMatrix = Matrix(Vector(0, 1, 0), theta += 0.01);
-        scaleMatrix = Matrix(0.2);
-        modelMatrix = translationMatrix * rotationMatrix * scaleMatrix;
+        scaleMatrix = Matrix(0.8);
+        modelMatrix = translationMatrix * scaleMatrix * rotationMatrix;
 
         shader.setMatProperty("model_mat", modelMatrix.m);
         square.draw();
