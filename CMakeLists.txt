@@ -4,15 +4,23 @@ project(billiards)
 
 set(SOURCE_FILES
         src/camera/Camera.cpp
-        src/material/Material.cpp
         src/light/Light.cpp
+        src/material/Material.cpp
         src/math/Vector.cpp
         src/math/Matrix.cpp
         src/objects/Mesh.cpp
         src/objects/Model.cpp
         src/shader/Shader.cpp
-        src/util/Util.cpp)
-include_directories(src/math src/shader src/util src/objects src/camera src/material src/light)
+        src/util/Util.cpp
+        src/window/Window.cpp)
+include_directories(src/camera
+        src/light
+        src/material
+        src/math
+        src/objects
+        src/shader
+        src/util
+        src/window)
 add_executable(billiards src/main.cpp ${SOURCE_FILES})
 target_link_libraries(billiards GL GLEW glfw m)
 
