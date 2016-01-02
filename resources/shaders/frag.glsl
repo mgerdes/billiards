@@ -29,7 +29,6 @@ void main () {
     // Ambient
     vec3 ambient_color = light.ambient_color * material.ambient_color;
 
-
     // Diffuse
     vec3 norm = normalize(frag_normal);
     vec3 light_direction = normalize(light.position - frag_position);

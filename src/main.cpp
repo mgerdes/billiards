@@ -13,9 +13,9 @@ int main() {
 
     Camera camera = Camera(Vector(2, 2, 2), Vector(0, 0, 0), Vector(0, 1, 0));
 
-    Light light = Light(Vector(2, 2, 2), Vector(0.6, 0.6, 0.6), Vector(0.3, 0.3, 0.3), Vector(0.0, 0.0, 0.0));
+    Light light = Light(Vector(2, 2, 2), Vector(0.2, 0.2, 0.2), Vector(0.8, 0.8, 0.8), Vector(0.0, 0.0, 0.0));
 
-    Material material = Material(Vector(1, 1, 0), Vector(1, 1, 0), Vector(1, 1, 0), 0.2);
+    Material material = Material(Vector(1, 1, 0), Vector(1, 1, 0), Vector(0, 0, 0), 0.2);
 
     Shader shader = Shader("resources/shaders/vert.glsl", "resources/shaders/frag.glsl");
     shader.setLightProperty(light);
@@ -41,14 +41,13 @@ int main() {
 
         translationMatrix = Matrix(Vector(0.0, 0.0, 0.0));
         rotationMatrix = Matrix(Vector(0, 1, 0), theta += 0.01);
-        scaleMatrix = Matrix(1.8);
+        scaleMatrix = Matrix(1.0);
         modelMatrix = translationMatrix * scaleMatrix * rotationMatrix;
 
-        square.material.ambientColor.z += 0.001;
         square.shader.setMatProperty("model_mat", modelMatrix.m);
-        //square.draw();
+        square.draw();
 
-        cat.draw();
+        //cat.draw();
 
         window.swapBuffers();
     }

@@ -109,9 +109,7 @@ Mesh::Mesh(vector<Vector> verticesVector,
 
 void Mesh::draw() {
     shader.setMaterialProperty(material);
-
     shader.enable();
-
     material.texture.enable();
 
     glBindVertexArray(vao);
@@ -119,6 +117,5 @@ void Mesh::draw() {
     glBindVertexArray(0);
 
     material.texture.disable();
-
     shader.disable();
 }
