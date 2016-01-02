@@ -9,8 +9,6 @@ Model::Model(string fileName, Shader &shader) {
         return;
     }
 
-    printf("%d\n", scene->mNumAnimations);
-
     Util::log(Severity::INFO, "Loading model: " + fileName);
     Util::log(Severity::INFO, std::to_string(scene->mNumAnimations) + " animations");
     Util::log(Severity::INFO, std::to_string(scene->mNumCameras) + " cameras");
@@ -38,6 +36,7 @@ void Model::processNode(aiNode *node, const aiScene *scene, Shader &shader) {
 Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
     vector<Vector> meshVertices;
     vector<Vector> meshNormals;
+    vector<Vector> meshTextureCoordinates;
 
     // Process vertices
     if (mesh->HasPositions()) {
@@ -59,12 +58,29 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
         Util::log(INFO, "A mesh was processed with no vertices.");
     }
 
-    Vector ambientColor, diffuseColor, specularColor;
+    // Process texture coordinates
+    if (mesh->HasTextureCoords(0)) {
+        for (int i = 0; i < mesh->mNumVertices; i++) {
+            aiVector3D texture = mesh->mTextureCoords[0][i];
+            meshTextureCoordinates.push_back(Vector(texture.x, texture.y, texture.z));
+        }
+    } else {
+        for (int i = 0; i < mesh->mNumVertices; i++) {
+            meshTextureCoordinates.push_back(Vector(0.0, 0.0, 0.0));
+        }
+        Util::log(INFO, "A mesh was processed with no texture coordinates.");
+    }
 
     // Process material
+    Vector ambientColor, diffuseColor, specularColor;
+    Texture texture;
     if (mesh->mMaterialIndex >= 0) {
         aiString path;
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+
+        aiGetMaterialTexture(material, aiTextureType_DIFFUSE, 0, &path, 0, 0, 0, 0, 0, 0);
+
+        texture = Texture(path.data);
 
         aiColor4D color;
         aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color);
@@ -79,9 +95,9 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
         Util::log(INFO, "A mesh was processed with no material.");
     }
 
-    Material meshMaterial = Material(ambientColor, diffuseColor, specularColor, 0.0);
+    Material meshMaterial = Material(texture, ambientColor, diffuseColor, specularColor, 0.0);
 
-    return Mesh(meshVertices, meshNormals, meshMaterial, shader);
+    return Mesh(meshVertices, meshNormals, meshTextureCoordinates, meshMaterial, shader);
 }
 
 void Model::draw() {

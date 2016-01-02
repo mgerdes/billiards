@@ -18,7 +18,16 @@ public:
     Material material;
     Shader &shader;
 
-    Mesh(vector<Vector> vertices, vector<Vector> normals, Material material, Shader &shader);
+    Mesh(vector<Vector> verticesVector,
+         vector<Vector> normalsVector,
+         vector<Vector> textureCoordinatesVector,
+         Material material,
+         Shader &shader);
+
+    Mesh(vector<Vector> verticesVector,
+         vector<Vector> normalsVector,
+         Material material,
+         Shader &shader);
 
     void draw();
 };

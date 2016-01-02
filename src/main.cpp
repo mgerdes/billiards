@@ -27,7 +27,8 @@ int main() {
 
     Mesh square = Mesh(GeometricObjects::getCubeVertices(),
                        GeometricObjects::getCubeNormals(),
-                       material, shader);
+                       material,
+                       shader);
 
     float theta = 0;
     Matrix modelMatrix;
@@ -45,7 +46,7 @@ int main() {
 
         square.material.ambientColor.z += 0.001;
         square.shader.setMatProperty("model_mat", modelMatrix.m);
-        square.draw();
+        //square.draw();
 
         cat.draw();
 
