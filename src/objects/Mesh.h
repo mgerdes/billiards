@@ -14,9 +14,10 @@ class Mesh {
 private:
     GLuint vao;
     int numberOfVertices;
+public:
     Material material;
     Shader &shader;
-public:
+
     Mesh(vector<Vector> vertices, vector<Vector> normals, Material material, Shader &shader);
 
     void draw();

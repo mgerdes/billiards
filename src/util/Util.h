@@ -9,7 +9,7 @@
 using namespace std;
 
 enum Severity {
-    ERROR, WARNING
+    ERROR, WARNING, INFO
 };
 
 class Util {

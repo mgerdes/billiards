@@ -1,6 +1,7 @@
 #include <vector>
 #include "Shader.h"
 #include "Mesh.h"
+#include "Model.h"
 #include "GeometricObjects.h"
 #include "Camera.h"
 #include "Window.h"
@@ -22,6 +23,8 @@ int main() {
     shader.setMatProperty("proj_mat", camera.projectionMatrix.m);
     shader.setMatProperty("view_mat", camera.viewMatrix.m);
 
+    Model cat = Model("resources/models/cat.obj", shader);
+
     Mesh square = Mesh(GeometricObjects::getCubeVertices(),
                        GeometricObjects::getCubeNormals(),
                        material, shader);
@@ -37,11 +40,14 @@ int main() {
 
         translationMatrix = Matrix(Vector(0.0, 0.0, 0.0));
         rotationMatrix = Matrix(Vector(0, 1, 0), theta += 0.01);
-        scaleMatrix = Matrix(0.8);
+        scaleMatrix = Matrix(1.8);
         modelMatrix = translationMatrix * scaleMatrix * rotationMatrix;
 
-        shader.setMatProperty("model_mat", modelMatrix.m);
+        square.material.ambientColor.z += 0.001;
+        square.shader.setMatProperty("model_mat", modelMatrix.m);
         square.draw();
+
+        cat.draw();
 
         window.swapBuffers();
     }

@@ -22,10 +22,10 @@ include_directories(src/camera
         src/util
         src/window)
 add_executable(billiards src/main.cpp ${SOURCE_FILES})
-target_link_libraries(billiards GL GLEW glfw m)
+target_link_libraries(billiards GL GLEW glfw m assimp)
 
 set(TEST_SOURCE_FILES
         tests/mathTests/VectorTests.cpp
         tests/mathTests/MatrixTests.cpp)
 add_executable(runTests tests/TestRunner.cpp ${TEST_SOURCE_FILES} ${SOURCE_FILES})
-target_link_libraries(runTests gtest gtest_main GL GLEW glfw m)
+target_link_libraries(runTests gtest gtest_main GL GLEW glfw m assimp)
