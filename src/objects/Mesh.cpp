@@ -2,11 +2,10 @@
 
 Mesh::Mesh(vector<Vector> verticesVector,
            vector<Vector> normalsVector,
-           Material material,
            Shader &shader,
-           MeshType type) : material(material),
-                            shader(shader),
+           MeshType type) : shader(shader),
                             type(type) {
+    hasMaterial = false;
     numberOfVertices = (int) verticesVector.size();
 
     GLfloat vertices[numberOfVertices * 3];
@@ -56,6 +55,7 @@ Mesh::Mesh(vector<Vector> verticesVector,
            MeshType type) : material(material),
                             shader(shader),
                             type(type) {
+    hasMaterial = true;
     numberOfVertices = (int) verticesVector.size();
 
     GLfloat vertices[numberOfVertices * 3];
@@ -112,9 +112,12 @@ Mesh::Mesh(vector<Vector> verticesVector,
 }
 
 void Mesh::draw() {
-    shader.setMaterialProperty(material);
+    if (hasMaterial) {
+        shader.setMaterialProperty(material);
+        material.texture.enable();
+    }
     shader.enable();
-    material.texture.enable();
+
 
     glBindVertexArray(vao);
     glDrawArrays(type, 0, numberOfVertices);

@@ -8,7 +8,6 @@
 class ResourceManager {
 public:
     static Shader boundingObjectShader;
-    static Material boundingObjectMaterial;
     static Shader tableModelShader;
 
     static void installResources();

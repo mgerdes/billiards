@@ -7,7 +7,6 @@ RectangleBoundingObject::RectangleBoundingObject(float x, float y, float width, 
           height{height},
           mesh(RectangleBoundingObject::getRectangleVertices(x, y, width, height),
                RectangleBoundingObject::getRectangleNormals(),
-               ResourceManager::boundingObjectMaterial,
                ResourceManager::boundingObjectShader,
                MeshType::LINE_LOOP) { }
 
@@ -35,7 +34,6 @@ CircleBoundingObject::CircleBoundingObject(float x, float y, float radius)
           radius{radius},
           mesh(CircleBoundingObject::getCircleVertices(x, y, radius),
                CircleBoundingObject::getCircleNormals(),
-               ResourceManager::boundingObjectMaterial,
                ResourceManager::boundingObjectShader,
                MeshType::LINE_LOOP) { }
 

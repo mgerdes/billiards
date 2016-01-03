@@ -17,19 +17,19 @@ private:
     MeshType type;
     GLuint vao;
     int numberOfVertices;
+    bool hasMaterial;
 public:
     Material material;
     Shader &shader;
 
     Mesh(vector<Vector> verticesVector,
          vector<Vector> normalsVector,
-         vector<Vector> textureCoordinatesVector,
-         Material material,
          Shader &shader,
          MeshType type = MeshType::TRIANGLE);
 
     Mesh(vector<Vector> verticesVector,
          vector<Vector> normalsVector,
+         vector<Vector> textureCoordinatesVector,
          Material material,
          Shader &shader,
          MeshType type = MeshType::TRIANGLE);

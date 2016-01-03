@@ -6,8 +6,6 @@ BilliardsSimulation::BilliardsSimulation(Window &window)
           table(RectangleBoundingObject(tableTopX, tableTopY, tableWidth, tableHeight)) {
     Light light = Light(Vector(2, 2, 2), Vector(0.1, 0.1, 0.1), Vector(0.6, 0.6, 0.6), Vector(0.0, 0.0, 0.0));
 
-    ResourceManager::boundingObjectShader.setLightProperty(light);
-    ResourceManager::boundingObjectShader.setVec3Property("camera_position", camera.position);
     ResourceManager::boundingObjectShader.setMatProperty("proj_mat", camera.projectionMatrix.m);
     ResourceManager::boundingObjectShader.setMatProperty("view_mat", camera.viewMatrix.m);
 
