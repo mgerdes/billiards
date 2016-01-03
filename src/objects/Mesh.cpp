@@ -113,7 +113,7 @@ void Mesh::draw() {
     material.texture.enable();
 
     glBindVertexArray(vao);
-    glDrawArrays(GL_TRIANGLES, 0, numberOfVertices);
+    glDrawArrays(GL_LINE_LOOP, 0, numberOfVertices);
     glBindVertexArray(0);
 
     material.texture.disable();

@@ -8,6 +8,7 @@ set(SOURCE_FILES
         src/material/Material.cpp
         src/math/Vector.cpp
         src/math/Matrix.cpp
+        src/objects/BoundingObject.cpp
         src/objects/Mesh.cpp
         src/objects/Model.cpp
         src/shader/Shader.cpp

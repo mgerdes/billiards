@@ -5,6 +5,7 @@
 #include "GeometricObjects.h"
 #include "Camera.h"
 #include "Window.h"
+#include "BoundingObject.h"
 
 using namespace std;
 
@@ -30,6 +31,21 @@ int main() {
                        material,
                        shader);
 
+    float pocketRadius = 0.1f;
+    float x = -0.5f;
+    float y = -1.0f;
+    float width = 1.0f;
+    float height = 2.0f;
+
+    RectangleBoundingObject rectangle = RectangleBoundingObject(x, y, width, height, material, shader);
+
+    CircleBoundingObject circle1 = CircleBoundingObject(x, y, pocketRadius, material, shader);
+    CircleBoundingObject circle2 = CircleBoundingObject(x + width, y, pocketRadius, material, shader);
+    CircleBoundingObject circle3 = CircleBoundingObject(x, y + height, pocketRadius, material, shader);
+    CircleBoundingObject circle4 = CircleBoundingObject(x + width, y + height, pocketRadius, material, shader);
+    CircleBoundingObject circle5 = CircleBoundingObject(x, y + (height / 2.0f), pocketRadius, material, shader);
+    CircleBoundingObject circle6 = CircleBoundingObject(x + width, y + (height / 2.0f), pocketRadius, material, shader);
+
     float theta = 0;
     Matrix modelMatrix;
     Matrix rotationMatrix;
@@ -44,10 +60,17 @@ int main() {
         scaleMatrix = Matrix(1.0);
         modelMatrix = translationMatrix * scaleMatrix * rotationMatrix;
 
+        circle1.draw();
+        circle2.draw();
+        circle3.draw();
+        circle4.draw();
+        circle5.draw();
+        circle6.draw();
+        rectangle.draw();
         square.shader.setMatProperty("model_mat", modelMatrix.m);
-        square.draw();
+        //square.draw();
 
-        //cat.draw();
+        cat.draw();
 
         window.swapBuffers();
     }
