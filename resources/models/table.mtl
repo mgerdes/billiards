@@ -32,6 +32,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd black.jpg
 
 newmtl 05_-_Default
 Ns 96.078431

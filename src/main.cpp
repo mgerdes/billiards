@@ -12,7 +12,7 @@ int main() {
 
     Camera camera = Camera(Vector(2.1, 2, 2.1), Vector(0, 0, 0), Vector(0, 1, 0));
 
-    Light light = Light(Vector(2, 2, 2), Vector(0.1, 0.1, 0.1), Vector(0.4, 0.4, 0.4), Vector(0.2, 0.2, 0.2));
+    Light light = Light(Vector(2, 2, 2), Vector(0.1, 0.1, 0.1), Vector(0.6, 0.6, 0.6), Vector(0.0, 0.0, 0.0));
 
     Material material = Material(Vector(0, 0, 0), Vector(0, 0, 0), Vector(0, 0, 0), 1.0);
 
@@ -48,9 +48,9 @@ int main() {
     Matrix translationMatrix;
     Matrix scaleMatrix;
 
-    float delta_x = -0.31f;
-    float delta_y = -0.54f;
-    float scale = 2.05f;
+    float delta_x = -0.305f;
+    float delta_y = -0.53f;
+    float scale = 2.03f;
 
     double lastKeyPress = 0.0;
     double keyLag = 0.05;
