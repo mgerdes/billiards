@@ -11,6 +11,7 @@ set(SOURCE_FILES
         src/objects/BoundingObject.cpp
         src/objects/Mesh.cpp
         src/objects/Model.cpp
+        src/resourceManager/ResourceManager.cpp
         src/shader/Shader.cpp
         src/simulation/BilliardsSimulation.cpp
         src/texture/Texture.cpp
@@ -21,6 +22,7 @@ include_directories(src/camera
         src/material
         src/math
         src/objects
+        src/resourceManager
         src/shader
         src/simulation
         src/texture

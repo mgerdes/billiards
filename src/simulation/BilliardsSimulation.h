@@ -5,6 +5,7 @@
 #include "Window.h"
 #include "BoundingObject.h"
 #include "Camera.h"
+#include "ResourceManager.h"
 
 class BilliardsBall {
 private:
@@ -37,14 +38,15 @@ private:
     float cornerHoleDeltaY = -0.01f;
     float middleHoleDeltaX = -0.10f;
 
+    Window &window;
+    ResourceManager &resourceManager;
+
+    Camera camera;
+    BilliardsTable table;
     vector<BilliardsBall> balls;
     vector<BilliardsPocket> pockets;
-    BilliardsTable table;
-    Window &window;
-    Camera camera;
-    Shader &shader;
 public:
-    BilliardsSimulation(Window &window, Material material, Shader &shader, Camera camera);
+    BilliardsSimulation(Window &window, ResourceManager &resourceManger);
 
     void update();
 
