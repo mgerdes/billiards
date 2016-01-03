@@ -12,6 +12,7 @@ set(SOURCE_FILES
         src/objects/Mesh.cpp
         src/objects/Model.cpp
         src/shader/Shader.cpp
+        src/simulation/BilliardsSimulation.cpp
         src/texture/Texture.cpp
         src/util/Util.cpp
         src/window/Window.cpp)
@@ -21,6 +22,7 @@ include_directories(src/camera
         src/math
         src/objects
         src/shader
+        src/simulation
         src/texture
         src/util
         src/window)
