@@ -31,6 +31,8 @@ public:
     Matrix(const Vector &rotationAxis, float theta);
 
     Matrix(const Vector &translationVector);
+
+    static Matrix scaleMatrix(const Vector &scaleVector);
 };
 
 

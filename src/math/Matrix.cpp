@@ -46,14 +46,21 @@ Matrix::Matrix(const Vector &rotationAxis, float theta) {
 }
 
 Matrix::Matrix(float scale) : Matrix(scale, 0.0, 0.0, 0.0,
-                                      0.0, scale, 0.0, 0.0,
-                                      0.0, 0.0, scale, 0.0,
-                                      0.0, 0.0, 0.0, 1.0) { }
+                                     0.0, scale, 0.0, 0.0,
+                                     0.0, 0.0, scale, 0.0,
+                                     0.0, 0.0, 0.0, 1.0) { }
 
 Matrix::Matrix(const Vector &translationVector) : Matrix(1.0, 0.0, 0.0, translationVector.x,
                                                          0.0, 1.0, 0.0, translationVector.y,
                                                          0.0, 0.0, 1.0, translationVector.z,
                                                          0.0, 0.0, 0.0, 1.0) { }
+
+Matrix Matrix::scaleMatrix(const Vector &scaleVector) {
+    return Matrix(scaleVector.x, 0.0, 0.0, 0.0,
+                  0.0, scaleVector.y, 0.0, 0.0,
+                  0.0, 0.0, scaleVector.z, 0.0,
+                  0.0, 0.0, 0.0, 1.0);
+}
 
 Matrix operator*(const Matrix &m1, const Matrix &m2) {
     Matrix m;
