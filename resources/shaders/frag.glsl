@@ -43,5 +43,5 @@ void main () {
 
     vec4 texel = texture(material.texture, frag_texture_coords);
 
-    color = vec4(ambient_color + diffuse_color, 1.0) + texel;
+    color = vec4(ambient_color + diffuse_color + specular_color, 1.0) + texel;
 }

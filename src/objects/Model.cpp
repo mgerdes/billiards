@@ -73,6 +73,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
 
     // Process material
     Vector ambientColor, diffuseColor, specularColor;
+    float shininess = 1.0;
     Texture texture;
     if (mesh->mMaterialIndex >= 0) {
         aiString path;
@@ -91,11 +92,13 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
 
         aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &color);
         specularColor = Vector(color.r, color.g, color.b);
+
+        aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &shininess);
     } else {
         Util::log(INFO, "A mesh was processed with no material.");
     }
 
-    Material meshMaterial = Material(texture, ambientColor, diffuseColor, specularColor, 0.0);
+    Material meshMaterial = Material(texture, ambientColor, diffuseColor, specularColor, shininess);
 
     return Mesh(meshVertices, meshNormals, meshTextureCoordinates, meshMaterial, shader);
 }

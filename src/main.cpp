@@ -12,9 +12,9 @@ int main() {
 
     Camera camera = Camera(Vector(2.1, 2, 2.1), Vector(0, 0, 0), Vector(0, 1, 0));
 
-    Light light = Light(Vector(2, 2, 2), Vector(0.2, 0.2, 0.2), Vector(0.8, 0.8, 0.8), Vector(0.0, 0.0, 0.0));
+    Light light = Light(Vector(2, 2, 2), Vector(0.1, 0.1, 0.1), Vector(0.4, 0.4, 0.4), Vector(0.2, 0.2, 0.2));
 
-    Material material = Material(Vector(0, 0, 0), Vector(0, 0, 0), Vector(0, 0, 0), 0.2);
+    Material material = Material(Vector(0, 0, 0), Vector(0, 0, 0), Vector(0, 0, 0), 1.0);
 
     Shader shader = Shader("resources/shaders/vert.glsl", "resources/shaders/frag.glsl");
     shader.setLightProperty(light);
@@ -30,13 +30,17 @@ int main() {
     float cornerHoleDelta = 0.05f;
 
     RectangleBoundingObject rectangle = RectangleBoundingObject(x, y, width, height, material, shader);
-    CircleBoundingObject circle1 = CircleBoundingObject(x + cornerHoleDelta, y + cornerHoleDelta, pocketRadius, material, shader);
-    CircleBoundingObject circle2 = CircleBoundingObject(x + width - cornerHoleDelta, y + cornerHoleDelta, pocketRadius, material, shader);
-    CircleBoundingObject circle3 = CircleBoundingObject(x + cornerHoleDelta, y + height - cornerHoleDelta, pocketRadius, material, shader);
-    CircleBoundingObject circle4 = CircleBoundingObject(x + width - cornerHoleDelta, y + height - cornerHoleDelta, pocketRadius, material, shader);
-    CircleBoundingObject circle5 = CircleBoundingObject(x, y + (height / 2.0f), pocketRadius, material, shader);
-    CircleBoundingObject circle6 = CircleBoundingObject(x + width, y + (height / 2.0f), pocketRadius, material, shader);
+    CircleBoundingObject pocket1 = CircleBoundingObject(x + cornerHoleDelta, y + cornerHoleDelta, pocketRadius, material, shader);
+    CircleBoundingObject pocket2 = CircleBoundingObject(x + width - cornerHoleDelta, y + cornerHoleDelta, pocketRadius, material, shader);
+    CircleBoundingObject pocket3 = CircleBoundingObject(x + cornerHoleDelta, y + height - cornerHoleDelta, pocketRadius, material, shader);
+    CircleBoundingObject pocket4 = CircleBoundingObject(x + width - cornerHoleDelta, y + height - cornerHoleDelta, pocketRadius, material, shader);
+    CircleBoundingObject pocket5 = CircleBoundingObject(x, y + (height / 2.0f), pocketRadius, material, shader);
+    CircleBoundingObject pocket6 = CircleBoundingObject(x + width, y + (height / 2.0f), pocketRadius, material, shader);
     Model table = Model("resources/models/table.obj", shader);
+
+
+    float ballRadius = 0.0250f;
+    CircleBoundingObject ball1 = CircleBoundingObject(0, 0, ballRadius, material, shader);
 
     float theta = 0.0f;
     Matrix modelMatrix;
@@ -61,13 +65,15 @@ int main() {
         modelMatrix = rotationMatrix * translationMatrix * scaleMatrix;
         shader.setMatProperty("model_mat", modelMatrix.m);
 
-        circle1.draw();
-        circle2.draw();
-        circle3.draw();
-        circle4.draw();
-        circle5.draw();
-        circle6.draw();
+        pocket1.draw();
+        pocket2.draw();
+        pocket3.draw();
+        pocket4.draw();
+        pocket5.draw();
+        pocket6.draw();
         rectangle.draw();
+
+        ball1.draw();
 
         translationMatrix = Matrix(Vector(delta_x, delta_y, 0.0));
         rotationMatrix = Matrix(Vector(0.0, 1.0, 0.0), theta + (float) (M_PI / 2.0));
