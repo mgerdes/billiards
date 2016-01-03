@@ -6,6 +6,7 @@
 #include <assimp/postprocess.h>
 #include "Mesh.h"
 #include "Texture.h"
+#include "ResourceManager.h"
 
 class Model {
 private:

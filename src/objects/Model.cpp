@@ -82,7 +82,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
         aiGetMaterialTexture(material, aiTextureType_DIFFUSE, 0, &path, 0, 0, 0, 0, 0, 0);
 
         if (path.length > 0) {
-            texture = Texture(path.data);
+            texture = ResourceManager::getTexture(path.data);
         }
 
         aiColor4D color;
