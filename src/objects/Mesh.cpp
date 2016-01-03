@@ -3,8 +3,10 @@
 Mesh::Mesh(vector<Vector> verticesVector,
            vector<Vector> normalsVector,
            Material material,
-           Shader &shader) : material(material),
-                             shader(shader) {
+           Shader &shader,
+           MeshType type) : material(material),
+                            shader(shader),
+                            type(type) {
     numberOfVertices = (int) verticesVector.size();
 
     GLfloat vertices[numberOfVertices * 3];
@@ -37,7 +39,7 @@ Mesh::Mesh(vector<Vector> verticesVector,
     glGenBuffers(1, &normals_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, normals_vbo);
     glBufferData(GL_ARRAY_BUFFER,
-                 3 * numberOfVertices * sizeof (GLfloat),
+                 3 * numberOfVertices * sizeof(GLfloat),
                  normals,
                  GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -50,8 +52,10 @@ Mesh::Mesh(vector<Vector> verticesVector,
            vector<Vector> normalsVector,
            vector<Vector> textureCoordinatesVector,
            Material material,
-           Shader &shader) : material(material),
-                             shader(shader) {
+           Shader &shader,
+           MeshType type) : material(material),
+                            shader(shader),
+                            type(type) {
     numberOfVertices = (int) verticesVector.size();
 
     GLfloat vertices[numberOfVertices * 3];
@@ -88,9 +92,9 @@ Mesh::Mesh(vector<Vector> verticesVector,
     glGenBuffers(1, &normals_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, normals_vbo);
     glBufferData(GL_ARRAY_BUFFER,
-            3 * numberOfVertices * sizeof (GLfloat),
-            normals,
-            GL_STATIC_DRAW);
+                 3 * numberOfVertices * sizeof(GLfloat),
+                 normals,
+                 GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(1);
 
@@ -98,7 +102,7 @@ Mesh::Mesh(vector<Vector> verticesVector,
     glGenBuffers(1, &texture_coords_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, texture_coords_vbo);
     glBufferData(GL_ARRAY_BUFFER,
-                 2 * numberOfVertices * sizeof (GLfloat),
+                 2 * numberOfVertices * sizeof(GLfloat),
                  textureCoords,
                  GL_STATIC_DRAW);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
@@ -113,7 +117,7 @@ void Mesh::draw() {
     material.texture.enable();
 
     glBindVertexArray(vao);
-    glDrawArrays(GL_LINE_LOOP, 0, numberOfVertices);
+    glDrawArrays(type, 0, numberOfVertices);
     glBindVertexArray(0);
 
     material.texture.disable();

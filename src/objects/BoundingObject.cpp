@@ -8,7 +8,8 @@ RectangleBoundingObject::RectangleBoundingObject(float x, float y, float width, 
           mesh(RectangleBoundingObject::getRectangleVertices(x, y, width, height),
                RectangleBoundingObject::getRectangleNormals(),
                material,
-               shader) { }
+               shader,
+               MeshType::LINE_LOOP) { }
 
 void RectangleBoundingObject::draw() {
     mesh.draw();
@@ -35,7 +36,8 @@ CircleBoundingObject::CircleBoundingObject(float x, float y, float radius, Mater
           mesh(CircleBoundingObject::getCircleVertices(x, y, radius),
                CircleBoundingObject::getCircleNormals(),
                material,
-               shader) { }
+               shader,
+               MeshType::LINE_LOOP) { }
 
 void CircleBoundingObject::draw() {
     mesh.draw();

@@ -25,7 +25,7 @@ Texture::Texture(string file) {
     free(image_data);
 }
 
-Texture::Texture() { }
+Texture::Texture() : location(0) { }
 
 void Texture::enable() {
     glBindTexture(GL_TEXTURE_2D, location);
