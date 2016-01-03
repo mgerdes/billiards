@@ -3,14 +3,15 @@
 
 #include "Shader.h"
 #include "Material.h"
+#include "BoundingObject.h"
 
 class ResourceManager {
 public:
-    Shader boundingObjectShader;
-    Material boundingObjectMaterial;
-    Shader tableModelShader;
+    static Shader boundingObjectShader;
+    static Material boundingObjectMaterial;
+    static Shader tableModelShader;
 
-    ResourceManager();
+    static void installResources();
 };
 
 #endif //BILLIARDS_RESOURCEMANAGER_H

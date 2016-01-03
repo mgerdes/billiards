@@ -2,6 +2,7 @@
 #define BILLIARDS_BOUNDINGOBJECT_H
 
 #include "Mesh.h"
+#include "ResourceManager.h"
 
 class RectangleBoundingObject {
 private:
@@ -14,7 +15,7 @@ private:
 public:
     Mesh mesh;
 
-    RectangleBoundingObject(float x, float y, float width, float height, Material material, Shader &shader);
+    RectangleBoundingObject(float x, float y, float width, float height);
 
     void draw();
 };
@@ -32,7 +33,7 @@ private:
 public:
     Mesh mesh;
 
-    CircleBoundingObject(float x, float y, float radius, Material material, Shader &shader);
+    CircleBoundingObject(float x, float y, float radius);
 
     void draw();
 };

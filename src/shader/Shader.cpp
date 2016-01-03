@@ -23,6 +23,8 @@ GLuint compileShader(string fileName, GLenum shaderType) {
     return shader;
 }
 
+Shader::Shader() { }
+
 Shader::Shader(string vertexShaderFileLocation, string fragmentShaderFileLocation) : shaderProgram(glCreateProgram()) {
     GLuint vertexShader = compileShader(vertexShaderFileLocation, GL_VERTEX_SHADER);
     GLuint fragmentShader = compileShader(fragmentShaderFileLocation, GL_FRAGMENT_SHADER);

@@ -1,14 +1,14 @@
 #include "BoundingObject.h"
 
-RectangleBoundingObject::RectangleBoundingObject(float x, float y, float width, float height, Material material, Shader &shader)
+RectangleBoundingObject::RectangleBoundingObject(float x, float y, float width, float height)
         : x{x},
           y{y},
           width{width},
           height{height},
           mesh(RectangleBoundingObject::getRectangleVertices(x, y, width, height),
                RectangleBoundingObject::getRectangleNormals(),
-               material,
-               shader,
+               ResourceManager::boundingObjectMaterial,
+               ResourceManager::boundingObjectShader,
                MeshType::LINE_LOOP) { }
 
 void RectangleBoundingObject::draw() {
@@ -29,14 +29,14 @@ vector<Vector> RectangleBoundingObject::getRectangleNormals() {
             Vector(0, 1, 0)};
 }
 
-CircleBoundingObject::CircleBoundingObject(float x, float y, float radius, Material material, Shader &shader)
+CircleBoundingObject::CircleBoundingObject(float x, float y, float radius)
         : x{x},
           y{y},
           radius{radius},
           mesh(CircleBoundingObject::getCircleVertices(x, y, radius),
                CircleBoundingObject::getCircleNormals(),
-               material,
-               shader,
+               ResourceManager::boundingObjectMaterial,
+               ResourceManager::boundingObjectShader,
                MeshType::LINE_LOOP) { }
 
 void CircleBoundingObject::draw() {

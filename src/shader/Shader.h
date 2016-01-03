@@ -19,6 +19,8 @@ private:
     GLuint shaderProgram;
     unordered_map<string, GLint> properties;
 public:
+    Shader();
+
     Shader(string vertexShaderLocation, string fragmentShaderLocation);
 
     void enable();

@@ -8,9 +8,8 @@ using namespace std;
 int main() {
     Window window = Window("opengl", 1000, 1000);
 
-    ResourceManager resourceManager;
-
-    BilliardsSimulation simulation = BilliardsSimulation(window, resourceManager);
+    ResourceManager::installResources();
+    BilliardsSimulation simulation = BilliardsSimulation(window);
 
     while (!window.shouldClose()) {
         window.clearBufferAndColor();

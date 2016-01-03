@@ -12,7 +12,10 @@ public:
     Texture texture;
     float shininess;
 
+    Material();
+
     Material(Vector ambientColor, Vector diffuseColor, Vector specularColor, float shininess);
+
     Material(Texture texture, Vector ambientColor, Vector diffuseColor, Vector specularColor, float shininess);
 };
 

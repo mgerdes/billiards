@@ -39,14 +39,12 @@ private:
     float middleHoleDeltaX = -0.10f;
 
     Window &window;
-    ResourceManager &resourceManager;
-
     Camera camera;
     BilliardsTable table;
     vector<BilliardsBall> balls;
     vector<BilliardsPocket> pockets;
 public:
-    BilliardsSimulation(Window &window, ResourceManager &resourceManger);
+    BilliardsSimulation(Window &window);
 
     void update();
 

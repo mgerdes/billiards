@@ -1,5 +1,7 @@
 #include "Material.h"
 
+Material::Material() { }
+
 Material::Material(Vector ambientColor,
                    Vector diffuseColor,
                    Vector specularColor,
