@@ -6,6 +6,7 @@
 #include "BoundingObject.h"
 #include "Camera.h"
 #include "ResourceManager.h"
+#include "Model.h"
 
 class BilliardsBall {
 private:
@@ -17,14 +18,16 @@ class BilliardsPocket {
 public:
     CircleBoundingObject boundingCircle;
 
-    BilliardsPocket(CircleBoundingObject boundingCircle) : boundingCircle(boundingCircle) { }
+    BilliardsPocket(CircleBoundingObject boundingCircle);
 };
 
 class BilliardsTable {
 public:
     RectangleBoundingObject boundingRectangle;
 
-    BilliardsTable(RectangleBoundingObject boundingRectangle) : boundingRectangle(boundingRectangle) { }
+    Model model;
+
+    BilliardsTable(RectangleBoundingObject boundingRectangle);
 };
 
 class BilliardsSimulation {
@@ -37,6 +40,11 @@ private:
     float cornerHoleDeltaX = -0.028f;
     float cornerHoleDeltaY = -0.01f;
     float middleHoleDeltaX = -0.10f;
+
+    float tableModelDeltaX = -0.325f;
+    float tableModelDeltaY = -0.61f;
+    float tableModelScaleX = 2.16f;
+    float tableModelScaleY = 2.55f;
 
     Window &window;
     Camera camera;

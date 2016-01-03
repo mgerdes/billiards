@@ -1,10 +1,18 @@
 #include "BilliardsSimulation.h"
 
+BilliardsPocket::BilliardsPocket(CircleBoundingObject boundingCircle) : boundingCircle{boundingCircle} { }
+
+BilliardsTable::BilliardsTable(RectangleBoundingObject boundingRectangle) : boundingRectangle{boundingRectangle}, model("resources/models/table.obj", ResourceManager::tableModelShader) { }
+
 BilliardsSimulation::BilliardsSimulation(Window &window)
         : window(window),
           camera(Vector(2.1, 2, 2.1), Vector(0, 0, 0), Vector(0, 1, 0)),
           table(RectangleBoundingObject(tableTopX, tableTopY, tableWidth, tableHeight)) {
-    Light light = Light(Vector(2, 2, 2), Vector(0.1, 0.1, 0.1), Vector(0.6, 0.6, 0.6), Vector(0.0, 0.0, 0.0));
+    Light light = Light(Vector(0, 4, 0), Vector(0.1, 0.1, 0.1), Vector(0.3, 0.3, 0.3), Vector(0.0, 0.0, 0.0));
+
+    ResourceManager::tableModelShader.setLightProperty(light);
+    ResourceManager::tableModelShader.setMatProperty("proj_mat", camera.projectionMatrix.m);
+    ResourceManager::tableModelShader.setMatProperty("view_mat", camera.viewMatrix.m);
 
     ResourceManager::boundingObjectShader.setMatProperty("proj_mat", camera.projectionMatrix.m);
     ResourceManager::boundingObjectShader.setMatProperty("view_mat", camera.viewMatrix.m);
@@ -47,9 +55,12 @@ void BilliardsSimulation::update() {
 }
 
 void BilliardsSimulation::draw() {
+    static float theta = 0.0;
+
     Matrix translationMatrix = Matrix(Vector(0.0, 0.0, 0.0));
+    Matrix rotationMatrix = Matrix(Vector(0.0, 1.0, 0.0), theta);
     Matrix scaleMatrix = Matrix(1.0);
-    Matrix modelMatrix = translationMatrix * scaleMatrix;
+    Matrix modelMatrix = rotationMatrix * translationMatrix * scaleMatrix;
     ResourceManager::boundingObjectShader.setMatProperty("model_mat", modelMatrix.m);
 
     for (BilliardsPocket pocket : pockets) {
@@ -57,4 +68,16 @@ void BilliardsSimulation::draw() {
     }
 
     table.boundingRectangle.draw();
+
+    translationMatrix = Matrix(Vector(tableModelDeltaX, tableModelDeltaY, 0.0));
+    rotationMatrix = Matrix(Vector(0.0, 1.0, 0.0), theta + (float) (M_PI / 2.0));
+    scaleMatrix = Matrix::scaleMatrix(Vector(tableModelScaleX,
+                                             (tableModelScaleX + tableModelScaleY) / 2.0,
+                                             tableModelScaleY));
+    modelMatrix = rotationMatrix * translationMatrix * scaleMatrix;
+    ResourceManager::tableModelShader.setMatProperty("model_mat", modelMatrix.m);
+
+    table.model.draw();
+
+    theta += 0.01;
 }
