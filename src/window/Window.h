@@ -6,9 +6,9 @@
 #include "Util.h"
 
 class Window {
-private:
-    GLFWwindow *glfwWindow;
 public:
+    GLFWwindow *glfwWindow;
+
     Window(string name, int width, int height);
 
     bool shouldClose();
