@@ -2,12 +2,25 @@
 
 BilliardsPocket::BilliardsPocket(CircleBoundingObject boundingCircle) : boundingCircle{boundingCircle} { }
 
-BilliardsTable::BilliardsTable(RectangleBoundingObject boundingRectangle) : boundingRectangle{boundingRectangle}, model("resources/models/table.obj", ResourceManager::tableModelShader) { }
+BilliardsTable::BilliardsTable(RectangleBoundingObject boundingRectangle) : boundingRectangle{boundingRectangle},
+                                                                            model("resources/models/table.obj",
+                                                                                  ResourceManager::tableModelShader) { }
+
+void BilliardsTable::draw() {
+    Matrix translation = Matrix(Vector(tableModelDeltaX, tableModelDeltaY, 0.0));
+    Matrix rotation = Matrix(Vector(0.0, 1.0, 0.0), (float) (M_PI / 2.0));
+    Matrix scale = Matrix::scaleMatrix(Vector(tableModelScaleX,
+                                              (tableModelScaleX + tableModelScaleY) / 2.0f,
+                                              tableModelScaleY));
+    Matrix modelMat = rotation * translation * scale;
+    ResourceManager::tableModelShader.setMatProperty("model_mat", modelMat.m);
+    model.draw();
+}
 
 BilliardsSimulation::BilliardsSimulation(Window &window)
         : window(window),
           camera(Vector(2.1, 2, 2.1), Vector(0, 0, 0), Vector(0, 1, 0)),
-          table(RectangleBoundingObject(tableTopX, tableTopY, tableWidth, tableHeight)) {
+          table(RectangleBoundingObject(tableY, tableY, tableWidth, tableHeight)) {
     Light light = Light(Vector(0, 4, 0), Vector(0.1, 0.1, 0.1), Vector(0.3, 0.3, 0.3), Vector(0.0, 0.0, 0.0));
 
     ResourceManager::tableModelShader.setLightProperty(light);
@@ -16,6 +29,9 @@ BilliardsSimulation::BilliardsSimulation(Window &window)
 
     ResourceManager::boundingObjectShader.setMatProperty("proj_mat", camera.projectionMatrix.m);
     ResourceManager::boundingObjectShader.setMatProperty("view_mat", camera.viewMatrix.m);
+
+    float tableTopX = tableX - (tableWidth / 2.0f);
+    float tableTopY = tableY - (tableHeight / 2.0f);
 
     CircleBoundingObject pocket1BoundingCircle = CircleBoundingObject(tableTopX + cornerHoleDeltaX,
                                                                       tableTopY + cornerHoleDeltaY,
@@ -54,30 +70,14 @@ void BilliardsSimulation::update() {
 
 }
 
-void BilliardsSimulation::draw() {
-    static float theta = 0.0;
-
-    Matrix translationMatrix = Matrix(Vector(0.0, 0.0, 0.0));
-    Matrix rotationMatrix = Matrix(Vector(0.0, 1.0, 0.0), theta);
-    Matrix scaleMatrix = Matrix(1.0);
-    Matrix modelMatrix = rotationMatrix * translationMatrix * scaleMatrix;
-    ResourceManager::boundingObjectShader.setMatProperty("model_mat", modelMatrix.m);
-
+void BilliardsSimulation::drawBoundingObjects() {
     for (BilliardsPocket pocket : pockets) {
         pocket.boundingCircle.draw();
     }
-
     table.boundingRectangle.draw();
+}
 
-    translationMatrix = Matrix(Vector(tableModelDeltaX, tableModelDeltaY, 0.0));
-    rotationMatrix = Matrix(Vector(0.0, 1.0, 0.0), theta + (float) (M_PI / 2.0));
-    scaleMatrix = Matrix::scaleMatrix(Vector(tableModelScaleX,
-                                             (tableModelScaleX + tableModelScaleY) / 2.0,
-                                             tableModelScaleY));
-    modelMatrix = rotationMatrix * translationMatrix * scaleMatrix;
-    ResourceManager::tableModelShader.setMatProperty("model_mat", modelMatrix.m);
-
-    table.model.draw();
-
-    theta += 0.01;
+void BilliardsSimulation::draw() {
+    drawBoundingObjects();
+    table.draw();
 }

@@ -7,10 +7,7 @@
 class RectangleBoundingObject {
 private:
     float x, y, width, height;
-
-    static vector<Vector> getRectangleVertices(float x, float y, float width, float height);
-
-    static vector<Vector> getRectangleNormals();
+    static vector<Vector> rectangleVertices, rectangleNormals;
 
 public:
     Mesh mesh;
@@ -23,12 +20,12 @@ public:
 class CircleBoundingObject {
 private:
     static const int NUM_POINTS = 64;
-
     float x, y, radius;
+    static vector<Vector> circleVertices, circleNormals;
 
-    static vector<Vector> getCircleVertices(float x, float y, float radius);
+    static vector<Vector> createCircleVertices();
 
-    static vector<Vector> getCircleNormals();
+    static vector<Vector> createCircleNormals();
 
 public:
     Mesh mesh;
