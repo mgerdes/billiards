@@ -10,8 +10,17 @@
 
 class BilliardsBall {
 private:
-    float ballRadius = 0.0250f;
+    static constexpr float ballRadius = 0.0250f;
+
+public:
+    Vector position, velocity;
     CircleBoundingObject boundingCircle;
+
+    BilliardsBall(Vector position, Vector velocity);
+
+    void draw();
+
+    void update();
 };
 
 class BilliardsPocket {

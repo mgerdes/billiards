@@ -14,6 +14,7 @@ int main() {
     while (!window.shouldClose()) {
         window.clearBufferAndColor();
 
+        simulation.update();
         simulation.draw();
 
         window.swapBuffers();

@@ -1,5 +1,16 @@
 #include "BilliardsSimulation.h"
 
+BilliardsBall::BilliardsBall(Vector position, Vector velocity)
+        : position(position),
+          velocity(velocity),
+          boundingCircle(position.x, position.y, ballRadius) { }
+
+
+void BilliardsBall::update() {
+    boundingCircle.x = boundingCircle.x + velocity.x;
+    boundingCircle.y = boundingCircle.y + velocity.y;
+}
+
 BilliardsPocket::BilliardsPocket(CircleBoundingObject boundingCircle) : boundingCircle{boundingCircle} { }
 
 BilliardsTable::BilliardsTable(RectangleBoundingObject boundingRectangle) : boundingRectangle{boundingRectangle},
@@ -64,15 +75,44 @@ BilliardsSimulation::BilliardsSimulation(Window &window)
     pockets.push_back(pocket4);
     pockets.push_back(pocket5);
     pockets.push_back(pocket6);
+
+    BilliardsBall ball1 = BilliardsBall(Vector(0.0f, 0.0f, 0.0f), Vector(0.001f, 0.001f, 0.0f));
+    balls.push_back(ball1);
 }
 
 void BilliardsSimulation::update() {
-
+    for (BilliardsBall &ball : balls) {
+        ball.update();
+        float tableRightBorder = table.boundingRectangle.x + (table.boundingRectangle.width / 2.0f);
+        float tableLeftBorder = table.boundingRectangle.x - (table.boundingRectangle.width / 2.0f);
+        float tableTopBorder = table.boundingRectangle.y + (table.boundingRectangle.height / 2.0f);
+        float tableBottomBorder = table.boundingRectangle.x - (table.boundingRectangle.height / 2.0f);
+        float radius = ball.boundingCircle.radius;
+        if (ball.boundingCircle.x + radius > tableRightBorder) {
+            ball.velocity.x *= -1;
+            ball.boundingCircle.x = tableRightBorder - radius - (float) Util::EPSILON;
+        }
+        if (ball.boundingCircle.x - radius < tableLeftBorder) {
+            ball.velocity.x *= -1;
+            ball.boundingCircle.x = tableLeftBorder + radius + (float) Util::EPSILON;
+        }
+        if (ball.boundingCircle.y + radius > tableTopBorder) {
+            ball.velocity.y *= -1;
+            ball.boundingCircle.y = tableTopBorder - radius - (float) Util::EPSILON;
+        }
+        if (ball.boundingCircle.y - radius < tableBottomBorder) {
+            ball.velocity.y *= -1;
+            ball.boundingCircle.y = tableBottomBorder +  radius + (float) Util::EPSILON;
+        }
+    }
 }
 
 void BilliardsSimulation::drawBoundingObjects() {
-    for (BilliardsPocket pocket : pockets) {
+    for (BilliardsPocket &pocket : pockets) {
         pocket.boundingCircle.draw();
+    }
+    for (BilliardsBall &ball : balls) {
+        ball.boundingCircle.draw();
     }
     table.boundingRectangle.draw();
 }
