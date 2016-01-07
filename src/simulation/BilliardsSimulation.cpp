@@ -3,12 +3,12 @@
 BilliardsBall::BilliardsBall(Vector position, Vector velocity)
         : position(position),
           velocity(velocity),
-          boundingCircle(position.x, position.y, ballRadius) { }
+          boundingCircle(position.x, position.y, radius) { }
 
 
 void BilliardsBall::update() {
-    boundingCircle.x = boundingCircle.x + velocity.x;
-    boundingCircle.y = boundingCircle.y + velocity.y;
+    position.x = boundingCircle.x = position.x + velocity.x;
+    position.y = boundingCircle.y = position.y + velocity.y;
 }
 
 BilliardsPocket::BilliardsPocket(CircleBoundingObject boundingCircle) : boundingCircle{boundingCircle} { }
@@ -76,13 +76,66 @@ BilliardsSimulation::BilliardsSimulation(Window &window)
     pockets.push_back(pocket5);
     pockets.push_back(pocket6);
 
-    BilliardsBall ball1 = BilliardsBall(Vector(0.0f, 0.0f, 0.0f), Vector(0.001f, 0.001f, 0.0f));
+    BilliardsBall ball1 = BilliardsBall(Vector(0.0f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball2 = BilliardsBall(Vector(0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball3 = BilliardsBall(Vector(0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball4 = BilliardsBall(Vector(0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball5 = BilliardsBall(Vector(0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball6 = BilliardsBall(Vector(-0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball7 = BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball8 = BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball9 = BilliardsBall(Vector(-0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball10 = BilliardsBall(Vector(-0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball11 = BilliardsBall(Vector(0.0f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball12 = BilliardsBall(Vector(0.1f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball13 = BilliardsBall(Vector(0.2f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball14 = BilliardsBall(Vector(0.3f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball15 = BilliardsBall(Vector(0.4f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
     balls.push_back(ball1);
+    balls.push_back(ball2);
+    balls.push_back(ball3);
+    balls.push_back(ball4);
+    balls.push_back(ball5);
+    balls.push_back(ball6);
+    balls.push_back(ball7);
+    balls.push_back(ball8);
+    balls.push_back(ball9);
+    balls.push_back(ball10);
+    balls.push_back(ball11);
+    balls.push_back(ball12);
+    balls.push_back(ball13);
+    balls.push_back(ball14);
+    balls.push_back(ball15);
+}
+
+bool BilliardsSimulation::noBallsColliding() {
+    for (int i = 0; i < balls.size(); i++) {
+        for (int j = i + 1; j < balls.size(); j++) {
+            BilliardsBall &ball1 = balls[i];
+            BilliardsBall &ball2 = balls[j];
+
+            double x1 = ball1.position.x;
+            double x2 = ball2.position.x;
+            double y1 = ball1.position.y;
+            double y2 = ball2.position.y;
+
+            double radius = ball1.radius;
+
+            double distanceSquared = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+            if (distanceSquared < radius * radius) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 void BilliardsSimulation::update() {
-    for (BilliardsBall &ball : balls) {
+    for (int i = 0; i < balls.size(); i++) {
+        BilliardsBall &ball = balls[i];
         ball.update();
+
+        // Check for collision with table
         float tableRightBorder = table.boundingRectangle.x + (table.boundingRectangle.width / 2.0f);
         float tableLeftBorder = table.boundingRectangle.x - (table.boundingRectangle.width / 2.0f);
         float tableTopBorder = table.boundingRectangle.y + (table.boundingRectangle.height / 2.0f);
@@ -90,19 +143,59 @@ void BilliardsSimulation::update() {
         float radius = ball.boundingCircle.radius;
         if (ball.boundingCircle.x + radius > tableRightBorder) {
             ball.velocity.x *= -1;
-            ball.boundingCircle.x = tableRightBorder - radius - (float) Util::EPSILON;
+            ball.position.x = ball.boundingCircle.x = tableRightBorder - radius - (float) Util::EPSILON;
         }
         if (ball.boundingCircle.x - radius < tableLeftBorder) {
             ball.velocity.x *= -1;
-            ball.boundingCircle.x = tableLeftBorder + radius + (float) Util::EPSILON;
+            ball.position.x = ball.boundingCircle.x = tableLeftBorder + radius + (float) Util::EPSILON;
         }
         if (ball.boundingCircle.y + radius > tableTopBorder) {
             ball.velocity.y *= -1;
-            ball.boundingCircle.y = tableTopBorder - radius - (float) Util::EPSILON;
+            ball.position.y = ball.boundingCircle.y = tableTopBorder - radius - (float) Util::EPSILON;
         }
         if (ball.boundingCircle.y - radius < tableBottomBorder) {
             ball.velocity.y *= -1;
-            ball.boundingCircle.y = tableBottomBorder +  radius + (float) Util::EPSILON;
+            ball.position.y = ball.boundingCircle.y = tableBottomBorder + radius + (float) Util::EPSILON;
+        }
+
+        // Check for collision with other balls
+        for (int j = i + 1; j < balls.size(); j++) {
+            BilliardsBall &otherBall = balls[j];
+
+            Vector p1 = ball.position;
+            Vector p2 = otherBall.position;
+
+            double distanceSquared = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+            if (distanceSquared  < radius * radius) {
+                // Found a collision
+                Vector v1 = ball.velocity;
+                Vector v2 = otherBall.velocity;
+
+                ball.velocity = v1 - (((v1 - v2) * (p1 - p2)) / ((p1 - p2) * (p1 - p2))) * (p1 - p2);
+                otherBall.velocity = v2 - (((v2 - v1) * (p2 - p1)) / ((p2 - p1) * (p2 - p1))) * (p2 - p1);
+
+                v1 = ball.velocity;
+                v2 = otherBall.velocity;
+
+                // Make sure they are no longer colliding
+                double a = (v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y);
+                double b = 2 * (p1.x - p2.x) * (v1.x - v2.x) + 2 * (p1.y - p2.y) * (v1.y - v2.y);
+                double c = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) - distanceSquared;
+
+                double t1 = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+                double t2 = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+
+                double t;
+
+                if (t1 >= 0) {
+                    t = t1 + Util::EPSILON;
+                } else {
+                    t = t2 + Util::EPSILON;
+                }
+
+                ball.position = p1 + t * v1;
+                otherBall.position = p2 + t * v2;
+            }
         }
     }
 }

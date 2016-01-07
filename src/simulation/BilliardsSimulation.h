@@ -9,10 +9,8 @@
 #include "Model.h"
 
 class BilliardsBall {
-private:
-    static constexpr float ballRadius = 0.0250f;
-
 public:
+    static constexpr float radius = 0.0250f;
     Vector position, velocity;
     CircleBoundingObject boundingCircle;
 
@@ -65,6 +63,8 @@ private:
     vector<BilliardsPocket> pockets;
 
     void drawBoundingObjects();
+
+    bool noBallsColliding();
 
 public:
     BilliardsSimulation(Window &window);
