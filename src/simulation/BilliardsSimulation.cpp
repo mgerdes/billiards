@@ -3,7 +3,8 @@
 BilliardsBall::BilliardsBall(Vector position, Vector velocity)
         : position(position),
           velocity(velocity),
-          boundingCircle(position.x, position.y, radius) { }
+          boundingCircle(position.x, position.y, radius),
+          model("resources/models/ball.obj", ResourceManager::tableModelShader) { }
 
 
 void BilliardsBall::update() {
@@ -11,11 +12,20 @@ void BilliardsBall::update() {
     position.y = boundingCircle.y = position.y + velocity.y;
 }
 
-BilliardsPocket::BilliardsPocket(CircleBoundingObject boundingCircle) : boundingCircle{boundingCircle} { }
+void BilliardsBall::draw() {
+    Matrix translation = Matrix(Vector(position.x, radius, position.y));
+    Matrix scale = Matrix::scaleMatrix(Vector(1.0, 1.0, 1.0));
+    Matrix modelMat = translation * scale;
+    ResourceManager::tableModelShader.setMatProperty("model_mat", modelMat.m);
+    model.draw();
+}
 
-BilliardsTable::BilliardsTable(RectangleBoundingObject boundingRectangle) : boundingRectangle{boundingRectangle},
-                                                                            model("resources/models/table.obj",
-                                                                                  ResourceManager::tableModelShader) { }
+BilliardsPocket::BilliardsPocket(CircleBoundingObject boundingCircle)
+        : boundingCircle{boundingCircle} { }
+
+BilliardsTable::BilliardsTable(RectangleBoundingObject boundingRectangle)
+        : boundingRectangle{boundingRectangle},
+          model("resources/models/table.obj", ResourceManager::tableModelShader) { }
 
 void BilliardsTable::draw() {
     Matrix translation = Matrix(Vector(tableModelDeltaX, tableModelDeltaY, 0.0));
@@ -166,7 +176,7 @@ void BilliardsSimulation::update() {
             Vector p2 = otherBall.position;
 
             double distanceSquared = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
-            if (distanceSquared  < radius * radius) {
+            if (distanceSquared < radius * radius) {
                 // Found a collision
                 Vector v1 = ball.velocity;
                 Vector v2 = otherBall.velocity;
@@ -212,5 +222,8 @@ void BilliardsSimulation::drawBoundingObjects() {
 
 void BilliardsSimulation::draw() {
     drawBoundingObjects();
+    for (BilliardsBall &ball : balls) {
+        ball.draw();
+    }
     table.draw();
 }

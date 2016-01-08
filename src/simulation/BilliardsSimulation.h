@@ -14,6 +14,8 @@ public:
     Vector position, velocity;
     CircleBoundingObject boundingCircle;
 
+    Model model;
+
     BilliardsBall(Vector position, Vector velocity);
 
     void draw();
