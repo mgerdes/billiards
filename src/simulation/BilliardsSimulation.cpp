@@ -144,7 +144,9 @@ void BilliardsSimulation::update() {
     for (int i = 0; i < balls.size(); i++) {
         BilliardsBall &ball = balls[i];
         ball.update();
-
+    }
+    for (int i = 0; i < balls.size(); i++) {
+        BilliardsBall &ball = balls[i];
         // Check for collision with table
         float tableRightBorder = table.boundingRectangle.x + (table.boundingRectangle.width / 2.0f);
         float tableLeftBorder = table.boundingRectangle.x - (table.boundingRectangle.width / 2.0f);
@@ -190,7 +192,7 @@ void BilliardsSimulation::update() {
                 // Make sure they are no longer colliding
                 double a = (v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y);
                 double b = 2 * (p1.x - p2.x) * (v1.x - v2.x) + 2 * (p1.y - p2.y) * (v1.y - v2.y);
-                double c = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) - distanceSquared;
+                double c = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) - radius * radius;
 
                 double t1 = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
                 double t2 = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
