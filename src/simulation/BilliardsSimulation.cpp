@@ -4,11 +4,22 @@ BilliardsStick::BilliardsStick()
         : model("resources/models/cue.obj", ResourceManager::tableModelShader) { }
 
 void BilliardsStick::draw(Vector positionOfCueBall) {
-    Matrix translation = Matrix(Vector(positionOfCueBall.x, 0.032f, positionOfCueBall.y));
-    Matrix scale = Matrix::scaleMatrix(Vector(1.0, 1.0, 1.0));
-    Matrix modelMat = translation * scale;
+    Matrix translation1 = Matrix(Vector(stickDelta, 0.0f, 0.0f));
+    Vector rotationVector = Vector(0, 1, 0);
+    Matrix translation2 = Matrix(Vector(positionOfCueBall.x, 0.032f, positionOfCueBall.y));
+    Matrix rotate = Matrix(rotationVector, angle);
+    Matrix modelMat = translation2 * rotate * translation1;
     ResourceManager::tableModelShader.setMatProperty("model_mat", modelMat.m);
     model.draw();
+}
+
+void BilliardsStick::update(Window &window) {
+    if (glfwGetKey(window.glfwWindow, GLFW_KEY_LEFT)) {
+        angle += angleDelta;
+    }
+    if (glfwGetKey(window.glfwWindow, GLFW_KEY_RIGHT)) {
+        angle -= angleDelta;
+    }
 }
 
 BilliardsBall::BilliardsBall(Vector position, Vector velocity, int ballNumber)
@@ -136,12 +147,16 @@ bool BilliardsSimulation::noBallsColliding() {
 }
 
 void BilliardsSimulation::update() {
+    stick.update(window);
+
     if (glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE)) {
-        balls[0].velocity = Vector(0.018f, 0.018f, 0.0f);
+        Vector rotationAxis = Vector(0.0f, 0.0f, 1.0f);
+        balls[0].velocity = Vector(0.018f, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
+        balls[0].velocity.y *= -1;
     }
 
-    Vector rotationAxis = Vector(0, 1, 0);
-    camera.position = camera.position.rotate(rotationAxis, 0.003);
+    Vector rotationAxis = Vector(0.0f, 1.0f, 0.0f);
+    camera.position = camera.position.rotate(rotationAxis, 0.003f);
     camera.updateViewMatrix();
     ResourceManager::tableModelShader.setMatProperty("view_mat", camera.viewMatrix.m);
     ResourceManager::boundingObjectShader.setMatProperty("view_mat", camera.viewMatrix.m);
@@ -157,7 +172,7 @@ void BilliardsSimulation::update() {
         float tableLeftBorder = table.boundingRectangle.x - (table.boundingRectangle.width / 2.0f);
         float tableTopBorder = table.boundingRectangle.y + (table.boundingRectangle.height / 2.0f);
         float tableBottomBorder = table.boundingRectangle.x - (table.boundingRectangle.height / 2.0f);
-        float radius = ball.boundingCircle.radius;
+        float radius = ball.radius;
         if (ball.boundingCircle.x + radius > tableRightBorder) {
             ball.velocity.x *= -1;
             ball.position.x = ball.boundingCircle.x = tableRightBorder - radius - (float) Util::EPSILON;

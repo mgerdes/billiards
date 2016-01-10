@@ -9,17 +9,24 @@
 #include "Model.h"
 
 class BilliardsStick {
+private:
+    static constexpr float stickDelta = -0.7900f;
+    static constexpr float angleDelta = 0.01f;
+
 public:
+    float angle = 0.0f;
     Model model;
 
     BilliardsStick();
 
     void draw(Vector positionOfCueBall);
+
+    void update(Window &window);
 };
 
 class BilliardsBall {
 public:
-    static constexpr float radius = 0.0320f;
+    static constexpr float radius = 0.0350f;
     int ballNumber;
     Vector position, velocity;
     CircleBoundingObject boundingCircle;
