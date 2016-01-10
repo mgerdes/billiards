@@ -1,8 +1,9 @@
 #include "BilliardsSimulation.h"
 
-BilliardsBall::BilliardsBall(Vector position, Vector velocity)
+BilliardsBall::BilliardsBall(Vector position, Vector velocity, int ballNumber)
         : position(position),
           velocity(velocity),
+          ballNumber(ballNumber),
           boundingCircle(position.x, position.y, radius),
           model("resources/models/ball.obj", ResourceManager::tableModelShader) { }
 
@@ -22,10 +23,12 @@ void BilliardsBall::update() {
 
 void BilliardsBall::draw() {
     Matrix translation = Matrix(Vector(position.x, radius, position.y));
-    Matrix scale = Matrix::scaleMatrix(Vector(1.0, 1.0, 1.0));
+    Matrix scale = Matrix::scaleMatrix(Vector(1.4, 1.4, 1.4));
     Matrix modelMat = translation * scale;
     ResourceManager::tableModelShader.setMatProperty("model_mat", modelMat.m);
+    ResourceManager::getTexture(std::to_string(ballNumber) + ".png").enable();
     model.draw();
+    ResourceManager::getTexture(std::to_string(ballNumber) + ".png").disable();
 }
 
 BilliardsPocket::BilliardsPocket(CircleBoundingObject boundingCircle)
@@ -94,21 +97,21 @@ BilliardsSimulation::BilliardsSimulation(Window &window)
     pockets.push_back(pocket5);
     pockets.push_back(pocket6);
 
-    BilliardsBall ball1 = BilliardsBall(Vector(0.0f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball2 = BilliardsBall(Vector(0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball3 = BilliardsBall(Vector(0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball4 = BilliardsBall(Vector(0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball5 = BilliardsBall(Vector(0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball6 = BilliardsBall(Vector(-0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball7 = BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball8 = BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball9 = BilliardsBall(Vector(-0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball10 = BilliardsBall(Vector(-0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball11 = BilliardsBall(Vector(0.0f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball12 = BilliardsBall(Vector(0.1f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball13 = BilliardsBall(Vector(0.2f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball14 = BilliardsBall(Vector(0.3f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
-    BilliardsBall ball15 = BilliardsBall(Vector(0.4f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f));
+    BilliardsBall ball1 = BilliardsBall(Vector(0.0f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 1);
+    BilliardsBall ball2 = BilliardsBall(Vector(0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 2);
+    BilliardsBall ball3 = BilliardsBall(Vector(0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 3);
+    BilliardsBall ball4 = BilliardsBall(Vector(0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 4);
+    BilliardsBall ball5 = BilliardsBall(Vector(0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 5);
+    BilliardsBall ball6 = BilliardsBall(Vector(-0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 6);
+    BilliardsBall ball7 = BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 7);
+    BilliardsBall ball8 = BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 8);
+    BilliardsBall ball9 = BilliardsBall(Vector(-0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 9);
+    BilliardsBall ball10 = BilliardsBall(Vector(-0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 10);
+    BilliardsBall ball11 = BilliardsBall(Vector(0.0f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 11);
+    BilliardsBall ball12 = BilliardsBall(Vector(0.1f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 12);
+    BilliardsBall ball13 = BilliardsBall(Vector(0.2f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 13);
+    BilliardsBall ball14 = BilliardsBall(Vector(0.3f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 14);
+    BilliardsBall ball15 = BilliardsBall(Vector(0.4f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 15);
     balls.push_back(ball1);
     balls.push_back(ball2);
     balls.push_back(ball3);
@@ -149,6 +152,12 @@ bool BilliardsSimulation::noBallsColliding() {
 }
 
 void BilliardsSimulation::update() {
+    Vector rotationAxis = Vector(0, 1, 0);
+    camera.position = camera.position.rotate(rotationAxis, 0.003);
+    camera.updateViewMatrix();
+    ResourceManager::tableModelShader.setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::boundingObjectShader.setMatProperty("view_mat", camera.viewMatrix.m);
+
     for (int i = 0; i < balls.size(); i++) {
         BilliardsBall &ball = balls[i];
         ball.update();

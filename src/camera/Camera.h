@@ -5,14 +5,13 @@
 #include "Vector.h"
 
 class Camera {
-private:
-    void updateProjectionMatrix();
-
-    void updateViewMatrix();
-
 public:
     Vector position, center, up;
     Matrix projectionMatrix, viewMatrix;
+
+    void updateProjectionMatrix();
+
+    void updateViewMatrix();
 
     Camera(Vector position, Vector center, Vector up);
 };

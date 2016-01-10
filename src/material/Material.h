@@ -10,6 +10,7 @@ public:
     Vector diffuseColor;
     Vector specularColor;
     Texture texture;
+    bool hasTexture;
     float shininess;
 
     Material();

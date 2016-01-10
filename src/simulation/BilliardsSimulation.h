@@ -10,13 +10,14 @@
 
 class BilliardsBall {
 public:
-    static constexpr float radius = 0.0250f;
+    static constexpr float radius = 0.0320f;
+    int ballNumber;
     Vector position, velocity;
     CircleBoundingObject boundingCircle;
 
     Model model;
 
-    BilliardsBall(Vector position, Vector velocity);
+    BilliardsBall(Vector position, Vector velocity, int ballNumber);
 
     void draw();
 

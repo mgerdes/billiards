@@ -114,15 +114,18 @@ Mesh::Mesh(vector<Vector> verticesVector,
 void Mesh::draw() {
     if (hasMaterial) {
         shader.setMaterialProperty(material);
-        material.texture.enable();
+        if (material.hasTexture) {
+            material.texture.enable();
+        }
     }
     shader.enable();
-
 
     glBindVertexArray(vao);
     glDrawArrays(type, 0, numberOfVertices);
     glBindVertexArray(0);
 
-    material.texture.disable();
+    if (hasMaterial && material.hasTexture) {
+        material.texture.disable();
+    }
     shader.disable();
 }

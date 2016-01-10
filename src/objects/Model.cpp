@@ -75,6 +75,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
     Vector ambientColor, diffuseColor, specularColor;
     float shininess = 1.0;
     Texture texture;
+    bool hasTexture;
     if (mesh->mMaterialIndex >= 0) {
         aiString path;
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
@@ -83,6 +84,9 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
 
         if (path.length > 0) {
             texture = ResourceManager::getTexture(path.data);
+            hasTexture = true;
+        } else {
+            hasTexture = false;
         }
 
         aiColor4D color;
@@ -100,7 +104,10 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
         Util::log(INFO, "A mesh was processed with no material.");
     }
 
-    Material meshMaterial = Material(texture, ambientColor, diffuseColor, specularColor, shininess);
+    Material meshMaterial = Material(ambientColor, diffuseColor, specularColor, shininess);
+    if (hasTexture) {
+        meshMaterial = Material(texture, ambientColor, diffuseColor, specularColor, shininess);
+    }
 
     return Mesh(meshVertices, meshNormals, meshTextureCoordinates, meshMaterial, shader);
 }
