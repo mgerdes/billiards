@@ -10,6 +10,14 @@ BilliardsBall::BilliardsBall(Vector position, Vector velocity)
 void BilliardsBall::update() {
     position.x = boundingCircle.x = position.x + velocity.x;
     position.y = boundingCircle.y = position.y + velocity.y;
+    double speed = velocity.length();
+    if (speed > Util::EPSILON) {
+        velocity.x = velocity.x - velocity.x * 0.01f;
+        velocity.y = velocity.y - velocity.y * 0.01f;
+    } else {
+        velocity.x = 0;
+        velocity.y = 0;
+    }
 }
 
 void BilliardsBall::draw() {
