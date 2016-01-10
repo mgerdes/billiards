@@ -13,6 +13,7 @@ void ResourceManager::installResources() {
     textures["chrome.jpg"] = Texture("chrome.jpg");
     textures["felt.jpg"] = Texture("felt.jpg");
     textures["mahogany.jpg"] = Texture("mahogany.jpg");
+    textures["0.png"] = Texture("0.png");
     textures["1.png"] = Texture("1.png");
     textures["2.png"] = Texture("2.png");
     textures["3.png"] = Texture("3.png");

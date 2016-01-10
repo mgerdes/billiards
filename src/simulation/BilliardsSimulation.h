@@ -8,6 +8,15 @@
 #include "ResourceManager.h"
 #include "Model.h"
 
+class BilliardsStick {
+public:
+    Model model;
+
+    BilliardsStick();
+
+    void draw(Vector positionOfCueBall);
+};
+
 class BilliardsBall {
 public:
     static constexpr float radius = 0.0320f;
@@ -62,6 +71,7 @@ private:
     Window &window;
     Camera camera;
     BilliardsTable table;
+    BilliardsStick stick;
     vector<BilliardsBall> balls;
     vector<BilliardsPocket> pockets;
 

@@ -1,5 +1,16 @@
 #include "BilliardsSimulation.h"
 
+BilliardsStick::BilliardsStick()
+        : model("resources/models/cue.obj", ResourceManager::tableModelShader) { }
+
+void BilliardsStick::draw(Vector positionOfCueBall) {
+    Matrix translation = Matrix(Vector(positionOfCueBall.x, 0.032f, positionOfCueBall.y));
+    Matrix scale = Matrix::scaleMatrix(Vector(1.0, 1.0, 1.0));
+    Matrix modelMat = translation * scale;
+    ResourceManager::tableModelShader.setMatProperty("model_mat", modelMat.m);
+    model.draw();
+}
+
 BilliardsBall::BilliardsBall(Vector position, Vector velocity, int ballNumber)
         : position(position),
           velocity(velocity),
@@ -65,68 +76,41 @@ BilliardsSimulation::BilliardsSimulation(Window &window)
     float tableTopX = tableX - (tableWidth / 2.0f);
     float tableTopY = tableY - (tableHeight / 2.0f);
 
-    CircleBoundingObject pocket1BoundingCircle = CircleBoundingObject(tableTopX + cornerHoleDeltaX,
-                                                                      tableTopY + cornerHoleDeltaY,
-                                                                      pocketRadius);
-    BilliardsPocket pocket1 = BilliardsPocket(pocket1BoundingCircle);
-    CircleBoundingObject pocket2BoundingCircle = CircleBoundingObject(tableTopX + tableWidth - cornerHoleDeltaX,
-                                                                      tableTopY + cornerHoleDeltaY,
-                                                                      pocketRadius);
-    BilliardsPocket pocket2 = BilliardsPocket(pocket2BoundingCircle);
-    CircleBoundingObject pocket3BoundingCircle = CircleBoundingObject(tableTopX + cornerHoleDeltaX,
-                                                                      tableTopY + tableHeight - cornerHoleDeltaY,
-                                                                      pocketRadius);
-    BilliardsPocket pocket3 = BilliardsPocket(pocket3BoundingCircle);
-    CircleBoundingObject pocket4BoundingCircle = CircleBoundingObject(tableTopX + tableWidth - cornerHoleDeltaX,
-                                                                      tableTopY + tableHeight - cornerHoleDeltaY,
-                                                                      pocketRadius);
-    BilliardsPocket pocket4 = BilliardsPocket(pocket4BoundingCircle);
-    CircleBoundingObject pocket5BoundingCircle = CircleBoundingObject(tableTopX + middleHoleDeltaX,
-                                                                      tableTopY + (tableHeight / 2.0f),
-                                                                      pocketRadius);
-    BilliardsPocket pocket5 = BilliardsPocket(pocket5BoundingCircle);
-    CircleBoundingObject pocket6BoundingCircle = CircleBoundingObject(tableTopX + tableWidth - middleHoleDeltaX,
-                                                                      tableTopY + (tableHeight / 2.0f),
-                                                                      pocketRadius);
-    BilliardsPocket pocket6 = BilliardsPocket(pocket6BoundingCircle);
+    pockets.push_back(BilliardsPocket(CircleBoundingObject(tableTopX + cornerHoleDeltaX,
+                                                           tableTopY + cornerHoleDeltaY,
+                                                           pocketRadius)));
+    pockets.push_back(BilliardsPocket(CircleBoundingObject(tableTopX + tableWidth - cornerHoleDeltaX,
+                                                           tableTopY + cornerHoleDeltaY,
+                                                           pocketRadius)));
+    pockets.push_back(BilliardsPocket(CircleBoundingObject(tableTopX + cornerHoleDeltaX,
+                                                           tableTopY + tableHeight - cornerHoleDeltaY,
+                                                           pocketRadius)));
+    pockets.push_back(BilliardsPocket(CircleBoundingObject(tableTopX + tableWidth - cornerHoleDeltaX,
+                                                           tableTopY + tableHeight - cornerHoleDeltaY,
+                                                           pocketRadius)));
+    pockets.push_back(BilliardsPocket(CircleBoundingObject(tableTopX + middleHoleDeltaX,
+                                                           tableTopY + (tableHeight / 2.0f),
+                                                           pocketRadius)));
+    pockets.push_back(BilliardsPocket(CircleBoundingObject(tableTopX + tableWidth - middleHoleDeltaX,
+                                                           tableTopY + (tableHeight / 2.0f),
+                                                           pocketRadius)));
 
-    pockets.push_back(pocket1);
-    pockets.push_back(pocket2);
-    pockets.push_back(pocket3);
-    pockets.push_back(pocket4);
-    pockets.push_back(pocket5);
-    pockets.push_back(pocket6);
-
-    BilliardsBall ball1 = BilliardsBall(Vector(0.0f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 1);
-    BilliardsBall ball2 = BilliardsBall(Vector(0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 2);
-    BilliardsBall ball3 = BilliardsBall(Vector(0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 3);
-    BilliardsBall ball4 = BilliardsBall(Vector(0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 4);
-    BilliardsBall ball5 = BilliardsBall(Vector(0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 5);
-    BilliardsBall ball6 = BilliardsBall(Vector(-0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 6);
-    BilliardsBall ball7 = BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 7);
-    BilliardsBall ball8 = BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 8);
-    BilliardsBall ball9 = BilliardsBall(Vector(-0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 9);
-    BilliardsBall ball10 = BilliardsBall(Vector(-0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 10);
-    BilliardsBall ball11 = BilliardsBall(Vector(0.0f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 11);
-    BilliardsBall ball12 = BilliardsBall(Vector(0.1f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 12);
-    BilliardsBall ball13 = BilliardsBall(Vector(0.2f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 13);
-    BilliardsBall ball14 = BilliardsBall(Vector(0.3f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 14);
-    BilliardsBall ball15 = BilliardsBall(Vector(0.4f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 15);
-    balls.push_back(ball1);
-    balls.push_back(ball2);
-    balls.push_back(ball3);
-    balls.push_back(ball4);
-    balls.push_back(ball5);
-    balls.push_back(ball6);
-    balls.push_back(ball7);
-    balls.push_back(ball8);
-    balls.push_back(ball9);
-    balls.push_back(ball10);
-    balls.push_back(ball11);
-    balls.push_back(ball12);
-    balls.push_back(ball13);
-    balls.push_back(ball14);
-    balls.push_back(ball15);
+    balls.push_back(BilliardsBall(Vector(0.4f, -0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 0));
+    balls.push_back(BilliardsBall(Vector(0.0f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 1));
+    balls.push_back(BilliardsBall(Vector(0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 2));
+    balls.push_back(BilliardsBall(Vector(0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 3));
+    balls.push_back(BilliardsBall(Vector(0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 4));
+    balls.push_back(BilliardsBall(Vector(0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 5));
+    balls.push_back(BilliardsBall(Vector(-0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 6));
+    balls.push_back(BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 7));
+    balls.push_back(BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 8));
+    balls.push_back(BilliardsBall(Vector(-0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 9));
+    balls.push_back(BilliardsBall(Vector(-0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 10));
+    balls.push_back(BilliardsBall(Vector(0.0f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 11));
+    balls.push_back(BilliardsBall(Vector(0.1f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 12));
+    balls.push_back(BilliardsBall(Vector(0.2f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 13));
+    balls.push_back(BilliardsBall(Vector(0.3f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 14));
+    balls.push_back(BilliardsBall(Vector(0.4f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 15));
 }
 
 bool BilliardsSimulation::noBallsColliding() {
@@ -152,6 +136,10 @@ bool BilliardsSimulation::noBallsColliding() {
 }
 
 void BilliardsSimulation::update() {
+    if (glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE)) {
+        balls[0].velocity = Vector(0.018f, 0.018f, 0.0f);
+    }
+
     Vector rotationAxis = Vector(0, 1, 0);
     camera.position = camera.position.rotate(rotationAxis, 0.003);
     camera.updateViewMatrix();
@@ -244,5 +232,6 @@ void BilliardsSimulation::draw() {
     for (BilliardsBall &ball : balls) {
         ball.draw();
     }
+    stick.draw(balls[0].position);
     table.draw();
 }
