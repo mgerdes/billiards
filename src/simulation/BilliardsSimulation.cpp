@@ -57,7 +57,7 @@ void BilliardsBall::update() {
 void BilliardsBall::draw() {
     Matrix translation = Matrix(Vector(position.x, radius, position.y));
     Matrix scale = Matrix::scaleMatrix(Vector(1.4f, 1.4f, 1.4f));
-    Vector rotationAxis = Vector(velocity.x, 0.0f, velocity.z).normalize() ^ Vector(0.0f, 1.0f, 0.0f);
+    Vector rotationAxis = Vector(velocity.x, 0.0f, velocity.y).normalize() ^ Vector(0.0f, 1.0f, 0.0f);
 
     Matrix rotate;
     if (velocity.length() > 0) {
