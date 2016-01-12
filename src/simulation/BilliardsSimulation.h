@@ -27,8 +27,10 @@ public:
 };
 
 class BilliardsBall {
+    static constexpr float angleDelta = 0.01f;
 public:
     static constexpr float radius = 0.0300f;
+    float angle = 0.0f;
     int ballNumber;
     Vector position, velocity;
     CircleBoundingObject boundingCircle;

@@ -44,6 +44,7 @@ void BilliardsBall::update() {
     position.x = boundingCircle.x = position.x + velocity.x;
     position.y = boundingCircle.y = position.y + velocity.y;
     double speed = velocity.length();
+    angle += 20 * speed;
     if (speed > Util::EPSILON) {
         velocity.x = velocity.x - velocity.x * 0.01f;
         velocity.y = velocity.y - velocity.y * 0.01f;
@@ -55,8 +56,16 @@ void BilliardsBall::update() {
 
 void BilliardsBall::draw() {
     Matrix translation = Matrix(Vector(position.x, radius, position.y));
-    Matrix scale = Matrix::scaleMatrix(Vector(1.4, 1.4, 1.4));
-    Matrix modelMat = translation * scale;
+    Matrix scale = Matrix::scaleMatrix(Vector(1.4f, 1.4f, 1.4f));
+    Vector rotationAxis = Vector(velocity.x, 0.0f, velocity.z).normalize() ^ Vector(0.0f, 1.0f, 0.0f);
+
+    Matrix rotate;
+    if (velocity.length() > 0) {
+        rotate = Matrix(rotationAxis, angle);
+    }
+
+    Matrix modelMat = translation * scale * rotate;
+
     ResourceManager::tableModelShader.setMatProperty("model_mat", modelMat.m);
     ResourceManager::getTexture(std::to_string(ballNumber) + ".png").enable();
     model.draw();
