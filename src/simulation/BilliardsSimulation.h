@@ -26,7 +26,7 @@ public:
 
 class BilliardsBall {
 public:
-    static constexpr float radius = 0.0350f;
+    static constexpr float radius = 0.0300f;
     int ballNumber;
     Vector position, velocity;
     CircleBoundingObject boundingCircle;

@@ -138,7 +138,7 @@ bool BilliardsSimulation::noBallsColliding() {
             double radius = ball1.radius;
 
             double distanceSquared = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
-            if (distanceSquared < radius * radius) {
+            if (distanceSquared < 4 * radius * radius) {
                 return false;
             }
         }
@@ -172,7 +172,7 @@ void BilliardsSimulation::update() {
         float tableLeftBorder = table.boundingRectangle.x - (table.boundingRectangle.width / 2.0f);
         float tableTopBorder = table.boundingRectangle.y + (table.boundingRectangle.height / 2.0f);
         float tableBottomBorder = table.boundingRectangle.x - (table.boundingRectangle.height / 2.0f);
-        float radius = ball.radius;
+        float radius = ball.boundingCircle.radius;
         if (ball.boundingCircle.x + radius > tableRightBorder) {
             ball.velocity.x *= -1;
             ball.position.x = ball.boundingCircle.x = tableRightBorder - radius - (float) Util::EPSILON;
@@ -198,7 +198,7 @@ void BilliardsSimulation::update() {
             Vector p2 = otherBall.position;
 
             double distanceSquared = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
-            if (distanceSquared < radius * radius) {
+            if (distanceSquared < 4 * radius * radius) {
                 // Found a collision
                 Vector v1 = ball.velocity;
                 Vector v2 = otherBall.velocity;
@@ -212,7 +212,7 @@ void BilliardsSimulation::update() {
                 // Make sure they are no longer colliding
                 double a = (v1.x - v2.x) * (v1.x - v2.x) + (v1.y - v2.y) * (v1.y - v2.y);
                 double b = 2 * (p1.x - p2.x) * (v1.x - v2.x) + 2 * (p1.y - p2.y) * (v1.y - v2.y);
-                double c = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) - radius * radius;
+                double c = (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y) - 4 * radius * radius;
 
                 double t1 = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
                 double t2 = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
