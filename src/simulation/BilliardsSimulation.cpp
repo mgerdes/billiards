@@ -4,7 +4,7 @@ BilliardsStick::BilliardsStick()
         : model("resources/models/cue.obj", ResourceManager::tableModelShader) { }
 
 void BilliardsStick::draw(Vector positionOfCueBall) {
-    Matrix translation1 = Matrix(Vector(stickDelta, 0.0f, 0.0f));
+    Matrix translation1 = Matrix(Vector(stickDelta - hitPower * 0.3f, 0.0f, 0.0f));
     Vector rotationVector = Vector(0, 1, 0);
     Matrix translation2 = Matrix(Vector(positionOfCueBall.x, 0.032f, positionOfCueBall.y));
     Matrix rotate = Matrix(rotationVector, angle);
@@ -19,6 +19,16 @@ void BilliardsStick::update(Window &window) {
     }
     if (glfwGetKey(window.glfwWindow, GLFW_KEY_RIGHT)) {
         angle -= angleDelta;
+    }
+    if (glfwGetKey(window.glfwWindow, GLFW_KEY_UP)) {
+        if (hitPower < 1.0f) {
+            hitPower += hitPowerDelta;
+        }
+    }
+    if (glfwGetKey(window.glfwWindow, GLFW_KEY_DOWN)) {
+        if (hitPower > 0.0f) {
+            hitPower -= hitPowerDelta;
+        }
     }
 }
 
@@ -151,7 +161,7 @@ void BilliardsSimulation::update() {
 
     if (glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE)) {
         Vector rotationAxis = Vector(0.0f, 0.0f, 1.0f);
-        balls[0].velocity = Vector(0.018f, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
+        balls[0].velocity = Vector(0.036f * stick.hitPower, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
         balls[0].velocity.y *= -1;
     }
 
