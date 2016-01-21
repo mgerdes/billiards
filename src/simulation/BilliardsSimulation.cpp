@@ -57,7 +57,7 @@ void BilliardsBall::update() {
 void BilliardsBall::draw() {
     Matrix translation = Matrix(Vector(position.x, radius, position.y));
     Matrix scale = Matrix::scaleMatrix(Vector(1.4f, 1.4f, 1.4f));
-    Vector rotationAxis = Vector(velocity.x, 0.0f, velocity.y).normalize() ^ Vector(0.0f, 1.0f, 0.0f);
+    Vector rotationAxis = Vector(velocity.x, 0.0f, velocity.y).normalize() ^Vector(0.0f, 1.0f, 0.0f);
 
     Matrix rotate;
     if (velocity.length() > 0) {
@@ -175,8 +175,11 @@ void BilliardsSimulation::update() {
     }
 
     Vector rotationAxis = Vector(0.0f, 1.0f, 0.0f);
-    camera.position = camera.position.rotate(rotationAxis, 0.003f);
+    camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) + Vector(-1.0f, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
+    camera.up = Vector(0.0f, 1.0f, 0.0f);
+    camera.center = Vector(balls[0].position.x, 0.0f, balls[0].position.y);
     camera.updateViewMatrix();
+
     ResourceManager::tableModelShader.setMatProperty("view_mat", camera.viewMatrix.m);
     ResourceManager::boundingObjectShader.setMatProperty("view_mat", camera.viewMatrix.m);
 
