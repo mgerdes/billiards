@@ -10,16 +10,16 @@
 
 class Model {
 private:
-    vector<Mesh> meshes;
+    vector<Mesh *> meshes;
 
-    void processNode(aiNode *node, const aiScene *scene, Shader &shader);
+    void processNode(aiNode *node, const aiScene *scene);
 
-    Mesh processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader);
+    Mesh *processMesh(aiMesh *mesh, const aiScene *scene);
 
 public:
-    Model(string fileName, Shader &shader);
+    Model(string fileName);
 
-    void draw();
+    void draw(Shader *shader, Matrix &modelMatrix);
 };
 
 #endif //BILLIARDS_MODEL_H

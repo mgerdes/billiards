@@ -10,31 +10,28 @@
 
 using namespace std;
 
-enum MeshType { LINE_LOOP = GL_LINE_LOOP, TRIANGLE = GL_TRIANGLES };
+enum MeshType {
+    LINE_LOOP = GL_LINE_LOOP, TRIANGLE = GL_TRIANGLES
+};
 
 class Mesh {
 private:
     MeshType type;
     GLuint vao;
     int numberOfVertices;
-    bool hasMaterial;
+    Material *material;
 public:
-    Material material;
-    Shader &shader;
-
     Mesh(vector<Vector> verticesVector,
          vector<Vector> normalsVector,
-         Shader &shader,
          MeshType type = MeshType::TRIANGLE);
 
     Mesh(vector<Vector> verticesVector,
          vector<Vector> normalsVector,
          vector<Vector> textureCoordinatesVector,
-         Material material,
-         Shader &shader,
+         Material *material,
          MeshType type = MeshType::TRIANGLE);
 
-    void draw();
+    void draw(Shader *shader, Matrix &modelMatrix);
 };
 
 #endif //BILLIARDS_MESH_H

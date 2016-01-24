@@ -2,10 +2,8 @@
 
 Mesh::Mesh(vector<Vector> verticesVector,
            vector<Vector> normalsVector,
-           Shader &shader,
-           MeshType type) : shader(shader),
+           MeshType type) : material(NULL),
                             type(type) {
-    hasMaterial = false;
     numberOfVertices = (int) verticesVector.size();
 
     GLfloat vertices[numberOfVertices * 3];
@@ -50,12 +48,9 @@ Mesh::Mesh(vector<Vector> verticesVector,
 Mesh::Mesh(vector<Vector> verticesVector,
            vector<Vector> normalsVector,
            vector<Vector> textureCoordinatesVector,
-           Material material,
-           Shader &shader,
+           Material *material,
            MeshType type) : material(material),
-                            shader(shader),
                             type(type) {
-    hasMaterial = true;
     numberOfVertices = (int) verticesVector.size();
 
     GLfloat vertices[numberOfVertices * 3];
@@ -111,21 +106,23 @@ Mesh::Mesh(vector<Vector> verticesVector,
     glBindVertexArray(0);
 }
 
-void Mesh::draw() {
-    if (hasMaterial) {
-        shader.setMaterialProperty(material);
-        if (material.hasTexture) {
-            material.texture.enable();
+void Mesh::draw(Shader *shader, Matrix &modelMatrix) {
+    shader->setMatProperty("model_mat", modelMatrix.m);
+
+    if (material) {
+        shader->setMaterialProperty(*material);
+        if (material->texture) {
+            material->texture->enable();
         }
     }
-    shader.enable();
+    shader->enable();
 
     glBindVertexArray(vao);
     glDrawArrays(type, 0, numberOfVertices);
     glBindVertexArray(0);
 
-    if (hasMaterial && material.hasTexture) {
-        material.texture.disable();
+    if (material && material->texture) {
+        material->texture->disable();
     }
-    shader.disable();
+    shader->disable();
 }

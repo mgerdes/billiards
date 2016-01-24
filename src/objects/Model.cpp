@@ -1,6 +1,6 @@
 #include "Model.h"
 
-Model::Model(string fileName, Shader &shader) {
+Model::Model(string fileName) {
     Assimp::Importer import;
     const aiScene *scene = import.ReadFile(fileName.c_str(), aiProcess_Triangulate);
 
@@ -17,23 +17,23 @@ Model::Model(string fileName, Shader &shader) {
     Util::log(Severity::INFO, std::to_string(scene->mNumMeshes) + " meshes");
     Util::log(Severity::INFO, std::to_string(scene->mNumTextures) + " textures");
 
-    this->processNode(scene->mRootNode, scene, shader);
+    this->processNode(scene->mRootNode, scene);
 
     Util::log(Severity::INFO, "Finished loading model: " + fileName);
 }
 
-void Model::processNode(aiNode *node, const aiScene *scene, Shader &shader) {
+void Model::processNode(aiNode *node, const aiScene *scene) {
     for (int i = 0; i < node->mNumMeshes; i++) {
         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-        meshes.push_back(processMesh(mesh, scene, shader));
+        meshes.push_back(processMesh(mesh, scene));
     }
 
     for (int i = 0; i < node->mNumChildren; i++) {
-        this->processNode(node->mChildren[i], scene, shader);
+        this->processNode(node->mChildren[i], scene);
     }
 }
 
-Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
+Mesh *Model::processMesh(aiMesh *mesh, const aiScene *scene) {
     vector<Vector> meshVertices;
     vector<Vector> meshNormals;
     vector<Vector> meshTextureCoordinates;
@@ -74,8 +74,7 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
     // Process material
     Vector ambientColor, diffuseColor, specularColor;
     float shininess = 1.0;
-    Texture texture;
-    bool hasTexture;
+    Texture *texture = 0;
     if (mesh->mMaterialIndex >= 0) {
         aiString path;
         aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
@@ -84,9 +83,6 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
 
         if (path.length > 0) {
             texture = ResourceManager::getTexture(path.data);
-            hasTexture = true;
-        } else {
-            hasTexture = false;
         }
 
         aiColor4D color;
@@ -104,16 +100,12 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene, Shader &shader) {
         Util::log(INFO, "A mesh was processed with no material.");
     }
 
-    Material meshMaterial = Material(ambientColor, diffuseColor, specularColor, shininess);
-    if (hasTexture) {
-        meshMaterial = Material(texture, ambientColor, diffuseColor, specularColor, shininess);
-    }
-
-    return Mesh(meshVertices, meshNormals, meshTextureCoordinates, meshMaterial, shader);
+    Material *meshMaterial = new Material(texture, ambientColor, diffuseColor, specularColor, shininess);
+    return new Mesh(meshVertices, meshNormals, meshTextureCoordinates, meshMaterial);
 }
 
-void Model::draw() {
-    for (Mesh mesh : meshes) {
-        mesh.draw();
+void Model::draw(Shader *shader, Matrix &modelMatrix) {
+    for (Mesh *mesh : meshes) {
+        mesh->draw(shader, modelMatrix);
     }
 }

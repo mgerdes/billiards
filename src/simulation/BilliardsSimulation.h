@@ -17,7 +17,7 @@ private:
 public:
     float angle = 0.0f;
     float hitPower = 0.0f;
-    Model model;
+    Model* model;
 
     BilliardsStick();
 
@@ -35,7 +35,7 @@ public:
     Vector position, velocity;
     CircleBoundingObject boundingCircle;
 
-    Model model;
+    Model* model;
 
     BilliardsBall(Vector position, Vector velocity, int ballNumber);
 
@@ -61,7 +61,7 @@ private:
 public:
     RectangleBoundingObject boundingRectangle;
 
-    Model model;
+    Model* model;
 
     BilliardsTable(RectangleBoundingObject boundingRectangle);
 

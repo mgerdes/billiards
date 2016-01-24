@@ -1,7 +1,7 @@
 #include "BilliardsSimulation.h"
 
 BilliardsStick::BilliardsStick()
-        : model("resources/models/cue.obj", ResourceManager::tableModelShader) { }
+        : model(ResourceManager::getModel("billiards_stick")) { }
 
 void BilliardsStick::draw(Vector positionOfCueBall) {
     Matrix translation1 = Matrix(Vector(stickDelta - hitPower * 0.3f, 0.0f, 0.0f));
@@ -9,8 +9,8 @@ void BilliardsStick::draw(Vector positionOfCueBall) {
     Matrix translation2 = Matrix(Vector(positionOfCueBall.x, 0.032f, positionOfCueBall.y));
     Matrix rotate = Matrix(rotationVector, angle);
     Matrix modelMat = translation2 * rotate * translation1;
-    ResourceManager::tableModelShader.setMatProperty("model_mat", modelMat.m);
-    model.draw();
+
+    model->draw(ResourceManager::getShader("default"), modelMat);
 }
 
 void BilliardsStick::update(Window &window) {
@@ -37,7 +37,7 @@ BilliardsBall::BilliardsBall(Vector position, Vector velocity, int ballNumber)
           velocity(velocity),
           ballNumber(ballNumber),
           boundingCircle(position.x, position.y, radius),
-          model("resources/models/ball.obj", ResourceManager::tableModelShader) { }
+          model(ResourceManager::getModel("billiards_ball")) { }
 
 
 void BilliardsBall::update() {
@@ -66,10 +66,9 @@ void BilliardsBall::draw() {
 
     Matrix modelMat = translation * scale * rotate;
 
-    ResourceManager::tableModelShader.setMatProperty("model_mat", modelMat.m);
-    ResourceManager::getTexture(std::to_string(ballNumber) + ".png").enable();
-    model.draw();
-    ResourceManager::getTexture(std::to_string(ballNumber) + ".png").disable();
+    ResourceManager::getTexture(std::to_string(ballNumber) + ".png")->enable();
+    model->draw(ResourceManager::getShader("default"), modelMat);
+    ResourceManager::getTexture(std::to_string(ballNumber) + ".png")->disable();
 }
 
 BilliardsPocket::BilliardsPocket(CircleBoundingObject boundingCircle)
@@ -77,7 +76,7 @@ BilliardsPocket::BilliardsPocket(CircleBoundingObject boundingCircle)
 
 BilliardsTable::BilliardsTable(RectangleBoundingObject boundingRectangle)
         : boundingRectangle{boundingRectangle},
-          model("resources/models/table.obj", ResourceManager::tableModelShader) { }
+          model(ResourceManager::getModel("billiards_table")) { }
 
 void BilliardsTable::draw() {
     Matrix translation = Matrix(Vector(tableModelDeltaX, tableModelDeltaY, 0.0));
@@ -86,8 +85,8 @@ void BilliardsTable::draw() {
                                               (tableModelScaleX + tableModelScaleY) / 2.0f,
                                               tableModelScaleY));
     Matrix modelMat = rotation * translation * scale;
-    ResourceManager::tableModelShader.setMatProperty("model_mat", modelMat.m);
-    model.draw();
+
+    model->draw(ResourceManager::getShader("default"), modelMat);
 }
 
 BilliardsSimulation::BilliardsSimulation(Window &window)
@@ -96,12 +95,12 @@ BilliardsSimulation::BilliardsSimulation(Window &window)
           table(RectangleBoundingObject(tableY, tableY, tableWidth, tableHeight)) {
     Light light = Light(Vector(0, 4, 0), Vector(0.1, 0.1, 0.1), Vector(0.3, 0.3, 0.3), Vector(0.0, 0.0, 0.0));
 
-    ResourceManager::tableModelShader.setLightProperty(light);
-    ResourceManager::tableModelShader.setMatProperty("proj_mat", camera.projectionMatrix.m);
-    ResourceManager::tableModelShader.setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::getShader("default")->setLightProperty(light);
+    ResourceManager::getShader("default")->setMatProperty("proj_mat", camera.projectionMatrix.m);
+    ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
 
-    ResourceManager::boundingObjectShader.setMatProperty("proj_mat", camera.projectionMatrix.m);
-    ResourceManager::boundingObjectShader.setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::getShader("bounding_object")->setMatProperty("proj_mat", camera.projectionMatrix.m);
+    ResourceManager::getShader("bounding_object")->setMatProperty("view_mat", camera.viewMatrix.m);
 
     float tableTopX = tableX - (tableWidth / 2.0f);
     float tableTopY = tableY - (tableHeight / 2.0f);
@@ -175,13 +174,17 @@ void BilliardsSimulation::update() {
     }
 
     Vector rotationAxis = Vector(0.0f, 1.0f, 0.0f);
-    camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) + Vector(-1.0f, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
+    camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) +
+                      Vector(-1.0f, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
     camera.up = Vector(0.0f, 1.0f, 0.0f);
     camera.center = Vector(balls[0].position.x, 0.0f, balls[0].position.y);
     camera.updateViewMatrix();
 
-    ResourceManager::tableModelShader.setMatProperty("view_mat", camera.viewMatrix.m);
-    ResourceManager::boundingObjectShader.setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
+
+    ResourceManager::getShader("bounding_object")->setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::getShader("bounding_object")->setMatProperty("view_mat", camera.viewMatrix.m);
 
     for (int i = 0; i < balls.size(); i++) {
         BilliardsBall &ball = balls[i];

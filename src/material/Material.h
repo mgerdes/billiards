@@ -9,15 +9,10 @@ public:
     Vector ambientColor;
     Vector diffuseColor;
     Vector specularColor;
-    Texture texture;
-    bool hasTexture;
+    Texture *texture;
     float shininess;
 
-    Material();
-
-    Material(Vector ambientColor, Vector diffuseColor, Vector specularColor, float shininess);
-
-    Material(Texture texture, Vector ambientColor, Vector diffuseColor, Vector specularColor, float shininess);
+    Material(Texture *texture, Vector ambientColor, Vector diffuseColor, Vector specularColor, float shininess);
 };
 
 #endif //BILLIARDS_MATERIAL_H
