@@ -30,6 +30,7 @@ class BilliardsBall {
     static constexpr float angleDelta = 0.01f;
 public:
     static constexpr float radius = 0.0300f;
+    static constexpr float smallestSpeed = 0.0001f;
     float angle = 0.0f;
     int ballNumber;
     Vector position, velocity;
@@ -85,10 +86,13 @@ private:
     BilliardsStick stick;
     vector<BilliardsBall> balls;
     vector<BilliardsPocket> pockets;
+    bool ballsMoving = true;
 
     void drawBoundingObjects();
 
     bool noBallsColliding();
+
+    bool noBallsMoving();
 
 public:
     BilliardsSimulation(Window &window);

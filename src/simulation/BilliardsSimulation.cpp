@@ -45,12 +45,10 @@ void BilliardsBall::update() {
     position.y = boundingCircle.y = position.y + velocity.y;
     double speed = velocity.length();
     angle += 20 * speed;
-    if (speed > Util::EPSILON) {
-        velocity.x = velocity.x - velocity.x * 0.01f;
-        velocity.y = velocity.y - velocity.y * 0.01f;
+    if (speed > smallestSpeed) {
+        velocity = velocity -  0.01f * velocity;
     } else {
-        velocity.x = 0;
-        velocity.y = 0;
+        velocity = Vector(0.0f, 0.0f, 0.0f);
     }
 }
 
@@ -142,6 +140,16 @@ BilliardsSimulation::BilliardsSimulation(Window &window)
     balls.push_back(BilliardsBall(Vector(0.4f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 15));
 }
 
+bool BilliardsSimulation::noBallsMoving() {
+    for (int i = 0; i < balls.size(); i++) {
+        double speed = balls[i].velocity.length();
+        if (speed > BilliardsBall::smallestSpeed) {
+            return false;
+        }
+    }
+    return true;
+}
+
 bool BilliardsSimulation::noBallsColliding() {
     for (int i = 0; i < balls.size(); i++) {
         for (int j = i + 1; j < balls.size(); j++) {
@@ -165,12 +173,16 @@ bool BilliardsSimulation::noBallsColliding() {
 }
 
 void BilliardsSimulation::update() {
+    ballsMoving = !noBallsMoving();
+
     stick.update(window);
 
-    if (glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE)) {
-        Vector rotationAxis = Vector(0.0f, 0.0f, 1.0f);
-        balls[0].velocity = Vector(0.036f * stick.hitPower, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
-        balls[0].velocity.y *= -1;
+    if (!ballsMoving) {
+        if (glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE)) {
+            Vector rotationAxis = Vector(0.0f, 0.0f, 1.0f);
+            balls[0].velocity = Vector(0.036f * stick.hitPower, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
+            balls[0].velocity.y *= -1;
+        }
     }
 
     Vector rotationAxis = Vector(0.0f, 1.0f, 0.0f);
@@ -272,6 +284,8 @@ void BilliardsSimulation::draw() {
     for (BilliardsBall &ball : balls) {
         ball.draw();
     }
-    stick.draw(balls[0].position);
+    if (!ballsMoving) {
+        stick.draw(balls[0].position);
+    }
     table.draw();
 }
