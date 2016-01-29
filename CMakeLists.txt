@@ -14,6 +14,9 @@ set(SOURCE_FILES
         src/resourceManager/ResourceManager.cpp
         src/shader/Shader.cpp
         src/simulation/BilliardsSimulation.cpp
+        src/simulation/BilliardsBall.cpp
+        src/simulation/BilliardsStick.cpp
+        src/simulation/BilliardsTable.cpp
         src/texture/Texture.cpp
         src/util/Util.cpp
         src/window/Window.cpp)
