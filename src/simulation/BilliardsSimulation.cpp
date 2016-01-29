@@ -98,12 +98,19 @@ void BilliardsSimulation::update() {
         }
     }
 
-    Vector rotationAxis = Vector(0.0f, 1.0f, 0.0f);
-    camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) +
-                      Vector(-1.0f, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
-    camera.up = Vector(0.0f, 1.0f, 0.0f);
-    camera.center = Vector(balls[0].position.x, 0.0f, balls[0].position.y);
-    camera.updateViewMatrix();
+    if (!ballsMoving) {
+        Vector rotationAxis = Vector(0.0f, 1.0f, 0.0f);
+        camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) +
+                          Vector(-1.0f, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
+        camera.up = Vector(0.0f, 1.0f, 0.0f);
+        camera.center = Vector(balls[0].position.x, 0.0f, balls[0].position.y);
+        camera.updateViewMatrix();
+    } else {
+        camera.position = Vector(0.0f, 2.4f, 0.0f);
+        camera.up = Vector(1.0f, 0.0f, 0.0f);
+        camera.center = Vector(0.0f, 0.0f, 0.0f);
+        camera.updateViewMatrix();
+    }
 
     ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
     ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
