@@ -85,48 +85,7 @@ bool BilliardsSimulation::noBallsColliding() {
     return true;
 }
 
-void BilliardsSimulation::update() {
-    ballsMoving = !noBallsMoving();
-
-    stick.update(window);
-
-    if (!ballsMoving) {
-        if (glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE)) {
-            stick.beforeAnimiationHitPower = stick.hitPower;
-            stick.isInAnimation = true;
-        }
-    }
-
-    if (stick.finishedAnimation) {
-        Vector rotationAxis = Vector(0.0f, 0.0f, 1.0f);
-        balls[0].velocity = Vector(0.036f * stick.beforeAnimiationHitPower, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
-        balls[0].velocity.y *= -1;
-    }
-
-    if (!ballsMoving && !stick.isInAnimation) {
-        Vector rotationAxis = Vector(0.0f, 1.0f, 0.0f);
-        camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) +
-                          Vector(-1.0f, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
-        camera.up = Vector(0.0f, 1.0f, 0.0f);
-        camera.center = Vector(balls[0].position.x, 0.0f, balls[0].position.y);
-        camera.updateViewMatrix();
-    } else {
-        camera.position = Vector(0.0f, 2.4f, 0.0f);
-        camera.up = Vector(1.0f, 0.0f, 0.0f);
-        camera.center = Vector(0.0f, 0.0f, 0.0f);
-        camera.updateViewMatrix();
-    }
-
-    ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
-    ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
-
-    ResourceManager::getShader("bounding_object")->setMatProperty("view_mat", camera.viewMatrix.m);
-    ResourceManager::getShader("bounding_object")->setMatProperty("view_mat", camera.viewMatrix.m);
-
-    for (int i = 0; i < balls.size(); i++) {
-        BilliardsBall &ball = balls[i];
-        ball.update();
-    }
+void BilliardsSimulation::manageCollisions() {
     for (int i = 0; i < balls.size(); i++) {
         BilliardsBall &ball = balls[i];
         // Check for collision with table
@@ -204,13 +163,81 @@ void BilliardsSimulation::drawBoundingObjects() {
     table.boundingRectangle.draw();
 }
 
+void BilliardsSimulation::update() {
+    if (currentState == BilliardsSimState::POSITIONING_CUE_STICK) 
+    {
+        if (glfwGetKey(window.glfwWindow, GLFW_KEY_LEFT)) {
+            stick.increaseAngle();
+        }
+        if (glfwGetKey(window.glfwWindow, GLFW_KEY_RIGHT)) {
+            stick.decreaseAngle();
+        }
+        if (glfwGetKey(window.glfwWindow, GLFW_KEY_UP)) {
+            stick.increaseHitPower();
+        }
+        if (glfwGetKey(window.glfwWindow, GLFW_KEY_DOWN)) {
+            stick.decreaseHitPower();
+        }
+        if (glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE)) {
+            stick.beforeAnimiationHitPower = stick.hitPower;
+            currentState = BilliardsSimState::ANIMATING_CUE_STICK;
+        }
+
+        camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) +
+            Vector(-1.0f, 0.0f, 0.0f).rotate(Vector::yAxis, stick.angle);
+        camera.up = Vector(0.0f, 1.0f, 0.0f);
+        camera.center = Vector(balls[0].position.x, 0.0f, balls[0].position.y);
+        camera.updateViewMatrix();
+    } 
+    else if (currentState == BilliardsSimState::ANIMATING_CUE_STICK) 
+    {
+        if (stick.hitPower > 0.0f) {
+            stick.hitPower -= 0.1 * stick.beforeAnimiationHitPower;
+        } else {
+            balls[0].velocity = Vector(0.036f * stick.beforeAnimiationHitPower, 0.0f, 0.0f).rotate(Vector::zAxis, stick.angle);
+            balls[0].velocity.y *= -1;
+            currentState = BilliardsSimState::SIMULATING_BALLS_MOVING;
+        }
+
+        camera.position = Vector(0.0f, 2.4f, 0.0f);
+        camera.up = Vector(1.0f, 0.0f, 0.0f);
+        camera.center = Vector(0.0f, 0.0f, 0.0f);
+        camera.updateViewMatrix();
+    } 
+    else if (currentState == BilliardsSimState::SIMULATING_BALLS_MOVING) 
+    {
+        for (int i = 0; i < balls.size(); i++) {
+            BilliardsBall &ball = balls[i];
+            ball.update();
+        }
+
+        manageCollisions();
+
+        if (noBallsMoving()) {
+            currentState = BilliardsSimState::POSITIONING_CUE_STICK;
+        }
+
+        camera.position = Vector(0.0f, 2.4f, 0.0f);
+        camera.up = Vector(1.0f, 0.0f, 0.0f);
+        camera.center = Vector(0.0f, 0.0f, 0.0f);
+        camera.updateViewMatrix();
+    }
+
+    ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
+
+    ResourceManager::getShader("bounding_object")->setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::getShader("bounding_object")->setMatProperty("view_mat", camera.viewMatrix.m);
+}
+
 void BilliardsSimulation::draw() {
     drawBoundingObjects();
     for (BilliardsBall &ball : balls) {
         ball.draw();
     }
-    if (!ballsMoving) {
+    table.draw();
+    if (currentState == BilliardsSimState::POSITIONING_CUE_STICK
+            || currentState == BilliardsSimState::ANIMATING_CUE_STICK) {
         stick.draw(balls[0].position);
     }
-    table.draw();
 }

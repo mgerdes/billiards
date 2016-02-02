@@ -12,6 +12,10 @@
 #include "ResourceManager.h"
 #include "Model.h"
 
+enum class BilliardsSimState {
+    POSITIONING_CUE_STICK, ANIMATING_CUE_STICK, SIMULATING_BALLS_MOVING
+};
+
 class BilliardsSimulation {
 private:
     float pocketRadius = 0.1f;
@@ -29,7 +33,6 @@ private:
     BilliardsStick stick;
     vector<BilliardsBall> balls;
     vector<BilliardsPocket> pockets;
-    bool ballsMoving = true;
 
     void drawBoundingObjects();
 
@@ -37,6 +40,9 @@ private:
 
     bool noBallsMoving();
 
+    void manageCollisions();
+
+    BilliardsSimState currentState = BilliardsSimState::SIMULATING_BALLS_MOVING;
 public:
     BilliardsSimulation(Window &window);
 

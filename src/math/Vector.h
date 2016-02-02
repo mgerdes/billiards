@@ -9,6 +9,7 @@ class Matrix;
 
 class Vector {
 public:
+    static Vector xAxis, yAxis, zAxis;
     float x, y, z;
 
     Vector();

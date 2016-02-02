@@ -14,15 +14,17 @@ public:
     float angle = 0.0f;
     float hitPower = 0.0f;
     float beforeAnimiationHitPower = 0.0f;
-    bool isInAnimation = false;
-    bool finishedAnimation = false;
     Model* model;
 
     BilliardsStick();
 
     void draw(Vector positionOfCueBall);
 
-    void update(Window &window);
+    void increaseHitPower();
+    void decreaseHitPower();
+
+    void increaseAngle();
+    void decreaseAngle();
 };
 
 #endif //BILLIARDS_BILLIARDSSTICK_H

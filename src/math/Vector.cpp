@@ -1,6 +1,10 @@
 #include <Util.h>
 #include "Vector.h"
 
+Vector Vector::xAxis = Vector(1.0f, 0.0f, 0.0f);
+Vector Vector::yAxis = Vector(0.0f, 1.0f, 0.0f);
+Vector Vector::zAxis = Vector(0.0f, 0.0f, 1.0f);
+
 Vector::Vector(float x, float y, float z) : x(x), y(y), z(z) { }
 
 Vector::Vector() : x(0), y(0), z(0) { }

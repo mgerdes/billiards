@@ -13,32 +13,22 @@ void BilliardsStick::draw(Vector positionOfCueBall) {
     model->draw(ResourceManager::getShader("default"), modelMat);
 }
 
-void BilliardsStick::update(Window &window) {
-    if (glfwGetKey(window.glfwWindow, GLFW_KEY_LEFT)) {
-        angle += angleDelta;
-    }
-    if (glfwGetKey(window.glfwWindow, GLFW_KEY_RIGHT)) {
-        angle -= angleDelta;
-    }
-    if (glfwGetKey(window.glfwWindow, GLFW_KEY_UP)) {
-        if (hitPower < 1.0f) {
-            hitPower += hitPowerDelta;
-        }
-    }
-    if (glfwGetKey(window.glfwWindow, GLFW_KEY_DOWN)) {
-        if (hitPower > 0.0f) {
-            hitPower -= hitPowerDelta;
-        }
-    }
-
-    if (isInAnimation && hitPower > 0.0f) {
-        hitPower -= 8 * hitPowerDelta;
-        if (hitPower <= 0.0f) {
-            finishedAnimation = true;
-        }
-    } else {
-        isInAnimation = false;
-        finishedAnimation = false;
+void BilliardsStick::increaseHitPower() {
+    if (hitPower < 1.0f) {
+        hitPower += hitPowerDelta;
     }
 }
 
+void BilliardsStick::decreaseHitPower() {
+    if (hitPower > 0.0f) {
+        hitPower -= hitPowerDelta;
+    }
+}
+
+void BilliardsStick::increaseAngle() {
+    angle += angleDelta;
+}
+
+void BilliardsStick::decreaseAngle() {
+    angle -= angleDelta;
+}
