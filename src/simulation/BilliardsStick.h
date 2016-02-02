@@ -13,6 +13,9 @@ private:
 public:
     float angle = 0.0f;
     float hitPower = 0.0f;
+    float beforeAnimiationHitPower = 0.0f;
+    bool isInAnimation = false;
+    bool finishedAnimation = false;
     Model* model;
 
     BilliardsStick();

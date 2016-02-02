@@ -30,5 +30,15 @@ void BilliardsStick::update(Window &window) {
             hitPower -= hitPowerDelta;
         }
     }
+
+    if (isInAnimation && hitPower > 0.0f) {
+        hitPower -= 8 * hitPowerDelta;
+        if (hitPower <= 0.0f) {
+            finishedAnimation = true;
+        }
+    } else {
+        isInAnimation = false;
+        finishedAnimation = false;
+    }
 }
 

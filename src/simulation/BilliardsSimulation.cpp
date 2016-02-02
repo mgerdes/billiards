@@ -92,13 +92,18 @@ void BilliardsSimulation::update() {
 
     if (!ballsMoving) {
         if (glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE)) {
-            Vector rotationAxis = Vector(0.0f, 0.0f, 1.0f);
-            balls[0].velocity = Vector(0.036f * stick.hitPower, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
-            balls[0].velocity.y *= -1;
+            stick.beforeAnimiationHitPower = stick.hitPower;
+            stick.isInAnimation = true;
         }
     }
 
-    if (!ballsMoving) {
+    if (stick.finishedAnimation) {
+        Vector rotationAxis = Vector(0.0f, 0.0f, 1.0f);
+        balls[0].velocity = Vector(0.036f * stick.beforeAnimiationHitPower, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
+        balls[0].velocity.y *= -1;
+    }
+
+    if (!ballsMoving && !stick.isInAnimation) {
         Vector rotationAxis = Vector(0.0f, 1.0f, 0.0f);
         camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) +
                           Vector(-1.0f, 0.0f, 0.0f).rotate(rotationAxis, stick.angle);
