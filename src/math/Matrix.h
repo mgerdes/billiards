@@ -33,6 +33,8 @@ public:
     Matrix(const Vector &translationVector);
 
     static Matrix scaleMatrix(const Vector &scaleVector);
+
+    void print();
 };
 
 

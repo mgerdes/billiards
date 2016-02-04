@@ -95,3 +95,12 @@ std::ostream &operator<<(std::ostream &stream, Matrix const &m) {
            << "[" << m.m[2] << ", " << m.m[6] << ", " << m.m[10] << ", " << m.m[14] << "]\n"
            << "[" << m.m[3] << ", " << m.m[7] << ", " << m.m[11] << ", " << m.m[15] << "]";
 }
+
+void Matrix::print() {
+    printf("\n");
+    printf("[%f, %f, %f, %f]\n", m[0], m[4], m[8], m[12]);
+    printf("[%f, %f, %f, %f]\n", m[1], m[5], m[9], m[13]);
+    printf("[%f, %f, %f, %f]\n", m[2], m[6], m[10], m[14]);
+    printf("[%f, %f, %f, %f]\n", m[3], m[7], m[11], m[15]);
+}
+

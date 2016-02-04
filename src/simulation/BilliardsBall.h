@@ -2,13 +2,13 @@
 #define BILLIARDS_BILLIARDSBALL_H
 
 #include "ResourceManager.h"
+#include "Quaternion.h"
 
 class BilliardsBall {
-    static constexpr float angleDelta = 0.01f;
+    Quaternion rotationQuaternion;
 public:
     static constexpr float radius = 0.0300f;
     static constexpr float smallestSpeed = 0.0001f;
-    float angle = 0.0f;
     int ballNumber;
     Vector position, velocity;
     CircleBoundingObject boundingCircle;

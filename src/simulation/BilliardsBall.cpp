@@ -7,13 +7,15 @@ BilliardsBall::BilliardsBall(Vector position, Vector velocity, int ballNumber)
           boundingCircle(position.x, position.y, radius),
           model(ResourceManager::getModel("billiards_ball")) { }
 
-
 void BilliardsBall::update() {
     position.x = boundingCircle.x = position.x + velocity.x;
     position.y = boundingCircle.y = position.y + velocity.y;
+
     double speed = velocity.length();
-    angle += 20 * speed;
     if (speed > smallestSpeed) {
+        Vector rotationAxis = Vector(velocity.x, 0.0f, velocity.y).normalize() ^ Vector(0.0f, 1.0f, 0.0f);
+        Quaternion tempQ = Quaternion(10 * speed, rotationAxis);
+        rotationQuaternion = tempQ * rotationQuaternion;
         velocity = velocity -  0.01f * velocity;
     } else {
         velocity = Vector(0.0f, 0.0f, 0.0f);
@@ -23,12 +25,7 @@ void BilliardsBall::update() {
 void BilliardsBall::draw() {
     Matrix translation = Matrix(Vector(position.x, radius, position.y));
     Matrix scale = Matrix::scaleMatrix(Vector(1.4f, 1.4f, 1.4f));
-    Vector rotationAxis = Vector(velocity.x, 0.0f, velocity.y).normalize() ^Vector(0.0f, 1.0f, 0.0f);
-
-    Matrix rotate;
-    if (velocity.length() > 0) {
-        rotate = Matrix(rotationAxis, angle);
-    }
+    Matrix rotate = rotationQuaternion.getMatrix();
 
     Matrix modelMat = translation * scale * rotate;
 
@@ -36,4 +33,3 @@ void BilliardsBall::draw() {
     model->draw(ResourceManager::getShader("default"), modelMat);
     ResourceManager::getTexture(std::to_string(ballNumber) + ".png")->disable();
 }
-
