@@ -3,6 +3,11 @@
 static const float ONE_DEG_IN_RAD = (float) ((2.0 * M_PI) / 360.0); // 0.017444444
 static const float ONE_RAD_IN_DEG = (float) (360.0 / (2.0 * M_PI)); //57.2957795
 
+Camera::Camera() { 
+    updateProjectionMatrix();
+    updateViewMatrix();
+}
+
 Camera::Camera(Vector position, Vector center, Vector up) : position(position),
                                                             center(center),
                                                             up(up) {

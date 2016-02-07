@@ -14,9 +14,10 @@ void BilliardsBall::update() {
     double speed = velocity.length();
     if (speed > smallestSpeed) {
         Vector rotationAxis = Vector(velocity.x, 0.0f, velocity.y).normalize() ^ Vector(0.0f, 1.0f, 0.0f);
-        Quaternion tempQ = Quaternion(10 * speed, rotationAxis);
+        Quaternion tempQ = Quaternion(15 * speed, rotationAxis);
         rotationQuaternion = tempQ * rotationQuaternion;
         velocity = velocity -  0.01f * velocity;
+    
     } else {
         velocity = Vector(0.0f, 0.0f, 0.0f);
     }

@@ -13,7 +13,7 @@
 #include "Model.h"
 
 enum class BilliardsSimState {
-    POSITIONING_CUE_STICK, ANIMATING_CUE_STICK, SIMULATING_BALLS_MOVING
+    POSITIONING_CUE_STICK, ANIMATING_CUE_STICK, SIMULATING_BALLS_MOVING, TRANSITIONING_CAMERA
 };
 
 class BilliardsSimulation {
@@ -34,6 +34,12 @@ private:
     vector<BilliardsBall> balls;
     vector<BilliardsPocket> pockets;
 
+    int timesCameraMovedInTransition;
+    BilliardsSimState stateAfterCameraTransition;
+    Vector cameraTransitionPositionDelta;
+    Vector cameraTransitionCenterDelta;
+    Vector cameraTransitionUpDelta;
+
     void drawBoundingObjects();
 
     bool noBallsColliding();
@@ -41,6 +47,11 @@ private:
     bool noBallsMoving();
 
     void manageCollisions();
+
+    void enterCameraTransitionState(Vector cameraTransitionEndPosition, 
+            Vector cameraTransitionEndCenter, 
+            Vector cameraTransitionEndUp, 
+            BilliardsSimState stateAfterCameraTransition);
 
     BilliardsSimState currentState = BilliardsSimState::SIMULATING_BALLS_MOVING;
 public:

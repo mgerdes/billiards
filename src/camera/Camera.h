@@ -13,6 +13,8 @@ public:
 
     void updateViewMatrix();
 
+    Camera();
+
     Camera(Vector position, Vector center, Vector up);
 };
 

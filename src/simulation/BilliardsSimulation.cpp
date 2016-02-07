@@ -153,6 +153,20 @@ void BilliardsSimulation::manageCollisions() {
     }
 }
 
+void BilliardsSimulation::enterCameraTransitionState(Vector cameraTransitionEndPosition, 
+        Vector cameraTransitionEndCenter, 
+        Vector cameraTransitionEndUp, 
+        BilliardsSimState stateAfterCameraTransition) {
+    timesCameraMovedInTransition = 0;
+
+    cameraTransitionPositionDelta = (1.0f/25.0f) * (cameraTransitionEndPosition - camera.position);
+    cameraTransitionCenterDelta = (1.0f/25.0f) * (cameraTransitionEndCenter - camera.center);
+    cameraTransitionUpDelta = (1.0f/25.0f) * (cameraTransitionEndUp - camera.up);
+
+    this->stateAfterCameraTransition = stateAfterCameraTransition;
+    currentState = BilliardsSimState::TRANSITIONING_CAMERA;
+}
+
 void BilliardsSimulation::drawBoundingObjects() {
     for (BilliardsPocket &pocket : pockets) {
         pocket.boundingCircle.draw();
@@ -164,48 +178,54 @@ void BilliardsSimulation::drawBoundingObjects() {
 }
 
 void BilliardsSimulation::update() {
-    if (currentState == BilliardsSimState::POSITIONING_CUE_STICK) 
-    {
+    if (currentState == BilliardsSimState::POSITIONING_CUE_STICK) {
+        bool changedCueStick = false;
+
         if (glfwGetKey(window.glfwWindow, GLFW_KEY_LEFT)) {
             stick.increaseAngle();
+            changedCueStick = true;
         }
         if (glfwGetKey(window.glfwWindow, GLFW_KEY_RIGHT)) {
             stick.decreaseAngle();
+            changedCueStick = true;
         }
         if (glfwGetKey(window.glfwWindow, GLFW_KEY_UP)) {
             stick.increaseHitPower();
+            changedCueStick = true;
         }
         if (glfwGetKey(window.glfwWindow, GLFW_KEY_DOWN)) {
             stick.decreaseHitPower();
+            changedCueStick = true;
         }
         if (glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE)) {
             stick.beforeAnimiationHitPower = stick.hitPower;
-            currentState = BilliardsSimState::ANIMATING_CUE_STICK;
+
+            Vector endPosition = Vector(0.0f, 2.4f, 0.0f);
+            Vector endCenter = Vector(0.0f, 0.0f, 0.0f);
+            Vector endUp = Vector(1.0f, 0.0f, 0.0f);
+
+            enterCameraTransitionState(endPosition, endCenter, endUp, BilliardsSimState::ANIMATING_CUE_STICK);
         }
 
-        camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) +
-            Vector(-1.0f, 0.0f, 0.0f).rotate(Vector::yAxis, stick.angle);
-        camera.up = Vector(0.0f, 1.0f, 0.0f);
-        camera.center = Vector(balls[0].position.x, 0.0f, balls[0].position.y);
-        camera.updateViewMatrix();
+        if (changedCueStick) {
+            camera.position = Vector(balls[0].position.x, 0.4f, balls[0].position.y) +
+                Vector(-1.0f, 0.0f, 0.0f).rotate(Vector::yAxis, stick.angle);
+            camera.up = Vector(0.0f, 1.0f, 0.0f);
+            camera.center = Vector(balls[0].position.x, 0.0f, balls[0].position.y);
+            camera.updateViewMatrix();
+        }
     } 
-    else if (currentState == BilliardsSimState::ANIMATING_CUE_STICK) 
-    {
+    else if (currentState == BilliardsSimState::ANIMATING_CUE_STICK) {
         if (stick.hitPower > 0.0f) {
             stick.hitPower -= 0.1 * stick.beforeAnimiationHitPower;
-        } else {
+        } 
+        else {
             balls[0].velocity = Vector(0.036f * stick.beforeAnimiationHitPower, 0.0f, 0.0f).rotate(Vector::zAxis, stick.angle);
             balls[0].velocity.y *= -1;
             currentState = BilliardsSimState::SIMULATING_BALLS_MOVING;
         }
-
-        camera.position = Vector(0.0f, 2.4f, 0.0f);
-        camera.up = Vector(1.0f, 0.0f, 0.0f);
-        camera.center = Vector(0.0f, 0.0f, 0.0f);
-        camera.updateViewMatrix();
     } 
-    else if (currentState == BilliardsSimState::SIMULATING_BALLS_MOVING) 
-    {
+    else if (currentState == BilliardsSimState::SIMULATING_BALLS_MOVING) {
         for (int i = 0; i < balls.size(); i++) {
             BilliardsBall &ball = balls[i];
             ball.update();
@@ -214,13 +234,26 @@ void BilliardsSimulation::update() {
         manageCollisions();
 
         if (noBallsMoving()) {
-            currentState = BilliardsSimState::POSITIONING_CUE_STICK;
-        }
+            Vector endPosition = Vector(balls[0].position.x, 0.4f, balls[0].position.y) +
+                Vector(-1.0f, 0.0f, 0.0f).rotate(Vector::yAxis, stick.angle);
+            Vector endCenter = Vector(balls[0].position.x, 0.0f, balls[0].position.y);
+            Vector endUp = Vector(0.0f, 1.0f, 0.0f);
 
-        camera.position = Vector(0.0f, 2.4f, 0.0f);
-        camera.up = Vector(1.0f, 0.0f, 0.0f);
-        camera.center = Vector(0.0f, 0.0f, 0.0f);
-        camera.updateViewMatrix();
+            enterCameraTransitionState(endPosition, endCenter, endUp, BilliardsSimState::POSITIONING_CUE_STICK);
+        }
+    }
+    else if (currentState == BilliardsSimState::TRANSITIONING_CAMERA) {
+        if (timesCameraMovedInTransition >= 25) {
+            currentState = stateAfterCameraTransition;
+        }
+        else {
+            camera.position = camera.position + cameraTransitionPositionDelta;                
+            camera.center = camera.center + cameraTransitionCenterDelta;                
+            camera.up = camera.up + cameraTransitionUpDelta;                
+            camera.updateViewMatrix();
+
+            timesCameraMovedInTransition++;
+        }
     }
 
     ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
