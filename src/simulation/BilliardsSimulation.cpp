@@ -245,6 +245,7 @@ void BilliardsSimulation::update() {
     else if (currentState == BilliardsSimState::TRANSITIONING_CAMERA) {
         if (timesCameraMovedInTransition >= 25) {
             currentState = stateAfterCameraTransition;
+            stateAfterCameraTransition = BilliardsSimState::TRANSITIONING_CAMERA;
         }
         else {
             camera.position = camera.position + cameraTransitionPositionDelta;                
@@ -270,7 +271,8 @@ void BilliardsSimulation::draw() {
     }
     table.draw();
     if (currentState == BilliardsSimState::POSITIONING_CUE_STICK
-            || currentState == BilliardsSimState::ANIMATING_CUE_STICK) {
+            || currentState == BilliardsSimState::ANIMATING_CUE_STICK
+            || stateAfterCameraTransition == BilliardsSimState::ANIMATING_CUE_STICK) {
         stick.draw(balls[0].position);
     }
 }
