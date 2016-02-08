@@ -25,7 +25,7 @@ void BilliardsBall::update() {
 
 void BilliardsBall::draw() {
     Matrix translation = Matrix(Vector(position.x, radius, position.y));
-    Matrix scale = Matrix::scaleMatrix(Vector(1.4f, 1.4f, 1.4f));
+    Matrix scale = Matrix::scaleMatrix(Vector(0.025f, 0.025f, 0.025f));
     Matrix rotate = rotationQuaternion.getMatrix();
 
     Matrix modelMat = translation * scale * rotate;
