@@ -57,7 +57,7 @@ private:
 public:
     BilliardsSimulation(Window &window);
 
-    void update();
+    void update(double timeDelta);
 
     void draw();
 };

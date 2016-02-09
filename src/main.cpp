@@ -11,10 +11,15 @@ int main() {
     ResourceManager::installResources();
     BilliardsSimulation simulation = BilliardsSimulation(window);
 
+    static double lastTime = glfwGetTime(); 
     while (!window.shouldClose()) {
         window.clearBufferAndColor();
 
-        simulation.update();
+        double currentTime = glfwGetTime();
+        double timeDelta = currentTime - lastTime;
+        lastTime = currentTime; 
+
+        simulation.update(timeDelta);
         simulation.draw();
 
         window.swapBuffers();

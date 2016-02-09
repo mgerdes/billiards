@@ -35,22 +35,22 @@ BilliardsSimulation::BilliardsSimulation(Window &window)
                                                            tableTopY + (tableHeight / 2.0f),
                                                            pocketRadius)));
 
-    balls.push_back(BilliardsBall(Vector(0.4f, -0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 0));
-    balls.push_back(BilliardsBall(Vector(0.0f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 1));
-    balls.push_back(BilliardsBall(Vector(0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 2));
-    balls.push_back(BilliardsBall(Vector(0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 3));
-    balls.push_back(BilliardsBall(Vector(0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 4));
-    balls.push_back(BilliardsBall(Vector(0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 5));
-    balls.push_back(BilliardsBall(Vector(-0.1f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 6));
-    balls.push_back(BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 7));
-    balls.push_back(BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 8));
-    balls.push_back(BilliardsBall(Vector(-0.3f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 9));
-    balls.push_back(BilliardsBall(Vector(-0.4f, 0.0f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 10));
-    balls.push_back(BilliardsBall(Vector(0.0f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 11));
-    balls.push_back(BilliardsBall(Vector(0.1f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 12));
-    balls.push_back(BilliardsBall(Vector(0.2f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 13));
-    balls.push_back(BilliardsBall(Vector(0.3f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 14));
-    balls.push_back(BilliardsBall(Vector(0.4f, 0.1f, 0.0f), Vector(0.008f, 0.008f, 0.0f), 15));
+    balls.push_back(BilliardsBall(Vector(0.4f, -0.1f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 0));
+    balls.push_back(BilliardsBall(Vector(0.0f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 1));
+    balls.push_back(BilliardsBall(Vector(0.1f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 2));
+    balls.push_back(BilliardsBall(Vector(0.2f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 3));
+    balls.push_back(BilliardsBall(Vector(0.3f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 4));
+    balls.push_back(BilliardsBall(Vector(0.4f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 5));
+    balls.push_back(BilliardsBall(Vector(-0.1f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 6));
+    balls.push_back(BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 7));
+    balls.push_back(BilliardsBall(Vector(-0.2f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 8));
+    balls.push_back(BilliardsBall(Vector(-0.3f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 9));
+    balls.push_back(BilliardsBall(Vector(-0.4f, 0.0f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 10));
+    balls.push_back(BilliardsBall(Vector(0.0f, 0.1f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 11));
+    balls.push_back(BilliardsBall(Vector(0.1f, 0.1f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 12));
+    balls.push_back(BilliardsBall(Vector(0.2f, 0.1f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 13));
+    balls.push_back(BilliardsBall(Vector(0.3f, 0.1f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 14));
+    balls.push_back(BilliardsBall(Vector(0.4f, 0.1f, 0.0f), Vector(0.8f, 0.8f, 0.0f), 15));
 }
 
 bool BilliardsSimulation::noBallsMoving() {
@@ -177,7 +177,7 @@ void BilliardsSimulation::drawBoundingObjects() {
     table.boundingRectangle.draw();
 }
 
-void BilliardsSimulation::update() {
+void BilliardsSimulation::update(double timeDelta) {
     if (currentState == BilliardsSimState::POSITIONING_CUE_STICK) {
         bool changedCueStick = false;
 
@@ -220,7 +220,7 @@ void BilliardsSimulation::update() {
             stick.hitPower -= 0.1 * stick.beforeAnimiationHitPower;
         } 
         else {
-            balls[0].velocity = Vector(0.036f * stick.beforeAnimiationHitPower, 0.0f, 0.0f).rotate(Vector::zAxis, stick.angle);
+            balls[0].velocity = Vector(3.5f * stick.beforeAnimiationHitPower, 0.0f, 0.0f).rotate(Vector::zAxis, stick.angle);
             balls[0].velocity.y *= -1;
             currentState = BilliardsSimState::SIMULATING_BALLS_MOVING;
         }
@@ -228,7 +228,7 @@ void BilliardsSimulation::update() {
     else if (currentState == BilliardsSimState::SIMULATING_BALLS_MOVING) {
         for (int i = 0; i < balls.size(); i++) {
             BilliardsBall &ball = balls[i];
-            ball.update();
+            ball.update(timeDelta);
         }
 
         manageCollisions();

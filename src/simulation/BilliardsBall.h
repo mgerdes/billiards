@@ -8,7 +8,7 @@ class BilliardsBall {
     Quaternion rotationQuaternion;
 public:
     static constexpr float radius = 0.0300f;
-    static constexpr float smallestSpeed = 0.0001f;
+    static constexpr float smallestSpeed = 0.01f;
     int ballNumber;
     Vector position, velocity;
     CircleBoundingObject boundingCircle;
@@ -19,7 +19,7 @@ public:
 
     void draw();
 
-    void update();
+    void update(double timeDelta);
 };
 
 #endif //BILLIARDS_BILLIARDSBALL_H
