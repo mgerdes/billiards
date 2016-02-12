@@ -28,7 +28,7 @@ private:
     float middleHoleDeltaX = -0.10f;
 
     Window &window;
-    Camera camera;
+    Camera &camera;
     BilliardsTable table;
     BilliardsStick stick;
     vector<BilliardsBall> balls;
@@ -55,7 +55,7 @@ private:
 
     BilliardsSimState currentState = BilliardsSimState::SIMULATING_BALLS_MOVING;
 public:
-    BilliardsSimulation(Window &window);
+    BilliardsSimulation(Window &window, Camera &camera);
 
     void update(double timeDelta);
 

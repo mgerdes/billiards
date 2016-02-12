@@ -43,7 +43,7 @@ void Camera::updateProjectionMatrix() {
     }
 
     float fovy = 60;
-    float aspect = 1.0;
+    float aspect = (float) width / (float) height;
     float near = 0.1;
     float far = 1000.0;
 

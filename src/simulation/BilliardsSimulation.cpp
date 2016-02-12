@@ -1,8 +1,8 @@
 #include "BilliardsSimulation.h"
 
-BilliardsSimulation::BilliardsSimulation(Window &window)
+BilliardsSimulation::BilliardsSimulation(Window &window, Camera &camera)
         : window(window),
-          camera(Vector(2.1, 2, 2.1), Vector(0, 0, 0), Vector(0, 1, 0)),
+          camera(camera),
           table(RectangleBoundingObject(tableY, tableY, tableWidth, tableHeight)) {
     Light light = Light(Vector(0, 4, 0), Vector(0.1, 0.1, 0.1), Vector(0.3, 0.3, 0.3), Vector(0.0, 0.0, 0.0));
 
@@ -258,10 +258,12 @@ void BilliardsSimulation::update(double timeDelta) {
     }
 
     ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
-    ResourceManager::getShader("default")->setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::getShader("default")->setMatProperty("proj_mat", camera.projectionMatrix.m);
 
     ResourceManager::getShader("bounding_object")->setMatProperty("view_mat", camera.viewMatrix.m);
-    ResourceManager::getShader("bounding_object")->setMatProperty("view_mat", camera.viewMatrix.m);
+    ResourceManager::getShader("bounding_object")->setMatProperty("proj_mat", camera.projectionMatrix.m);
+
+    glViewport(0, 0, camera.width, camera.height);
 }
 
 void BilliardsSimulation::draw() {

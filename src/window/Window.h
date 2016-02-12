@@ -16,6 +16,10 @@ public:
     void clearBufferAndColor();
 
     void swapBuffers();
+
+    int getWidth();
+
+    int getHeight();
 };
 
 #endif //BILLIARDS_WINDOW_H

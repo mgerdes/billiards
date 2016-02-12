@@ -9,6 +9,8 @@ public:
     Vector position, center, up;
     Matrix projectionMatrix, viewMatrix;
 
+    int width = 1, height = 1;
+
     void updateProjectionMatrix();
 
     void updateViewMatrix();

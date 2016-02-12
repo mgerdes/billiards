@@ -37,3 +37,15 @@ void Window::swapBuffers() {
     glfwPollEvents();
     glfwSwapBuffers(glfwWindow);
 }
+
+int Window::getWidth() {
+    int width, height;
+    glfwGetFramebufferSize(glfwWindow, &width, &height);
+    return width;
+}
+
+int Window::getHeight() {
+    int width, height;
+    glfwGetFramebufferSize(glfwWindow, &width, &height);
+    return height;
+}
