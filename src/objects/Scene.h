@@ -10,8 +10,6 @@ class Scene {
     public:
         Scene(int maxNumObjects);
 
-        ~Scene();
-
         void addObject(Object3D *object);
 
         Object3D** getObjects();

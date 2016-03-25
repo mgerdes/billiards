@@ -3,7 +3,9 @@
 Object3D::Object3D(int maxNumChildren, bool isMesh) {
     this->maxNumChildren = maxNumChildren;
     this->numChildren = 0;
-    this->children = new Object3D*[maxNumChildren];
+    if (maxNumChildren > 0) {
+        this->children = new Object3D*[maxNumChildren];
+    }
     this->isMesh = isMesh;
 }
 

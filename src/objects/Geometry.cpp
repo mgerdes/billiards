@@ -7,9 +7,10 @@ Geometry::Geometry(int maxVertices) {
 }
 
 void Geometry::addVertex(float x, float y, float z) {
-    this->vertices[this->numVertices++] = x;
-    this->vertices[this->numVertices++] = y;
-    this->vertices[this->numVertices++] = z;
+    this->vertices[this->numVertices * 3] = x;
+    this->vertices[this->numVertices * 3 + 1] = y;
+    this->vertices[this->numVertices * 3 + 2] = z;
+    this->numVertices++;
 }
 
 int Geometry::getNumVertices() {

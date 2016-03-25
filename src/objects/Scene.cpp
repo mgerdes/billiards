@@ -6,10 +6,6 @@ Scene::Scene(int maxNumObjects) {
     this->objects = new Object3D*[maxNumObjects];    
 }
 
-Scene::~Scene() {
-    delete[] objects;
-}
-
 void Scene::addObject(Object3D *object) {
     this->objects[this->numObjects++] = object;
 }
