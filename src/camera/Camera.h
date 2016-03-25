@@ -1,23 +1,21 @@
 #ifndef BILLIARDS_CAMERA_H
 #define BILLIARDS_CAMERA_H
 
-#include "Matrix.h"
-#include "Vector.h"
+#include <math.h>
+#include "Matrix4.h"
+#include "Vector3.h"
 
 class Camera {
-public:
-    Vector position, center, up;
-    Matrix projectionMatrix, viewMatrix;
+    private:
+        float fieldOfView, aspectRatio, near, far;
+        Vector3 *position, *lookAt, *up;
+        Matrix4 *projectionMatrix, *viewMatrix;
+    public:
+        Camera(float fieldOfView, float aspectRatio, float near, float far);
 
-    int width = 1, height = 1;
+        void updateProjectionMatrix();
 
-    void updateProjectionMatrix();
-
-    void updateViewMatrix();
-
-    Camera();
-
-    Camera(Vector position, Vector center, Vector up);
+        void updateViewMatrix();
 };
 
-#endif //BILLIARDS_CAMERA_H
+#endif 

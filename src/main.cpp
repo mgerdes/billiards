@@ -25,7 +25,7 @@ int main() {
     Scene *scene = new Scene(1);
     scene->addObject(table);
 
-    Camera *camera;
+    Camera *camera = new Camera(45, 1, 0.1, 100);
 
     Renderer *renderer = new Renderer(scene, camera);
 

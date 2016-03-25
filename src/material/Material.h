@@ -1,7 +1,6 @@
 #ifndef BILLIARDS_MATERIAL_H
 #define BILLIARDS_MATERIAL_H
 
-#include "Vector.h"
 #include "Texture.h"
 #include "Shader.h"
 

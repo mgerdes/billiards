@@ -5,12 +5,9 @@ project(billiards)
 set(SOURCE_FILES
         src/billiards_game/BilliardsBall.cpp
         src/camera/Camera.cpp
-        src/light/Light.cpp
         src/material/Material.cpp
-        src/math/Vector.cpp
         src/math/Vector3.cpp
-        src/math/Matrix.cpp
-        src/math/Quaternion.cpp
+        src/math/Matrix4.cpp
         src/objects/Mesh.cpp
         src/objects/Geometry.cpp
         src/objects/Object3D.cpp
@@ -24,7 +21,6 @@ set(SOURCE_FILES
         src/window/Window.cpp)
 include_directories(src/camera
         src/billiards_game
-        src/light
         src/material
         src/math
         src/objects
