@@ -3,43 +3,19 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <vector>
 #include "Util.h"
-#include "Vector.h"
-#include "Material.h"
-#include "Light.h"
-
-using namespace std;
 
 class Shader {
-private:
-    GLuint shaderProgram;
-    unordered_map<string, GLint> properties;
-public:
-    Shader();
+    private:
+        unsigned int shaderProgram;
 
-    Shader(string vertexShaderLocation, string fragmentShaderLocation);
+        unsigned int compileShader(const char *fileName, int shaderType);
+    public:
+        Shader(const char *vertexShaderLocation, const char *fragmentShaderLocation);
 
-    void enable();
+        void bind();
 
-    void disable();
-
-    void addProperty(string propertyName);
-
-    void setMaterialProperty(Material &material);
-
-    void setLightProperty(Light &light);
-
-    void setMatProperty(string propertyName, float m[16]);
-
-    void setVec3Property(string propertyName, Vector &v);
-
-    void setVec3Property(string propertyName, float x, float y, float z);
-
-    void setFloatProperty(string propertyName, float f);
+        void unbind();
 };
 
 

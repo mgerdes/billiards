@@ -7,28 +7,26 @@ set(SOURCE_FILES
         src/light/Light.cpp
         src/material/Material.cpp
         src/math/Vector.cpp
+        src/math/Vector3.cpp
         src/math/Matrix.cpp
         src/math/Quaternion.cpp
-        src/objects/BoundingObject.cpp
         src/objects/Mesh.cpp
-        src/objects/Model.cpp
-        src/resourceManager/ResourceManager.cpp
+        src/objects/Geometry.cpp
+        src/objects/Object3D.cpp
+        src/objects/Scene.cpp
         src/shader/Shader.cpp
-        src/simulation/BilliardsSimulation.cpp
-        src/simulation/BilliardsBall.cpp
-        src/simulation/BilliardsStick.cpp
-        src/simulation/BilliardsTable.cpp
+        src/renderer/Renderer.cpp
         src/texture/Texture.cpp
         src/util/Util.cpp
+        src/util/ResourceManager.cpp
         src/window/Window.cpp)
 include_directories(src/camera
         src/light
         src/material
         src/math
         src/objects
-        src/resourceManager
+        src/renderer
         src/shader
-        src/simulation
         src/texture
         src/util
         src/window)

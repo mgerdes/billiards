@@ -1,37 +1,22 @@
 #ifndef BILLIARDS_MESH_H
 #define BILLIARDS_MESH_H
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <vector>
-#include "Vector.h"
-#include "Shader.h"
+#include "Object3D.h"
+#include "Geometry.h"
 #include "Material.h"
 
-using namespace std;
+class Mesh : public Object3D {
+    private:
+        unsigned int VAO;
 
-enum MeshType {
-    LINE_LOOP = GL_LINE_LOOP, TRIANGLE = GL_TRIANGLES
+        Geometry *geometry;
+        Material *material;
+    public:
+        Mesh(Geometry *geometry, Material *material);
+
+        void draw();
+
+        Material *getMaterial();
 };
 
-class Mesh {
-private:
-    MeshType type;
-    GLuint vao;
-    int numberOfVertices;
-    Material *material;
-public:
-    Mesh(vector<Vector> verticesVector,
-         vector<Vector> normalsVector,
-         MeshType type = MeshType::TRIANGLE);
-
-    Mesh(vector<Vector> verticesVector,
-         vector<Vector> normalsVector,
-         vector<Vector> textureCoordinatesVector,
-         Material *material,
-         MeshType type = MeshType::TRIANGLE);
-
-    void draw(Shader *shader, Matrix &modelMatrix);
-};
-
-#endif //BILLIARDS_MESH_H
+#endif 

@@ -3,7 +3,7 @@
 #define COLOR_RED "\x1b[31m"
 #define COLOR_RESET "\x1b[0m"
 
-string Util::readFile(string fileName) {
+std::string Util::readFile(std::string fileName) {
     ifstream file(fileName);
 
     if (file.fail()) {

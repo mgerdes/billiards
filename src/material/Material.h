@@ -3,16 +3,15 @@
 
 #include "Vector.h"
 #include "Texture.h"
+#include "Shader.h"
 
 class Material {
-public:
-    Vector ambientColor;
-    Vector diffuseColor;
-    Vector specularColor;
-    Texture *texture;
-    float shininess;
+    private:
+        Shader *shader;
+    public:
+        Material(Shader *shader);
 
-    Material(Texture *texture, Vector ambientColor, Vector diffuseColor, Vector specularColor, float shininess);
+        Shader *getShader();
 };
 
-#endif //BILLIARDS_MATERIAL_H
+#endif 

@@ -13,12 +13,12 @@ enum Severity {
 };
 
 class Util {
-public:
-    static constexpr double EPSILON = 0.00001;
+    public:
+        static constexpr double EPSILON = 0.00001;
 
-    static string readFile(string file);
+        static std::string readFile(std::string fileName);
 
-    static void log(Severity type, string error);
+        static void log(Severity type, string error);
 };
 
-#endif //BILLIARDS_UTIL_H
+#endif 
