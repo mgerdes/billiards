@@ -32,6 +32,20 @@ unsigned int Shader::compileShader(const char *fileName, int shaderType) {
     return shader;
 }
 
+void Shader::addProperty(const char *propertyName) {
+    int propertyLocation = glGetUniformLocation(shaderProgram, propertyName);
+    if (propertyLocation == -1) {
+        Util::log(Severity::ERROR, "Attempting to add an invalid property name to shader: " + std::string(propertyName));
+    }
+    properties[propertyName] = propertyLocation;
+}
+
+void Shader::setMatProperty(const char* propertyName, float m[16]) {
+    if (!properties.count(propertyName)) {
+        addProperty(propertyName);
+    }
+    glUniformMatrix4fv(properties[propertyName], 1, GL_FALSE, m);
+}
 
 void Shader::bind() {
     glUseProgram(shaderProgram);

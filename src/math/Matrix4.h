@@ -23,6 +23,8 @@ class Matrix4 {
 
         void clear();
 
+        static Matrix4 *identity();
+
         static Matrix4 *multiply(Matrix4 *m1, Matrix4 *m2);
 
         static Matrix4 *translation(Vector3 *translation);

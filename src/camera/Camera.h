@@ -16,6 +16,10 @@ class Camera {
         void updateProjectionMatrix();
 
         void updateViewMatrix();
+
+        Matrix4 *getProjectionMatrix();
+
+        Matrix4 *getViewMatrix();
 };
 
 #endif 

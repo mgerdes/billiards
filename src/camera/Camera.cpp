@@ -69,3 +69,11 @@ void Camera::updateProjectionMatrix() {
     projectionMatrix->m[14] = pz;
     projectionMatrix->m[11] = -1.0f;
 }
+
+Matrix4 *Camera::getProjectionMatrix() {
+    return projectionMatrix;
+}
+
+Matrix4 *Camera::getViewMatrix() {
+    return viewMatrix;
+}

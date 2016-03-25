@@ -52,3 +52,10 @@ Matrix4 *Matrix4::translation(Vector3 *translation) {
             0, 0, 0, 1);
 }
 
+Matrix4 *Matrix4::identity() {
+    return new Matrix4(
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1);
+}
