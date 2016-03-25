@@ -5,13 +5,25 @@ Renderer::Renderer(Scene *scene, Camera *camera) {
     this->camera = camera;
 }
 
-void Renderer::render() {
-    Mesh** meshes = this->scene->getMeshes();
-    int numMeshes = this->scene->getNumMeshes();
+void Renderer::renderObject(Object3D *object) {
+    if (object->getIsMesh()) {
+        Mesh *mesh = (Mesh*) object;
+        mesh->getMaterial()->getShader()->bind();
+        mesh->draw();
+        mesh->getMaterial()->getShader()->unbind();
+    }
 
-    for (int i = 0; i < numMeshes; i++) {
-        meshes[i]->getMaterial()->getShader()->bind();
-        meshes[i]->draw();
-        meshes[i]->getMaterial()->getShader()->unbind();
+    Object3D **children = object->getChildren();
+    for (int i = 0; i < object->getNumChildren(); i++) {
+        renderObject(children[i]);
+    }
+}
+
+void Renderer::render() {
+    Object3D** objects = this->scene->getObjects();
+    int numObjects = this->scene->getNumObjects();
+
+    for (int i = 0; i < numObjects; i++) {
+        renderObject(objects[i]);
     }
 }

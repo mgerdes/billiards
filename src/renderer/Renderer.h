@@ -8,6 +8,8 @@ class Renderer {
     private:
         Scene *scene;
         Camera *camera;
+
+        void renderObject(Object3D *object);
     public:
         Renderer(Scene *scene, Camera *camera);
 

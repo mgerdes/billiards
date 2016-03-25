@@ -1,15 +1,20 @@
 #include "Window.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "ObjLoader.h"
 
 int main() {
     Window window = Window("opengl", 1000, 1000);
 
     ResourceManager::installResources();
+    Object3D *table = ObjLoader::loadObject("resources/models/table.obj");
 
-    Geometry *triangleGeometry = new Geometry(3);
-    triangleGeometry->addVertex(0, 1, 0);
+    Geometry *triangleGeometry = new Geometry(6);
+    triangleGeometry->addVertex(1, 1, 0);
     triangleGeometry->addVertex(1, 0, 0);
+    triangleGeometry->addVertex(-1, 0, 0);
+    triangleGeometry->addVertex(1, 1, 0);
+    triangleGeometry->addVertex(-1, 1, 0);
     triangleGeometry->addVertex(-1, 0, 0);
 
     Shader *triangleShader = ResourceManager::getShader(Shaders::BASIC);
@@ -18,7 +23,7 @@ int main() {
     Mesh *triangleMesh = new Mesh(triangleGeometry, triangleMaterial);
 
     Scene *scene = new Scene(1);
-    scene->addMesh(triangleMesh);
+    scene->addObject(table);
 
     Camera *camera;
 

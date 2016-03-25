@@ -3,6 +3,7 @@ Set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 project(billiards)
 
 set(SOURCE_FILES
+        src/billiards_game/BilliardsBall.cpp
         src/camera/Camera.cpp
         src/light/Light.cpp
         src/material/Material.cpp
@@ -18,9 +19,11 @@ set(SOURCE_FILES
         src/renderer/Renderer.cpp
         src/texture/Texture.cpp
         src/util/Util.cpp
+        src/util/ObjLoader.cpp
         src/util/ResourceManager.cpp
         src/window/Window.cpp)
 include_directories(src/camera
+        src/billiards_game
         src/light
         src/material
         src/math

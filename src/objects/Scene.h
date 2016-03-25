@@ -5,18 +5,18 @@
 
 class Scene {
     private:
-        int maxNumMeshes, numMeshes;
-        Mesh **meshes;
+        int maxNumObjects, numObjects;
+        Object3D **objects;
     public:
-        Scene(int maxNumMeshes);
+        Scene(int maxNumObjects);
 
         ~Scene();
 
-        void addMesh(Mesh *mesh);
+        void addObject(Object3D *object);
 
-        Mesh** getMeshes();
+        Object3D** getObjects();
 
-        int getNumMeshes();
+        int getNumObjects();
 };
 
 #endif

@@ -1,24 +1,23 @@
 #include "Scene.h"
 
-Scene::Scene(int maxNumMeshes) {
-    this->numMeshes = 0;
-    this->maxNumMeshes = maxNumMeshes;
-    this->meshes = new Mesh*[maxNumMeshes];    
+Scene::Scene(int maxNumObjects) {
+    this->numObjects = 0;
+    this->maxNumObjects = maxNumObjects;
+    this->objects = new Object3D*[maxNumObjects];    
 }
 
 Scene::~Scene() {
-    delete[] meshes;
+    delete[] objects;
 }
 
-void Scene::addMesh(Mesh *mesh) {
-    this->meshes[this->numMeshes++] = mesh;
+void Scene::addObject(Object3D *object) {
+    this->objects[this->numObjects++] = object;
 }
 
-int Scene::getNumMeshes() {
-    return this->numMeshes;
+int Scene::getNumObjects() {
+    return this->numObjects;
 }
 
-Mesh **Scene::getMeshes() {
-    return this->meshes;
+Object3D **Scene::getObjects() {
+    return this->objects;
 }
-
