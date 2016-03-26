@@ -15,6 +15,8 @@ class BilliardsBall {
         Object3D *getObject();
 
         void update(float dt);
+
+        Vector3 *getVelocity();
 };
 
 #endif

@@ -3,10 +3,11 @@
 BilliardsBall::BilliardsBall(int num) {
     this->ball = ObjLoader::loadObject("resources/models/ball.obj");
     this->ball->scale->setThis(0.013, 0.013, 0.013);
+    this->ball->translation->x = 0.3;
     this->ball->translation->y = 0.013;
     this->ball->updateModelMat();
 
-    this->velocity = new Vector3(0.5, 0, 0);
+    this->velocity = new Vector3(0.1, 0.0, 0.1);
 }
 
 Object3D *BilliardsBall::getObject() {
@@ -19,4 +20,8 @@ void BilliardsBall::update(float dt) {
     this->ball->translation->z += this->velocity->z * dt;
 
     this->ball->updateModelMat();
+}
+
+Vector3 *BilliardsBall::getVelocity() {
+    return this->velocity;
 }

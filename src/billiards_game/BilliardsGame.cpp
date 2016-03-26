@@ -8,7 +8,7 @@ BilliardsGame::BilliardsGame() {
 void BilliardsGame::initScene() {
     this->table = ObjLoader::loadObject("resources/models/table.obj");
     this->table->translation->y = -0.26;
-    this->table->translation->x = -0.155;
+    this->table->translation->x = -0.150;
     this->table->updateModelMat();
     this->cueStick = new CueStick();
 
@@ -24,16 +24,9 @@ void BilliardsGame::initScene() {
 
 void BilliardsGame::initCamera() {
     this->camera = new Camera(45.0, 1.0, 0.1, 100);
-
-    this->camera->position = new Vector3(1.0, 1.0, 1.0);
-    this->camera->lookAt = new Vector3(0.0, 0.0, 0.0);
-    this->camera->up = new Vector3(0.0, 1.0, 0.0);
-
-    this->camera->updateViewMatrix();
 }
 
 void BilliardsGame::handleKeyInput() {
-
     if (this->isLeftKeyDown) {
         this->cueStick->decreaseAngle();
     }
@@ -47,14 +40,17 @@ void BilliardsGame::handleKeyInput() {
         this->cueStick->decreaseHitPower();
     }
     if (this->isWKeyDown) {
+        this->balls[0]->update(0.002);
+        printf("%f\n", this->balls[0]->getObject()->translation->z);
     }
     if (this->isSKeyDown) {
+        this->balls[0]->update(-0.002);
+        printf("%f\n", this->balls[0]->getObject()->translation->z);
     }
     if (this->isAKeyDown) {
     }
     if (this->isDKeyDown) {
     }
-    this->cueStick->getObject()->updateModelMat();
 
     this->camera->position = new Vector3(1.0, 0.5, 0.0); 
     this->camera->position->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
@@ -63,14 +59,25 @@ void BilliardsGame::handleKeyInput() {
 
 void BilliardsGame::handleCollisions() {
     for (int i = 0; i < 1; i++) {
-        
+        if (this->balls[i]->getObject()->translation->x < -0.450) {
+            this->balls[i]->getVelocity()->x *= -1;
+        }
+        if (this->balls[i]->getObject()->translation->x > 0.450) {
+            this->balls[i]->getVelocity()->x *= -1;
+        }
+        if (this->balls[i]->getObject()->translation->z < -0.182) {
+            this->balls[i]->getVelocity()->z *= -1;
+        }
+        if (this->balls[i]->getObject()->translation->z > 0.182) {
+            this->balls[i]->getVelocity()->z *= -1;
+        }
     }
 }
 
 void BilliardsGame::update(float dt) {
     this->handleKeyInput();
     for (int i = 0; i < 1; i++) {
-        //this->balls[i]->update(dt);
+        this->balls[i]->update(dt);
     }
     this->handleCollisions();
 }
