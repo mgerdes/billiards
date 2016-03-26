@@ -10,6 +10,8 @@ CueStick::CueStick() {
     this->object->scale->setThis(0.7, 0.7, 0.7);
     this->object->updateModelMat();
 
+    this->angle = 0;
+
     this->cueStick = ObjLoader::loadObject("resources/models/cue.obj");
     this->cueStick->setMatrixMultOrder(MatrixMultOrder::R_T_S);
     this->object->addChildObject(this->cueStick);

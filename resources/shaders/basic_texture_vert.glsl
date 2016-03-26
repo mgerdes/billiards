@@ -13,8 +13,8 @@ out vec3 frag_normal;
 out vec2 frag_texture_coord;
 
 void main () {
-    frag_position = vert_position;
-    frag_normal = vert_normal;
+    frag_position = (model_mat * vec4(vert_position, 1.0)).xyz;
+    frag_normal = normalize((transpose(inverse(model_mat)) * vec4(vert_normal, 1.0)).xyz);
     frag_texture_coord = vert_texture_coord;
 
     gl_Position = proj_mat * view_mat * model_mat * vec4(vert_position, 1.0);
