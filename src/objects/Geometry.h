@@ -18,7 +18,11 @@ class Geometry {
 
         void setNumTextureCoords(int maxNumTextureCoords);
 
-        void addTextureCoord(float x, float y, float z);
+        void addTextureCoord(float x, float y);
+
+        int getNumTextureCoords();
+
+        float *getTextureCoords();
 };
 
 #endif

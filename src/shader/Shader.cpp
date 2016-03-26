@@ -12,8 +12,6 @@ Shader::Shader(const char *vertexShaderFileLocation, const char *fragmentShaderF
 }
 
 unsigned int Shader::compileShader(const char *fileName, int shaderType) {
-    printf("%s\n", fileName);
-
     std::string file = Util::readFile(fileName); 
     const char *shaderStr = file.c_str();
 

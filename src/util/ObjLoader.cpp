@@ -47,7 +47,7 @@ Mesh *ObjLoader::processMesh(aiMesh *mesh, const aiScene *scene) {
         meshGeometry->setNumTextureCoords(mesh->mNumVertices);
         for (int i = 0; i < mesh->mNumVertices; i++) {
             aiVector3D texture = mesh->mTextureCoords[0][i];
-            meshGeometry->addTextureCoord(texture.x, texture.y, texture.z);
+            meshGeometry->addTextureCoord(texture.x, texture.y);
         }
     } 
 
