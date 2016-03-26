@@ -3,6 +3,8 @@
 
 #include "Vector3.h"
 
+class Vector3;
+
 class Matrix4 {
     public:
         /*

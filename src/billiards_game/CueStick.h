@@ -21,6 +21,8 @@ class CueStick {
         void increaseAngle();
 
         void decreaseAngle();
+
+        float getAngle();
 };
 
 #endif

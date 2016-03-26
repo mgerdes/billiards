@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "CueStick.h"
+#include "BilliardsBall.h"
 
 class BilliardsGame {
     private:
@@ -12,14 +13,18 @@ class BilliardsGame {
         Camera *camera;
         CueStick *cueStick;
         Object3D *table;
+        BilliardsBall *balls[16];
 
         void initScene();
 
         void initCamera();
 
         void handleKeyInput();
+
+        void handleCollisions();
     public:
         bool isLeftKeyDown, isRightKeyDown, isUpKeyDown, isDownKeyDown;
+        bool isWKeyDown, isAKeyDown, isSKeyDown, isDKeyDown;
 
         BilliardsGame();        
 

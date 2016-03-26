@@ -48,3 +48,10 @@ Vector3 *Vector3::cross(Vector3 *v1, Vector3 *v2) {
     float z = v1->x * v2->y - v1->y * v2->x;
     return new Vector3(x, y, z);
 }
+
+void Vector3::applyMatrix(Matrix4 *m) {
+    float x = m->m[0] * this->x + m->m[4] * this->y + m->m[8] * this->z + m->m[12];
+    float y = m->m[1] * this->x + m->m[5] * this->y + m->m[9] * this->z + m->m[13];
+    float z = m->m[2] * this->x + m->m[6] * this->y + m->m[10] * this->z + m->m[14];
+    this->setThis(x, y, z);
+}

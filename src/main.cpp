@@ -22,6 +22,10 @@ int main() {
         billiardsGame->isRightKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_RIGHT);
         billiardsGame->isUpKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_UP);
         billiardsGame->isDownKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_DOWN);
+        billiardsGame->isWKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_W);
+        billiardsGame->isAKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_A);
+        billiardsGame->isSKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_S);
+        billiardsGame->isDKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_D);
 
         billiardsGame->update(timeDelta);
         renderer->render();

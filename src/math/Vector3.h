@@ -2,6 +2,9 @@
 #define BILLIARDS_VECTOR3_H
 
 #include <math.h>
+#include "Matrix4.h"
+
+class Matrix4;
 
 class Vector3 {
     public:
@@ -16,6 +19,8 @@ class Vector3 {
         void setThis(float x, float y, float z);
 
         void scale(float scalar);
+
+        void applyMatrix(Matrix4 *m);
 
         Vector3 *clone();
 

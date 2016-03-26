@@ -4,6 +4,7 @@ project(billiards)
 
 set(SOURCE_FILES
         src/billiards_game/BilliardsGame.cpp
+        src/billiards_game/BilliardsBall.cpp
         src/billiards_game/CueStick.cpp
         src/camera/Camera.cpp
         src/material/Material.cpp
