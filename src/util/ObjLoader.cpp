@@ -36,13 +36,46 @@ Object3D *ObjLoader::loadObject(const char *fileName) {
 Mesh *ObjLoader::processMesh(aiMesh *mesh, const aiScene *scene) {
     Geometry *meshGeometry = new Geometry(mesh->mNumVertices);
 
+    // Process vertices
     for (int i = 0; i < mesh->mNumVertices; i++) {
         aiVector3D position = mesh->mVertices[i];
         meshGeometry->addVertex(position.x, position.y, position.z);
     }
 
-    Shader *meshShader = ResourceManager::getShader(Shaders::BASIC);
+    // Process texture coordinates
+    if (mesh->HasTextureCoords(0)) {
+        meshGeometry->setNumTextureCoords(mesh->mNumVertices);
+        for (int i = 0; i < mesh->mNumVertices; i++) {
+            aiVector3D texture = mesh->mTextureCoords[0][i];
+            meshGeometry->addTextureCoord(texture.x, texture.y, texture.z);
+        }
+    } 
+
+    // Process material
+    Texture *texture;
+    if (mesh->mMaterialIndex >= 0) {
+        aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
+
+        aiString path;
+        aiGetMaterialTexture(material, aiTextureType_DIFFUSE, 0, &path, 0, 0, 0, 0, 0, 0);
+        if (path.length > 0) {
+            texture = ResourceManager::getTexture(path.data);
+        }
+
+        aiColor4D color;
+        aiGetMaterialColor(material, AI_MATKEY_COLOR_DIFFUSE, &color);
+        aiGetMaterialColor(material, AI_MATKEY_COLOR_AMBIENT, &color);
+        aiGetMaterialColor(material, AI_MATKEY_COLOR_SPECULAR, &color);
+
+        float shininess;
+        aiGetMaterialFloat(material, AI_MATKEY_SHININESS, &shininess);
+    }
+
+    Shader *meshShader = ResourceManager::getShader("basic_texture");
     Material *meshMaterial = new Material(meshShader);
+    if (texture) {
+        meshMaterial->setTexture(texture);
+    }
     
     return new Mesh(meshGeometry, meshMaterial);
 }

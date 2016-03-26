@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd felt.jpg
+map_Kd resources/textures/felt.jpg
 
 newmtl 03_-_Default
 Ns 96.078431
@@ -21,7 +21,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd chrome.jpg
+map_Kd resources/textures/chrome.jpg
 
 newmtl 04_-_Default
 Ns 96.078431
@@ -32,7 +32,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd black.jpg
+map_Kd resources/textures/black.jpg
 
 newmtl 05_-_Default
 Ns 96.078431
@@ -43,7 +43,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd mahogany.jpg
+map_Kd resources/textures/mahogany.jpg
 
 newmtl 09_-_Default
 Ns 96.078431

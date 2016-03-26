@@ -3,20 +3,19 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <string>
 #include "Util.h"
 
 class Texture {
-private:
-    GLuint location;
-public:
-    Texture();
+    private:
+        unsigned int location;
+    public:
+        Texture();
 
-    Texture(string fileName);
+        Texture(const char *fileName);
 
-    void enable();
+        void bind();
 
-    void disable();
+        void unbind();
 };
 
-#endif //BILLIARDS_TEXTURE_H
+#endif

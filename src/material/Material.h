@@ -7,10 +7,15 @@
 class Material {
     private:
         Shader *shader;
+        Texture *texture;
     public:
         Material(Shader *shader);
 
         Shader *getShader();
+
+        void setTexture(Texture *texture);
+
+        Texture *getTexture();
 };
 
 #endif 

@@ -5,27 +5,20 @@
 #include "Material.h"
 #include "Geometry.h"
 
-enum Shaders {
-    BASIC
-};
-
-enum Materials {
-
-};
-
-enum Geometries {
-
-};
-
 class ResourceManager {
     private:
-        static Shader **shaders;
-        static Material **materials;
-        static Geometry **geometries;
+        static std::unordered_map<std::string, Shader*> shaders;
+        static std::unordered_map<std::string, Texture*> textures;
+
+        static void installShaders();
+
+        static void installTextures();
     public:
         static void installResources();
 
-        static Shader *getShader(enum Shaders shader);
+        static Shader *getShader(const char* name);
+
+        static Texture *getTexture(const char* name);
 };
 
 #endif

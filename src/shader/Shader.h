@@ -1,10 +1,10 @@
 #ifndef BILLIARDS_SHADER_H
 #define BILLIARDS_SHADER_H
 
+#include <unordered_map>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Util.h"
-#include <unordered_map>
 
 class Shader {
     private:

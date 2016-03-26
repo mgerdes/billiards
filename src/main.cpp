@@ -25,8 +25,6 @@ int main() {
 
         renderer->render();
 
-        camera->updateViewMatrix();
-
         window.swapBuffers();
     }
 

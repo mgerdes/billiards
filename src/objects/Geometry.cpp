@@ -20,3 +20,16 @@ int Geometry::getNumVertices() {
 float *Geometry::getVertices() {
     return this->vertices;
 }
+
+void Geometry::setNumTextureCoords(int maxNumTextureCoords) {
+    this->numTextureCoords = 0;
+    this->maxNumTextureCoords = maxNumTextureCoords;
+    this->textureCoords = new float[maxNumTextureCoords * 3];
+}
+
+void Geometry::addTextureCoord(float x, float y, float z) {
+    this->textureCoords[this->numTextureCoords * 3] = x;
+    this->textureCoords[this->numTextureCoords * 3 + 1] = y;
+    this->textureCoords[this->numTextureCoords * 3 + 2] = z;
+    this->numTextureCoords++;
+}
