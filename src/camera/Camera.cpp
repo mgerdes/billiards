@@ -21,12 +21,9 @@ Camera::Camera(float fieldOfView, float aspectRatio, float near, float far) {
 }
 
 void Camera::updateViewMatrix() {
+    Matrix4 *p = Matrix4::translation(-position->x, -position->y, -position->z); 
+
     Vector3 *temp;
-
-    temp = position->clone();
-    temp->scale(-1);
-    Matrix4 *p = Matrix4::translation(temp); 
-
     temp = Vector3::subtract(lookAt, position);
     temp->normalize();
     Vector3 *f = temp;
@@ -39,7 +36,7 @@ void Camera::updateViewMatrix() {
     temp->normalize();
     Vector3 *u = temp;
 
-    Matrix4 *ori = new Matrix4();
+    Matrix4 *ori = Matrix4::identity();
     ori->m[0] = r->x;
     ori->m[4] = r->y;
     ori->m[8] = r->z;
@@ -51,10 +48,16 @@ void Camera::updateViewMatrix() {
     ori->m[10] = -f->z;
 
     viewMatrix = Matrix4::multiply(ori, p);
+
+    delete ori;
+    delete p;
+    delete f;
+    delete r;
+    delete u;
 }
 
 void Camera::updateProjectionMatrix() {
-    projectionMatrix->clear();
+    projectionMatrix->zeroOut();
 
     float fieldOfViewRadians = fieldOfView * ONE_DEG_IN_RAD;
     float range = tan(fieldOfViewRadians / 2.0f) * near;

@@ -8,20 +8,6 @@ int main() {
 
     ResourceManager::installResources();
     Object3D *table = ObjLoader::loadObject("resources/models/table.obj");
-
-    Geometry *triangleGeometry = new Geometry(6);
-    triangleGeometry->addVertex(1, 1, 0);
-    triangleGeometry->addVertex(1, 0, 0);
-    triangleGeometry->addVertex(-1, 0, 0);
-    triangleGeometry->addVertex(1, 1, 0);
-    triangleGeometry->addVertex(-1, 1, 0);
-    triangleGeometry->addVertex(-1, 0, 0);
-
-    Shader *triangleShader = ResourceManager::getShader(Shaders::BASIC);
-    Material *triangleMaterial = new Material(triangleShader);
-
-    Mesh *triangleMesh = new Mesh(triangleGeometry, triangleMaterial);
-
     Scene *scene = new Scene(1);
     scene->addObject(table);
 
@@ -38,6 +24,8 @@ int main() {
         lastTime = currentTime;
 
         renderer->render();
+
+        camera->updateViewMatrix();
 
         window.swapBuffers();
     }

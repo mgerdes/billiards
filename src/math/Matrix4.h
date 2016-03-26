@@ -21,13 +21,13 @@ class Matrix4 {
                 float m31, float m32, float m33, float m34,
                 float m41, float m42, float m43, float m44);
 
-        void clear();
+        void zeroOut();
 
         static Matrix4 *identity();
 
         static Matrix4 *multiply(Matrix4 *m1, Matrix4 *m2);
 
-        static Matrix4 *translation(Vector3 *translation);
+        static Matrix4 *translation(float x, float y, float z);
 };
 
 #endif 

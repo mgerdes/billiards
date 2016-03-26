@@ -24,7 +24,7 @@ Matrix4::Matrix4(float m11, float m12, float m13, float m14,
     m[15] = m44;
 }
 
-void Matrix4::clear() {
+void Matrix4::zeroOut() {
     for (int i = 0; i < 16; i++) {
         m[i] = 0;
     }
@@ -44,11 +44,11 @@ Matrix4 *Matrix4::multiply(Matrix4 *m1, Matrix4 *m2) {
     return m;
 }
 
-Matrix4 *Matrix4::translation(Vector3 *translation) {
+Matrix4 *Matrix4::translation(float x, float y, float z) {
     return new Matrix4(
-            1, 0, 0, translation->x,
-            0, 1, 0, translation->y,
-            0, 0, 1, translation->z,
+            1, 0, 0, x,
+            0, 1, 0, y,
+            0, 0, 1, z,
             0, 0, 0, 1);
 }
 
