@@ -17,6 +17,8 @@ class Mesh : public Object3D {
         void draw();
 
         Material *getMaterial();
+
+        Geometry *getGeometry();
 };
 
 #endif 

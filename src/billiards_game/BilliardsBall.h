@@ -3,6 +3,7 @@
 
 #include "Object3D.h"
 #include "ObjLoader.h"
+#include "ResourceManager.h"
 
 class BilliardsBall {
     private:

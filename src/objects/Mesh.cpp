@@ -53,3 +53,7 @@ void Mesh::draw() {
 Material *Mesh::getMaterial() {
     return material;
 }
+
+Geometry *Mesh::getGeometry() {
+    return geometry;
+}

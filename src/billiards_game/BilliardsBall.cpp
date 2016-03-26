@@ -7,6 +7,10 @@ BilliardsBall::BilliardsBall(int num) {
     this->ball->translation->y = 0.013;
     this->ball->updateModelMat();
 
+    Texture *texture = ResourceManager::getTexture("resources/textures/1.png");
+    Mesh *mesh = (Mesh*) this->ball->getChildren()[0];
+    mesh->getMaterial()->setTexture(texture);
+
     this->velocity = new Vector3(0.1, 0.0, 0.1);
 }
 
