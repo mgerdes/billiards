@@ -20,7 +20,13 @@ float Vector3::length() {
     return sqrt(x * x + y * y + z * z);
 }
 
-void Vector3::normalize() {
+void Vector3::setThis(float x, float y, float z) {
+    this->x = x;
+    this->y = y;
+    this->z = z;
+}
+
+void Vector3::normalizeThis() {
     float l = this->length();
     if (l != 0) {
         x /= l;

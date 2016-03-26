@@ -11,7 +11,9 @@ class Vector3 {
 
         float length();
 
-        void normalize();
+        void normalizeThis();
+
+        void setThis(float x, float y, float z);
 
         void scale(float scalar);
 

@@ -27,7 +27,17 @@ class Matrix4 {
 
         static Matrix4 *multiply(Matrix4 *m1, Matrix4 *m2);
 
+        static Matrix4 *translation(Vector3 *v);
+
         static Matrix4 *translation(float x, float y, float z);
+
+        static Matrix4 *scale(Vector3 *v);
+
+        static Matrix4 *scale(float x, float y, float z);
+
+        static Matrix4 *eulerRotation(Vector3 *v);
+
+        static Matrix4 *eulerRotation(float x, float y, float z);
 };
 
 #endif 

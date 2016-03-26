@@ -9,9 +9,9 @@ Camera::Camera(float fieldOfView, float aspectRatio, float near, float far) {
     this->near = near;
     this->far = far;
 
-    this->position = new Vector3(1, 1, 1);
-    this->lookAt = new Vector3(0, 0, 0);
-    this->up = new Vector3(0, 1, 0);
+    this->position = new Vector3(1.2, 1.2, 1.2);
+    this->lookAt = new Vector3(0.0, 0.0, 0.0);
+    this->up = new Vector3(0.0, 1.0, 0.0);
 
     this->viewMatrix = new Matrix4();
     this->projectionMatrix = new Matrix4();
@@ -25,15 +25,15 @@ void Camera::updateViewMatrix() {
 
     Vector3 *temp;
     temp = Vector3::subtract(lookAt, position);
-    temp->normalize();
+    temp->normalizeThis();
     Vector3 *f = temp;
 
     temp = Vector3::cross(f, up);
-    temp->normalize();
+    temp->normalizeThis();
     Vector3 *r = temp;
 
     temp = Vector3::cross(r, f);
-    temp->normalize();
+    temp->normalizeThis();
     Vector3 *u = temp;
 
     Matrix4 *ori = Matrix4::identity();

@@ -5,7 +5,7 @@ Renderer::Renderer(Scene *scene, Camera *camera) {
     this->camera = camera;
 }
 
-void Renderer::renderObject(Object3D *object) {
+void Renderer::renderObject(Object3D *object, Matrix4 *modelMat) {
     if (object->getIsMesh()) {
         Mesh *mesh = (Mesh*) object;
 
@@ -18,6 +18,7 @@ void Renderer::renderObject(Object3D *object) {
         // Send matrices into the shader.
         mesh->getMaterial()->getShader()->setMatProperty("proj_mat", camera->getProjectionMatrix()->m);
         mesh->getMaterial()->getShader()->setMatProperty("view_mat", camera->getViewMatrix()->m);
+        mesh->getMaterial()->getShader()->setMatProperty("model_mat", modelMat->m);
 
         mesh->draw();
 
@@ -30,7 +31,7 @@ void Renderer::renderObject(Object3D *object) {
 
     Object3D **children = object->getChildren();
     for (int i = 0; i < object->getNumChildren(); i++) {
-        renderObject(children[i]);
+        renderObject(children[i], modelMat);
     }
 }
 
@@ -39,6 +40,6 @@ void Renderer::render() {
     int numObjects = this->scene->getNumObjects();
 
     for (int i = 0; i < numObjects; i++) {
-        renderObject(objects[i]);
+        renderObject(objects[i], objects[i]->getModelMat());
     }
 }

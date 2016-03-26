@@ -11,9 +11,11 @@ int main() {
     Scene *scene = new Scene(1);
     scene->addObject(table);
 
-    Camera *camera = new Camera(45, 1, 0.1, 100);
+    Camera *camera = new Camera(45.0, 1.0, 0.1, 100);
 
     Renderer *renderer = new Renderer(scene, camera);
+
+    table->updateModelMat();
 
     static double lastTime = glfwGetTime(); 
     while (!window.shouldClose()) {

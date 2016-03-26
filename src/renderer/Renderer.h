@@ -9,7 +9,7 @@ class Renderer {
         Scene *scene;
         Camera *camera;
 
-        void renderObject(Object3D *object);
+        void renderObject(Object3D *object, Matrix4 *modelMat);
     public:
         Renderer(Scene *scene, Camera *camera);
 
