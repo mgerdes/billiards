@@ -3,6 +3,7 @@
 
 #include "Matrix4.h"
 #include "Vector3.h"
+#include "Quaternion.h"
 
 enum MatrixMultOrder {
     T_R_S, R_T_S
@@ -15,6 +16,7 @@ class Object3D {
         Object3D **children;
         Matrix4 *modelMat;
         MatrixMultOrder matrixMultOrder;
+        Quaternion *quaternion;
     public:
         Vector3 *translation, *scale, *rotation;
 
@@ -35,6 +37,10 @@ class Object3D {
         void setModelMat(Matrix4 *modelMat);
 
         void setMatrixMultOrder(MatrixMultOrder matrixMultOrder);
+
+        Quaternion *getQuaternion();
+
+        void setQuaternion(Quaternion *quaternion);
 };
 
 #endif

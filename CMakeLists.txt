@@ -10,6 +10,7 @@ set(SOURCE_FILES
         src/material/Material.cpp
         src/math/Vector3.cpp
         src/math/Matrix4.cpp
+        src/math/Quaternion.cpp
         src/objects/Mesh.cpp
         src/objects/Geometry.cpp
         src/objects/Object3D.cpp

@@ -11,6 +11,7 @@ Object3D::Object3D(int maxNumChildren, bool isMesh) {
     this->translation = new Vector3(0.0, 0.0, 0.0);
     this->scale = new Vector3(1.0, 1.0, 1.0);
     this->rotation = new Vector3(0.0, 0.0, 0.0);
+    this->quaternion = 0;
 
     this->modelMat = Matrix4::identity();
 
@@ -35,7 +36,12 @@ bool Object3D::getIsMesh() {
 
 void Object3D::updateModelMat() {
     Matrix4 *translationMat = Matrix4::translation(this->translation);
-    Matrix4 *rotationMat = Matrix4::eulerRotation(this->rotation);
+    Matrix4 *rotationMat;
+    if (quaternion) {
+        rotationMat = quaternion->getMatrix();
+    } else {
+        rotationMat = Matrix4::eulerRotation(this->rotation);
+    }
     Matrix4 *scaleMat = Matrix4::scale(this->scale);
 
     if (this->matrixMultOrder == MatrixMultOrder::T_R_S) {
@@ -51,4 +57,12 @@ Matrix4 *Object3D::getModelMat() {
 
 void Object3D::setMatrixMultOrder(MatrixMultOrder order) {
     this->matrixMultOrder = order;
+}
+
+Quaternion *Object3D::getQuaternion() {
+    return this->quaternion;
+}
+
+void Object3D::setQuaternion(Quaternion *quaternion) {
+    this->quaternion = quaternion;
 }
