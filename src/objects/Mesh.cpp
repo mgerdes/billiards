@@ -17,7 +17,19 @@ Mesh::Mesh(Geometry *geometry, Material *material) : Object3D(0, true) {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
     glEnableVertexAttribArray(0);
 
-    if (geometry->getNumTextureCoords() > 0) {
+    if (geometry->hasNormals()) {
+        unsigned int normalsVBO;
+        glGenBuffers(1, &normalsVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, normalsVBO);
+        glBufferData(GL_ARRAY_BUFFER,
+                3 * geometry->getNumNormals() * sizeof(float),
+                geometry->getNormals(),
+                GL_STATIC_DRAW);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+        glEnableVertexAttribArray(1);
+    }
+
+    if (geometry->hasTextureCoords()) {
         unsigned int textureCoordsVBO;
         glGenBuffers(1, &textureCoordsVBO);
         glBindBuffer(GL_ARRAY_BUFFER, textureCoordsVBO);
@@ -25,8 +37,8 @@ Mesh::Mesh(Geometry *geometry, Material *material) : Object3D(0, true) {
                 2 * geometry->getNumTextureCoords() * sizeof(float),
                 geometry->getTextureCoords(),
                 GL_STATIC_DRAW);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+        glEnableVertexAttribArray(2);
     } 
 
     glBindVertexArray(0);

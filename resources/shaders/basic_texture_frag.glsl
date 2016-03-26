@@ -1,5 +1,7 @@
 #version 330 core
 
+in vec3 frag_position;
+in vec3 frag_normal;
 in vec2 frag_texture_coord;
 
 uniform sampler2D tex;

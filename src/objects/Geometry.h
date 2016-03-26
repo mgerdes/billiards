@@ -5,8 +5,14 @@
 
 class Geometry {
     private:
-        int numVertices, maxVertices, numTextureCoords, maxNumTextureCoords;
-        float *vertices, *textureCoords;
+        int numVertices, maxVertices;
+        float *vertices;
+
+        int numTextureCoords, maxNumTextureCoords;
+        float *textureCoords;
+
+        int numNormals, maxNumNormals;
+        float *normals;
     public:
         Geometry(int maxVertices);
 
@@ -16,13 +22,25 @@ class Geometry {
 
         float *getVertices();
 
-        void setNumTextureCoords(int maxNumTextureCoords);
+        void setMaxNumTextureCoords(int maxNumTextureCoords);
 
         void addTextureCoord(float x, float y);
 
         int getNumTextureCoords();
 
         float *getTextureCoords();
+
+        bool hasTextureCoords();
+
+        void setMaxNumNormals(int maxNumNormals);
+
+        void addNormal(float x, float y, float z);
+
+        int getNumNormals();
+
+        float *getNormals();
+
+        bool hasNormals();
 };
 
 #endif

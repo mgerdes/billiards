@@ -26,7 +26,7 @@ float *Geometry::getVertices() {
     return this->vertices;
 }
 
-void Geometry::setNumTextureCoords(int maxNumTextureCoords) {
+void Geometry::setMaxNumTextureCoords(int maxNumTextureCoords) {
     this->numTextureCoords = 0;
     this->maxNumTextureCoords = maxNumTextureCoords;
     this->textureCoords = new float[maxNumTextureCoords * 2];
@@ -44,4 +44,33 @@ int Geometry::getNumTextureCoords() {
 
 float *Geometry::getTextureCoords() {
     return this->textureCoords;
+}
+
+bool Geometry::hasTextureCoords() {
+    return this->numTextureCoords > 0;
+}
+
+void Geometry::setMaxNumNormals(int maxNumNormals) {
+    this->numNormals = 0;
+    this->maxNumNormals = maxNumNormals;
+    this->normals = new float[maxNumNormals * 3];
+}
+
+float *Geometry::getNormals() {
+    return this->normals;
+}
+
+int Geometry::getNumNormals() {
+    return this->numNormals;
+}
+
+void Geometry::addNormal(float x, float y, float z) {
+    this->normals[this->numNormals * 3] = x;
+    this->normals[this->numNormals * 3 + 1] = y;
+    this->normals[this->numNormals * 3 + 2] = z;
+    this->numNormals++;
+}
+
+bool Geometry::hasNormals() {
+    return this->numNormals > 0;
 }

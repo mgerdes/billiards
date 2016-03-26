@@ -42,9 +42,18 @@ Mesh *ObjLoader::processMesh(aiMesh *mesh, const aiScene *scene) {
         meshGeometry->addVertex(position.x, position.y, position.z);
     }
 
+    // Process normals
+    if (mesh->HasNormals()) {
+        meshGeometry->setMaxNumNormals(mesh->mNumVertices);
+        for (int i = 0; i < mesh->mNumVertices; i++) {
+            aiVector3D normal = mesh->mNormals[i];
+            meshGeometry->addNormal(normal.x, normal.y, normal.z);
+        }
+    } 
+
     // Process texture coordinates
     if (mesh->HasTextureCoords(0)) {
-        meshGeometry->setNumTextureCoords(mesh->mNumVertices);
+        meshGeometry->setMaxNumTextureCoords(mesh->mNumVertices);
         for (int i = 0; i < mesh->mNumVertices; i++) {
             aiVector3D texture = mesh->mTextureCoords[0][i];
             meshGeometry->addTextureCoord(texture.x, texture.y);
