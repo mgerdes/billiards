@@ -6,6 +6,8 @@ Renderer::Renderer(Scene *scene, Camera *camera) {
 }
 
 void Renderer::renderObject(Object3D *object, Matrix4 *modelMat) {
+    modelMat = Matrix4::multiply(object->getModelMat(), modelMat);
+
     if (object->getIsMesh()) {
         Mesh *mesh = (Mesh*) object;
 
@@ -40,6 +42,6 @@ void Renderer::render() {
     int numObjects = this->scene->getNumObjects();
 
     for (int i = 0; i < numObjects; i++) {
-        renderObject(objects[i], objects[i]->getModelMat());
+        renderObject(objects[i], Matrix4::identity());
     }
 }

@@ -13,6 +13,8 @@ Object3D::Object3D(int maxNumChildren, bool isMesh) {
     this->rotation = new Vector3(0.0, 0.0, 0.0);
 
     this->modelMat = Matrix4::identity();
+
+    this->matrixMultOrder = MatrixMultOrder::T_R_S;
 }
 
 void Object3D::addChildObject(Object3D *object) {
@@ -33,14 +35,20 @@ bool Object3D::getIsMesh() {
 
 void Object3D::updateModelMat() {
     Matrix4 *translationMat = Matrix4::translation(this->translation);
-    Matrix4 *scaleMat = Matrix4::scale(this->scale);
     Matrix4 *rotationMat = Matrix4::eulerRotation(this->rotation);
+    Matrix4 *scaleMat = Matrix4::scale(this->scale);
 
-    this->modelMat = Matrix4::multiply(
-            Matrix4::multiply(translationMat, scaleMat),
-            rotationMat);
+    if (this->matrixMultOrder == MatrixMultOrder::T_R_S) {
+        this->modelMat = Matrix4::multiply(Matrix4::multiply(translationMat, rotationMat), scaleMat);
+    } else if (this->matrixMultOrder == MatrixMultOrder::R_T_S) {
+        this->modelMat = Matrix4::multiply(Matrix4::multiply(rotationMat, translationMat), scaleMat);
+    }
 }
 
 Matrix4 *Object3D::getModelMat() {
     return this->modelMat;
+}
+
+void Object3D::setMatrixMultOrder(MatrixMultOrder order) {
+    this->matrixMultOrder = order;
 }

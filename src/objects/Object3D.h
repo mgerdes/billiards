@@ -4,12 +4,17 @@
 #include "Matrix4.h"
 #include "Vector3.h"
 
+enum MatrixMultOrder {
+    T_R_S, R_T_S
+};
+
 class Object3D {
     private:
         int numChildren, maxNumChildren;
         bool isMesh;
         Object3D **children;
         Matrix4 *modelMat;
+        MatrixMultOrder matrixMultOrder;
     public:
         Vector3 *translation, *scale, *rotation;
 
@@ -26,6 +31,10 @@ class Object3D {
         void updateModelMat();
 
         Matrix4 *getModelMat();
+
+        void setModelMat(Matrix4 *modelMat);
+
+        void setMatrixMultOrder(MatrixMultOrder matrixMultOrder);
 };
 
 #endif
