@@ -12,7 +12,10 @@ Shader::Shader(const char *vertexShaderFileLocation, const char *fragmentShaderF
 }
 
 unsigned int Shader::compileShader(const char *fileName, int shaderType) {
-    const char *shaderStr = Util::readFile(fileName).c_str();
+    printf("%s\n", fileName);
+
+    std::string file = Util::readFile(fileName); 
+    const char *shaderStr = file.c_str();
 
     GLuint shader = glCreateShader(shaderType);
     glShaderSource(shader, 1, &shaderStr, NULL);
