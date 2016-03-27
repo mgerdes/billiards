@@ -52,11 +52,9 @@ void BilliardsGame::handleKeyInput() {
 
     }
     if (this->isSpaceKeyDown) {
-        for (int i = 0; i < 16; i++) {
-            float vx = (rand() / (float) RAND_MAX) * 2 * 0.500 - 0.500;
-            float vz = (rand() / (float) RAND_MAX) * 2 * 0.500 - 0.500;
-            this->balls[i]->getVelocity()->setThis(vx, 0.0, vz);
-        }
+        float hitPower = this->cueStick->getHitPower();
+        this->balls[0]->getVelocity()->setThis(hitPower, 0.0, 0.0);
+        this->balls[0]->getVelocity()->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle()));
     }
 }
 

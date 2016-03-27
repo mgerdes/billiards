@@ -50,3 +50,7 @@ void CueStick::decreaseAngle() {
 float CueStick::getAngle() {
     return this->angle;
 }
+
+float CueStick::getHitPower() {
+    return this->hitPower;
+}

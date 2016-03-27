@@ -23,6 +23,8 @@ class CueStick {
         void decreaseAngle();
 
         float getAngle();
+
+        float getHitPower();
 };
 
 #endif
