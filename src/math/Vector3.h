@@ -18,7 +18,9 @@ class Vector3 {
 
         void setThis(float x, float y, float z);
 
-        void scale(float scalar);
+        void scaleThis(float scalar);
+
+        void addToThis(float x, float y, float z);
 
         void applyMatrix(Matrix4 *m);
 
@@ -27,6 +29,10 @@ class Vector3 {
         static Vector3 *subtract(Vector3 *v1, Vector3 *v2);
 
         static Vector3 *cross(Vector3 *v1, Vector3 *v2);
+
+        static float dot(Vector3 *v1, Vector3 *v2);
+
+        static float distanceSqrdBetween(Vector3 *v1, Vector3 *v2);
 };
 
 #endif 

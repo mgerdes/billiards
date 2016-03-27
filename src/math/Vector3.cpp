@@ -10,7 +10,7 @@ Vector3 *Vector3::clone() {
     return new Vector3(this->x, this->y, this->z);
 }
 
-void Vector3::scale(float scalar) {
+void Vector3::scaleThis(float scalar) {
     x *= scalar;
     y *= scalar;
     z *= scalar;
@@ -54,4 +54,21 @@ void Vector3::applyMatrix(Matrix4 *m) {
     float y = m->m[1] * this->x + m->m[5] * this->y + m->m[9] * this->z + m->m[13];
     float z = m->m[2] * this->x + m->m[6] * this->y + m->m[10] * this->z + m->m[14];
     this->setThis(x, y, z);
+}
+
+float Vector3::distanceSqrdBetween(Vector3 *v1, Vector3 *v2) {
+    float a = v1->x - v2->x;
+    float b = v1->y - v2->y;
+    float c = v1->z - v2->z;
+    return a*a + b*b + c*c;   
+}
+
+float Vector3::dot(Vector3 *v1, Vector3* v2) {
+    return v1->x * v2->x + v1->y * v2->y + v1->z * v2->z;
+}
+
+void Vector3::addToThis(float x, float y, float z) {
+    this->x += x;
+    this->y += y;
+    this->z += z;
 }
