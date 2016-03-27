@@ -135,8 +135,8 @@ void BilliardsGame::handleCollisions() {
 
 bool BilliardsGame::isAnyBallsMoving() {
     for (int i = 0; i < 16; i++) {
-        float speed = this->balls[0]->getVelocity()->length();
-        if (speed > 0) {
+        float speed = this->balls[i]->getVelocity()->length();
+        if (speed > 0.0) {
             return true;
         }
     }
@@ -184,8 +184,20 @@ void BilliardsGame::update(float dt) {
         this->updateCueStick();
 
         if (this->isSpaceKeyDown) {
-            this->currentState = BilliardsGameState::SIMULATING_BALLS_MOVING;
+            this->currentState = BilliardsGameState::ANIMATING_CUE_STICK;
+        }
+    }
+    else if (currentState == BilliardsGameState::ANIMATING_CUE_STICK) {
+        Vector3 *cueStickPosition = this->cueStick->getObject()->translation;                 
+        if (cueStickPosition->x < -0.535) {
+            cueStickPosition->x += 0.02 * cueStick->getHitPower();
+            this->cueStick->getObject()->updateModelMat();
+        }
+        else {
             this->cueStick->getObject()->setIsVisible(false);
+            this->cueStick->increaseHitPower();
+            this->cueStick->decreaseHitPower();
+            this->currentState = BilliardsGameState::SIMULATING_BALLS_MOVING;
         }
     }
     this->updateCamera();
