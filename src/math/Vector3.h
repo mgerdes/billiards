@@ -30,13 +30,11 @@ class Vector3 {
 
         void applyMatrix(Matrix4 *m);
 
-        Vector3 *clone();
+        static Vector3 subtract(Vector3 *v1, Vector3 *v2);
 
-        static Vector3 *subtract(Vector3 *v1, Vector3 *v2);
+        static Vector3 add(Vector3 *v1, Vector3 *v2);
 
-        static Vector3 *add(Vector3 *v1, Vector3 *v2);
-
-        static Vector3 *cross(Vector3 *v1, Vector3 *v2);
+        static Vector3 cross(Vector3 *v1, Vector3 *v2);
 
         static float dot(Vector3 *v1, Vector3 *v2);
 

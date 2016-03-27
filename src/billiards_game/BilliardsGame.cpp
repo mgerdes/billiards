@@ -93,21 +93,21 @@ void BilliardsGame::handleCollisions() {
 
             float distance = Vector3::distanceBetween(p1, p2);
             if (distance < 2 * radius) {
-                Vector3 *temp1 = Vector3::subtract(v1, v2);
-                Vector3 *temp2 = Vector3::subtract(p1, p2);
-                float tempScalar1 = Vector3::dot(temp1, temp2) / Vector3::dot(temp2, temp2);
-                temp2->scaleThis(tempScalar1);
+                Vector3 temp1 = Vector3::subtract(v1, v2);
+                Vector3 temp2 = Vector3::subtract(p1, p2);
+                float tempScalar1 = Vector3::dot(&temp1, &temp2) / Vector3::dot(&temp2, &temp2);
+                temp2.scaleThis(tempScalar1);
 
-                Vector3 *temp3 = Vector3::subtract(v2, v1);
-                Vector3 *temp4 = Vector3::subtract(p2, p1);
-                float tempScalar2 = Vector3::dot(temp3, temp4) / Vector3::dot(temp4, temp4);
-                temp4->scaleThis(tempScalar2);
+                Vector3 temp3 = Vector3::subtract(v2, v1);
+                Vector3 temp4 = Vector3::subtract(p2, p1);
+                float tempScalar2 = Vector3::dot(&temp3, &temp4) / Vector3::dot(&temp4, &temp4);
+                temp4.scaleThis(tempScalar2);
 
-                Vector3 *newV1 = Vector3::subtract(v1, temp2); 
-                v1->setThis(newV1->x, newV1->y, newV1->z);
+                Vector3 newV1 = Vector3::subtract(v1, &temp2); 
+                v1->setThis(newV1.x, newV1.y, newV1.z);
 
-                Vector3 *newV2 = Vector3::subtract(v2, temp4); 
-                v2->setThis(newV2->x, newV2->y, newV2->z);
+                Vector3 newV2 = Vector3::subtract(v2, &temp4); 
+                v2->setThis(newV2.x, newV2.y, newV2.z);
 
                 // Make sure they are no longer colliding
                 float a = (v1->x - v2->x) * (v1->x - v2->x) 
@@ -163,10 +163,10 @@ void BilliardsGame::handlePositionCueStickState() {
     Matrix4 rotationMatrix = Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415);
     temp.applyMatrix(&rotationMatrix);
 
-    this->camera->position = cueBallPosition->clone(); 
+    this->camera->position = new Vector3(*cueBallPosition); 
     this->camera->position->addToThis(&temp);
 
-    this->camera->lookAt = cueBallPosition->clone();
+    this->camera->lookAt = new Vector3(*cueBallPosition);
     this->camera->updateViewMatrix();
 
     if (this->isSpaceKeyDown) {
@@ -207,7 +207,7 @@ void BilliardsGame::handleSimulatingBallsMovingState(float dt) {
         Matrix4 rotationMatrix = Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415);
         temp.applyMatrix(&rotationMatrix);
 
-        Vector3 *endCameraTransitionPosition = this->balls[0]->getObject()->translation->clone();
+        Vector3 *endCameraTransitionPosition = new Vector3(*this->balls[0]->getObject()->translation);
         endCameraTransitionPosition->addToThis(&temp);
 
         Vector3 endCameraTransitionLookAt = Vector3(0.0, 0.0, 0.0);
@@ -263,10 +263,10 @@ void BilliardsGame::enterCameraTransitionState(Vector3 *cameraTransitionEndPosit
         BilliardsGameState stateAfterCameraTransition) {
     this->timesCameraTransitioned = 0;
 
-    this->cameraTransitionPositionDelta = Vector3::subtract(cameraTransitionEndPosition, this->camera->position);
+    this->cameraTransitionPositionDelta = new Vector3(Vector3::subtract(cameraTransitionEndPosition, this->camera->position));
     this->cameraTransitionPositionDelta->scaleThis(1.0/25.0);
 
-    this->cameraTransitionLookAtDelta = Vector3::subtract(cameraTransitionEndLookAt, this->camera->lookAt);
+    this->cameraTransitionLookAtDelta = new Vector3(Vector3::subtract(cameraTransitionEndLookAt, this->camera->lookAt));
     this->cameraTransitionLookAtDelta->scaleThis(1.0/25.0);
 
     this->stateAfterCameraTransition = stateAfterCameraTransition;

@@ -36,12 +36,12 @@ void BilliardsBall::update(float dt) {
         this->ball->translation->y += this->velocity->y * dt;
         this->ball->translation->z += this->velocity->z * dt;
 
-        Vector3 *temp = this->velocity->clone();
-        temp->normalizeThis();
+        Vector3 temp = Vector3(*this->velocity);
+        temp.normalizeThis();
         Vector3 yAxis = Vector3(0.0, 1.0, 0.0);
-        Vector3 *rotationVector = Vector3::cross(temp, &yAxis);
+        Vector3 rotationVector = Vector3::cross(&temp, &yAxis);
 
-        Quaternion *q = new Quaternion(25 * dt * speed, rotationVector);
+        Quaternion *q = new Quaternion(25 * dt * speed, &rotationVector);
         q->multiplyThisBy(this->ball->getQuaternion());
         this->ball->setQuaternion(q);
 

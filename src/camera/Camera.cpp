@@ -23,35 +23,27 @@ Camera::Camera(float fieldOfView, float aspectRatio, float near, float far) {
 void Camera::updateViewMatrix() {
     Matrix4 p = Matrix4::translation(-position->x, -position->y, -position->z); 
 
-    Vector3 *temp;
-    temp = Vector3::subtract(lookAt, position);
-    temp->normalizeThis();
-    Vector3 *f = temp;
+    Vector3 f = Vector3::subtract(lookAt, position);
+    f.normalizeThis();
 
-    temp = Vector3::cross(f, up);
-    temp->normalizeThis();
-    Vector3 *r = temp;
+    Vector3 r = Vector3::cross(&f, up);
+    r.normalizeThis();
 
-    temp = Vector3::cross(r, f);
-    temp->normalizeThis();
-    Vector3 *u = temp;
+    Vector3 u = Vector3::cross(&r, &f);
+    u.normalizeThis();
 
     Matrix4 ori = Matrix4::identity();
-    ori.m[0] = r->x;
-    ori.m[4] = r->y;
-    ori.m[8] = r->z;
-    ori.m[1] = u->x;
-    ori.m[5] = u->y;
-    ori.m[9] = u->z;
-    ori.m[2] = -f->x;
-    ori.m[6] = -f->y;
-    ori.m[10] = -f->z;
+    ori.m[0] = r.x;
+    ori.m[4] = r.y;
+    ori.m[8] = r.z;
+    ori.m[1] = u.x;
+    ori.m[5] = u.y;
+    ori.m[9] = u.z;
+    ori.m[2] = -f.x;
+    ori.m[6] = -f.y;
+    ori.m[10] = -f.z;
 
     viewMatrix = new Matrix4(Matrix4::multiply(&ori, &p));
-
-    delete f;
-    delete r;
-    delete u;
 }
 
 void Camera::updateProjectionMatrix() {

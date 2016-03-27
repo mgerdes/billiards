@@ -6,10 +6,6 @@ Vector3::Vector3(float x, float y, float z) {
     this->z = z;
 }
 
-Vector3 *Vector3::clone() {
-    return new Vector3(this->x, this->y, this->z);
-}
-
 void Vector3::scaleThis(float scalar) {
     x *= scalar;
     y *= scalar;
@@ -30,15 +26,6 @@ void Vector3::setThis(float x, float y, float z) {
     this->z = z;
 }
 
-void Vector3::lerpThis(Vector3 *v, float t) {
-    this->scaleThis(1.0 - t);
-
-    Vector3 *temp = v->clone();
-    temp->scaleThis(t);
-
-    this->setThis(Vector3::add(this, temp));
-}
-
 void Vector3::normalizeThis() {
     float l = this->length();
     if (l != 0) {
@@ -48,25 +35,25 @@ void Vector3::normalizeThis() {
     }
 }
 
-Vector3 *Vector3::subtract(Vector3 *v1, Vector3 *v2) {
+Vector3 Vector3::subtract(Vector3 *v1, Vector3 *v2) {
     float x = v1->x - v2->x;
     float y = v1->y - v2->y;
     float z = v1->z - v2->z;
-    return new Vector3(x, y, z);
+    return Vector3(x, y, z);
 }
 
-Vector3 *Vector3::add(Vector3 *v1, Vector3 *v2) {
+Vector3 Vector3::add(Vector3 *v1, Vector3 *v2) {
     float x = v1->x + v2->x;
     float y = v1->y + v2->y;
     float z = v1->z + v2->z;
-    return new Vector3(x, y, z);
+    return Vector3(x, y, z);
 }
 
-Vector3 *Vector3::cross(Vector3 *v1, Vector3 *v2) {
+Vector3 Vector3::cross(Vector3 *v1, Vector3 *v2) {
     float x = v1->y * v2->z - v1->z * v2->y;
     float y = v1->z * v2->x - v1->x * v2->z;
     float z = v1->x * v2->y - v1->y * v2->x;
-    return new Vector3(x, y, z);
+    return Vector3(x, y, z);
 }
 
 void Vector3::applyMatrix(Matrix4 *m) {
