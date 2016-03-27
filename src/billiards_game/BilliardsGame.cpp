@@ -1,6 +1,7 @@
 #include "BilliardsGame.h"
 
 BilliardsGame::BilliardsGame() {
+    this->currentState = BilliardsGameState::SIMULATING_BALLS_MOVING;
     this->initScene();    
     this->initCamera();
 }
@@ -10,7 +11,9 @@ void BilliardsGame::initScene() {
     this->table->translation->y = -0.26;
     this->table->translation->x = -0.150;
     this->table->updateModelMat();
+
     this->cueStick = new CueStick();
+    this->cueStick->getObject()->setIsVisible(false);
 
     this->scene = new Scene(18);
     this->scene->addObject(this->table);
@@ -130,6 +133,16 @@ void BilliardsGame::handleCollisions() {
     }
 }
 
+bool BilliardsGame::isAnyBallsMoving() {
+    for (int i = 0; i < 16; i++) {
+        float speed = this->balls[0]->getVelocity()->length();
+        if (speed > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void BilliardsGame::updateCueStick() {
     Vector3 *cueStickPosition = this->cueStick->getObject()->getChildren()[0]->translation;
     Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
@@ -152,12 +165,29 @@ void BilliardsGame::updateCamera() {
 }
 
 void BilliardsGame::update(float dt) {
-    this->handleKeyInput();
-    for (int i = 0; i < 16; i++) {
-        this->balls[i]->update(dt);
+    bool isAnyBallsMoving = this->isAnyBallsMoving();
+
+    if (currentState == BilliardsGameState::SIMULATING_BALLS_MOVING) {
+        for (int i = 0; i < 16; i++) {
+            this->balls[i]->update(dt);
+        }
+        this->handleCollisions();
+
+        if (!isAnyBallsMoving) {
+            this->currentState = BilliardsGameState::POSITIONING_CUE_STICK;
+            this->updateCueStick();
+            this->cueStick->getObject()->setIsVisible(true);
+        }
     }
-    this->handleCollisions();
-    this->updateCueStick();
+    else if (currentState == BilliardsGameState::POSITIONING_CUE_STICK) {
+        this->handleKeyInput();
+        this->updateCueStick();
+
+        if (this->isSpaceKeyDown) {
+            this->currentState = BilliardsGameState::SIMULATING_BALLS_MOVING;
+            this->cueStick->getObject()->setIsVisible(false);
+        }
+    }
     this->updateCamera();
 }
 

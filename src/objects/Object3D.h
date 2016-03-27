@@ -12,7 +12,7 @@ enum MatrixMultOrder {
 class Object3D {
     private:
         int numChildren, maxNumChildren;
-        bool isMesh;
+        bool isMesh, isVisible;
         Object3D **children;
         Matrix4 *modelMat;
         MatrixMultOrder matrixMultOrder;
@@ -29,6 +29,10 @@ class Object3D {
         Object3D **getChildren();
 
         bool getIsMesh();
+
+        bool getIsVisible();
+
+        void setIsVisible(bool isVisible);
 
         void updateModelMat();
 

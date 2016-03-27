@@ -7,6 +7,7 @@ Object3D::Object3D(int maxNumChildren, bool isMesh) {
         this->children = new Object3D*[maxNumChildren];
     }
     this->isMesh = isMesh;
+    this->isVisible = true;
 
     this->translation = new Vector3(0.0, 0.0, 0.0);
     this->scale = new Vector3(1.0, 1.0, 1.0);
@@ -32,6 +33,14 @@ Object3D **Object3D::getChildren() {
 
 bool Object3D::getIsMesh() {
     return this->isMesh;
+}
+
+bool Object3D::getIsVisible() {
+    return this->isVisible;
+}
+
+void Object3D::setIsVisible(bool isVisible) {
+    this->isVisible = isVisible;
 }
 
 void Object3D::updateModelMat() {

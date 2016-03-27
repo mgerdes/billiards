@@ -7,6 +7,10 @@
 #include "CueStick.h"
 #include "BilliardsBall.h"
 
+enum BilliardsGameState {
+    POSITIONING_CUE_STICK, ANIMATING_CUE_STICK, SIMULATING_BALLS_MOVING, TRANSITIONING_CAMERA
+};
+
 class BilliardsGame {
     private:
         Scene *scene;
@@ -14,6 +18,7 @@ class BilliardsGame {
         CueStick *cueStick;
         Object3D *table;
         BilliardsBall *balls[16];
+        BilliardsGameState currentState;
 
         void initScene();
 
@@ -26,6 +31,8 @@ class BilliardsGame {
         void updateCueStick();
 
         void updateCamera();
+
+        bool isAnyBallsMoving();
     public:
         bool isLeftKeyDown, isRightKeyDown, isUpKeyDown, isDownKeyDown;
         bool isWKeyDown, isAKeyDown, isSKeyDown, isDKeyDown;

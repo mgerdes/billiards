@@ -6,6 +6,10 @@ Renderer::Renderer(Scene *scene, Camera *camera) {
 }
 
 void Renderer::renderObject(Object3D *object, Matrix4 *modelMat) {
+    if (!object->getIsVisible()) {
+        return;
+    }
+
     modelMat = Matrix4::multiply(object->getModelMat(), modelMat);
 
     if (object->getIsMesh()) {
