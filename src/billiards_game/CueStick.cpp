@@ -2,18 +2,16 @@
 
 CueStick::CueStick() {
     this->hitPower = 0.0;
+    this->angle = 0;
 
     this->object = new Object3D(1, false);
     this->object->translation->y = 0.10;
-    this->object->translation->x = -0.54;
+    this->object->translation->x = -0.535;
     this->object->rotation->y = -0.175;
     this->object->scale->setThis(0.7, 0.7, 0.7);
     this->object->updateModelMat();
 
-    this->angle = 0;
-
     this->cueStick = ObjLoader::loadObject("resources/models/cue.obj");
-    this->cueStick->setMatrixMultOrder(MatrixMultOrder::R_T_S);
     this->object->addChildObject(this->cueStick);
 }
 
@@ -25,16 +23,16 @@ void CueStick::increaseHitPower() {
     if (this->hitPower < 1.0) {
         this->hitPower += 0.01;
     }
-    this->cueStick->translation->x = -hitPower * 0.3;
-    this->cueStick->updateModelMat();
+    this->object->translation->x = -0.535 - hitPower * 0.3;
+    this->object->updateModelMat();
 }
 
 void CueStick::decreaseHitPower() {
     if (this->hitPower > 0.0) {
         this->hitPower -= 0.01;
     }
-    this->cueStick->translation->x = -hitPower * 0.3;
-    this->cueStick->updateModelMat();
+    this->object->translation->x = -0.535 - hitPower * 0.3;
+    this->object->updateModelMat();
 }
 
 void CueStick::increaseAngle() {

@@ -22,6 +22,10 @@ class BilliardsGame {
         void handleKeyInput();
 
         void handleCollisions();
+
+        void updateCueStick();
+
+        void updateCamera();
     public:
         bool isLeftKeyDown, isRightKeyDown, isUpKeyDown, isDownKeyDown;
         bool isWKeyDown, isAKeyDown, isSKeyDown, isDKeyDown;

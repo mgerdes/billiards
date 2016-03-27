@@ -20,6 +20,10 @@ float Vector3::length() {
     return sqrt(x * x + y * y + z * z);
 }
 
+void Vector3::setThis(Vector3 *v) {
+    this->setThis(v->x, v->y, v->z);
+}
+
 void Vector3::setThis(float x, float y, float z) {
     this->x = x;
     this->y = y;
@@ -65,6 +69,10 @@ float Vector3::distanceBetween(Vector3 *v1, Vector3 *v2) {
 
 float Vector3::dot(Vector3 *v1, Vector3* v2) {
     return v1->x * v2->x + v1->y * v2->y + v1->z * v2->z;
+}
+
+void Vector3::addToThis(Vector3 *v) {
+    this->addToThis(v->x, v->y, v->z);
 }
 
 void Vector3::addToThis(float x, float y, float z) {

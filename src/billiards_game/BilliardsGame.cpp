@@ -40,25 +40,13 @@ void BilliardsGame::handleKeyInput() {
         this->cueStick->decreaseHitPower();
     }
     if (this->isWKeyDown) {
-        this->balls[0]->getObject()->translation->z += 0.001;
-        this->balls[0]->getObject()->updateModelMat();
-        //printf("%f\n", this->balls[0]->getObject()->translation->z);
-        printf("%f\n", Vector3::distanceBetween(this->balls[0]->getObject()->translation, this->balls[1]->getObject()->translation));
     }
     if (this->isSKeyDown) {
-        this->balls[0]->getObject()->translation->z -= 0.001;
-        this->balls[0]->getObject()->updateModelMat();
-        printf("%f\n", Vector3::distanceBetween(this->balls[0]->getObject()->translation, this->balls[1]->getObject()->translation)); 
-        //printf("%f\n", this->balls[0]->getObject()->translation->z);
     }
     if (this->isAKeyDown) {
     }
     if (this->isDKeyDown) {
     }
-
-    this->camera->position = new Vector3(1.0, 0.5, 0.0); 
-    this->camera->position->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
-    this->camera->updateViewMatrix();
 }
 
 void BilliardsGame::handleCollisions() {
@@ -133,12 +121,35 @@ void BilliardsGame::handleCollisions() {
     }
 }
 
+void BilliardsGame::updateCueStick() {
+    Vector3 *cueStickPosition = this->cueStick->getObject()->getChildren()[0]->translation;
+    Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
+    cueStickPosition->x = cueBallPosition->x;
+    cueStickPosition->z = cueBallPosition->z;
+    this->cueStick->getObject()->getChildren()[0]->updateModelMat();
+}
+
+void BilliardsGame::updateCamera() {
+    Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
+
+    Vector3 *temp = new Vector3(1.0, 0.5, 0.0);
+    temp->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
+
+    this->camera->position = cueBallPosition->clone(); 
+    this->camera->position->addToThis(temp);
+
+    this->camera->lookAt = cueBallPosition->clone();
+    this->camera->updateViewMatrix();
+}
+
 void BilliardsGame::update(float dt) {
     this->handleKeyInput();
     for (int i = 0; i < 16; i++) {
         this->balls[i]->update(dt);
     }
     this->handleCollisions();
+    this->updateCueStick();
+    this->updateCamera();
 }
 
 Scene *BilliardsGame::getScene() {

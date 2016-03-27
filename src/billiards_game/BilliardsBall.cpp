@@ -8,9 +8,10 @@ BilliardsBall::BilliardsBall(int num) {
     Mesh *mesh = (Mesh*) this->ball->getChildren()[0];
     mesh->getMaterial()->setTexture(texture);
 
-    float x = (rand() / (float) RAND_MAX) * 2 * 0.45 - 0.45;
+    float x = (rand() / (float) RAND_MAX) * 2 * 0.400 - 0.400;
     float y = 0.013;
-    float z = (rand() / (float) RAND_MAX) * 2 * 0.182 - 0.182;
+    float z = (rand() / (float) RAND_MAX) * 2 * 0.120 - 0.120;
+
     this->ball->translation->setThis(x, y, z);
     this->ball->scale->setThis(0.013, 0.013, 0.013);
     this->ball->setQuaternion(new Quaternion());

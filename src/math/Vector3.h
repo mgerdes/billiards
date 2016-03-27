@@ -18,9 +18,13 @@ class Vector3 {
 
         void setThis(float x, float y, float z);
 
+        void setThis(Vector3 *v);
+
         void scaleThis(float scalar);
 
         void addToThis(float x, float y, float z);
+
+        void addToThis(Vector3 *v);
 
         void applyMatrix(Matrix4 *m);
 
