@@ -56,11 +56,11 @@ void Vector3::applyMatrix(Matrix4 *m) {
     this->setThis(x, y, z);
 }
 
-float Vector3::distanceSqrdBetween(Vector3 *v1, Vector3 *v2) {
+float Vector3::distanceBetween(Vector3 *v1, Vector3 *v2) {
     float a = v1->x - v2->x;
     float b = v1->y - v2->y;
     float c = v1->z - v2->z;
-    return a*a + b*b + c*c;   
+    return sqrt(a*a + b*b + c*c);   
 }
 
 float Vector3::dot(Vector3 *v1, Vector3* v2) {

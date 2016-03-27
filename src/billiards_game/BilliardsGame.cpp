@@ -20,6 +20,13 @@ void BilliardsGame::initScene() {
         this->balls[i] = new BilliardsBall(i);
         this->scene->addObject(this->balls[i]->getObject());
     }
+    //this->balls[0]->getObject()->translation->x = 0;
+    //this->balls[0]->getObject()->translation->z = -0.1;
+    //this->balls[0]->getObject()->updateModelMat();
+
+    //this->balls[1]->getObject()->translation->x = 0;
+    //this->balls[1]->getObject()->translation->z = 0.1;
+    //this->balls[1]->getObject()->updateModelMat();
 }
 
 void BilliardsGame::initCamera() {
@@ -40,12 +47,16 @@ void BilliardsGame::handleKeyInput() {
         this->cueStick->decreaseHitPower();
     }
     if (this->isWKeyDown) {
-        this->balls[0]->update(0.002);
-        printf("%f\n", this->balls[0]->getObject()->translation->z);
+        this->balls[0]->getObject()->translation->z += 0.001;
+        this->balls[0]->getObject()->updateModelMat();
+        //printf("%f\n", this->balls[0]->getObject()->translation->z);
+        printf("%f\n", Vector3::distanceBetween(this->balls[0]->getObject()->translation, this->balls[1]->getObject()->translation));
     }
     if (this->isSKeyDown) {
-        this->balls[0]->update(-0.002);
-        printf("%f\n", this->balls[0]->getObject()->translation->z);
+        this->balls[0]->getObject()->translation->z -= 0.001;
+        this->balls[0]->getObject()->updateModelMat();
+        printf("%f\n", Vector3::distanceBetween(this->balls[0]->getObject()->translation, this->balls[1]->getObject()->translation)); 
+        //printf("%f\n", this->balls[0]->getObject()->translation->z);
     }
     if (this->isAKeyDown) {
     }
@@ -82,11 +93,14 @@ void BilliardsGame::handleCollisions() {
         for (int j = i + 1; j < 16; j++) {
             Vector3 *p2 = this->balls[j]->getObject()->translation;
             Vector3 *v2 = this->balls[j]->getVelocity();
-            float distanceSqrd = Vector3::distanceSqrdBetween(p1, p2);
-            if (distanceSqrd < 4 * 0.013 * 0.013) {
+
+            double radius = 0.014;
+
+            float distance = Vector3::distanceBetween(p1, p2);
+            if (distance < 2 * radius) {
                 Vector3 *temp1 = Vector3::subtract(v1, v2);
                 Vector3 *temp2 = Vector3::subtract(p1, p2);
-                float tempScalar1 = Vector3::dot(temp1, temp2) / Vector3::dot(temp1, temp1);
+                float tempScalar1 = Vector3::dot(temp1, temp2) / Vector3::dot(temp2, temp2);
                 temp2->scaleThis(tempScalar1);
 
                 Vector3 *temp3 = Vector3::subtract(v2, v1);
@@ -101,33 +115,26 @@ void BilliardsGame::handleCollisions() {
                 v2->setThis(newV2->x, newV2->y, newV2->z);
 
                 // Make sure they are no longer colliding
-                double a = (v1->x - v2->x) * (v1->x - v2->x) 
-                    + (v1->y - v2->y) * (v1->y - v2->y);
-                double b = 2 * (p1->x - p2->x) * (v1->x - v2->x) 
-                    + 2 * (p1->y - p2->y) * (v1->y - v2->y);
-                double c = (p1->x - p2->x) * (p1->x - p2->x) 
-                    + (p1->y - p2->y) * (p1->y - p2->y) - 4 * 0.013 * 0.013;
+                float a = (v1->x - v2->x) * (v1->x - v2->x) 
+                    + (v1->z - v2->z) * (v1->z - v2->z);
+                float b = 2 * (p1->x - p2->x) * (v1->x - v2->x) 
+                    + 2 * (p1->z - p2->z) * (v1->z - v2->z);
+                float c = (p1->x - p2->x) * (p1->x - p2->x) 
+                    + (p1->z - p2->z) * (p1->z - p2->z) - 4 * radius * radius;
 
                 double t1 = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
                 double t2 = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 
                 double t;
 
-                if (t1 >= 0) {
+                if (t1 >= 0.0) {
                     t = t1 + 0.000001;
                 } else {
                     t = t2 + 0.000001;
                 }
 
-                t = 0.1;
-
-                p1->addToThis(t * v1->x, t * v1->y, t * v1->z); 
-                p2->addToThis(t * v2->x, t * v2->y, t * v2->z); 
-
-                float distanceSqrd = Vector3::distanceSqrdBetween(p1, p2);
-                if (distanceSqrd < 4 * 0.013 * 0.013) {
-                    printf("BADDDD\n");
-                }
+                p1->addToThis(t * v1->x, 0.0, t * v1->z); 
+                p2->addToThis(t * v2->x, 0.0, t * v2->z); 
             }
         }
     }

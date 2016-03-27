@@ -32,7 +32,7 @@ class Vector3 {
 
         static float dot(Vector3 *v1, Vector3 *v2);
 
-        static float distanceSqrdBetween(Vector3 *v1, Vector3 *v2);
+        static float distanceBetween(Vector3 *v1, Vector3 *v2);
 };
 
 #endif 
