@@ -20,6 +20,10 @@ class BilliardsGame {
         BilliardsBall *balls[16];
         BilliardsGameState currentState;
 
+        Vector3 *cameraTransitionPositionDelta, *cameraTransitionLookAtDelta;
+        int timesCameraTransitioned;
+        BilliardsGameState stateAfterCameraTransition;
+
         void initScene();
 
         void initCamera();
@@ -30,9 +34,12 @@ class BilliardsGame {
 
         void updateCueStick();
 
-        void updateCamera();
-
         bool isAnyBallsMoving();
+
+        void enterCameraTransitionState(Vector3 *cameraTransitionEndPosition, 
+                Vector3 *cameraTransitionEndLookAt, 
+                Vector3 *cameraTransitionEndUp, 
+                BilliardsGameState stateAfterCameraTransition);
     public:
         bool isLeftKeyDown, isRightKeyDown, isUpKeyDown, isDownKeyDown;
         bool isWKeyDown, isAKeyDown, isSKeyDown, isDKeyDown;

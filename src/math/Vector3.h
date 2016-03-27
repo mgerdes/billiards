@@ -20,6 +20,8 @@ class Vector3 {
 
         void setThis(Vector3 *v);
 
+        void lerpThis(Vector3 *v, float t);
+
         void scaleThis(float scalar);
 
         void addToThis(float x, float y, float z);
@@ -31,6 +33,8 @@ class Vector3 {
         Vector3 *clone();
 
         static Vector3 *subtract(Vector3 *v1, Vector3 *v2);
+
+        static Vector3 *add(Vector3 *v1, Vector3 *v2);
 
         static Vector3 *cross(Vector3 *v1, Vector3 *v2);
 

@@ -151,43 +151,58 @@ void BilliardsGame::updateCueStick() {
     this->cueStick->getObject()->getChildren()[0]->updateModelMat();
 }
 
-void BilliardsGame::updateCamera() {
-    Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
-
-    Vector3 *temp = new Vector3(1.0, 0.5, 0.0);
-    temp->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
-
-    this->camera->position = cueBallPosition->clone(); 
-    this->camera->position->addToThis(temp);
-
-    this->camera->lookAt = cueBallPosition->clone();
-    this->camera->updateViewMatrix();
-}
-
 void BilliardsGame::update(float dt) {
     bool isAnyBallsMoving = this->isAnyBallsMoving();
 
-    if (currentState == BilliardsGameState::SIMULATING_BALLS_MOVING) {
+    if (this->currentState == BilliardsGameState::SIMULATING_BALLS_MOVING) {
         for (int i = 0; i < 16; i++) {
             this->balls[i]->update(dt);
         }
         this->handleCollisions();
 
         if (!isAnyBallsMoving) {
-            this->currentState = BilliardsGameState::POSITIONING_CUE_STICK;
+            Vector3 *temp = new Vector3(1.0, 0.5, 0.0);
+            temp->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
+            Vector3 *endCameraTransitionPosition = this->balls[0]->getObject()->translation->clone();
+            endCameraTransitionPosition->addToThis(temp);
+
+            Vector3 *endCameraTransitionLookAt = this->balls[0]->getObject()->translation->clone();
+
+            this->enterCameraTransitionState(endCameraTransitionPosition, 
+                    endCameraTransitionLookAt, 
+                    0, 
+                    BilliardsGameState::POSITIONING_CUE_STICK);
+
             this->updateCueStick();
             this->cueStick->getObject()->setIsVisible(true);
         }
     }
-    else if (currentState == BilliardsGameState::POSITIONING_CUE_STICK) {
+    else if (this->currentState == BilliardsGameState::POSITIONING_CUE_STICK) {
         this->handleKeyInput();
         this->updateCueStick();
 
+        Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
+
+        Vector3 *temp = new Vector3(1.0, 0.5, 0.0);
+        temp->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
+
+        this->camera->position = cueBallPosition->clone(); 
+        this->camera->position->addToThis(temp);
+
+        this->camera->lookAt = cueBallPosition->clone();
+        this->camera->updateViewMatrix();
+
         if (this->isSpaceKeyDown) {
-            this->currentState = BilliardsGameState::ANIMATING_CUE_STICK;
+            Vector3 endCameraTransitionPosition = Vector3(1.0, 1.0, 1.0);
+            Vector3 *endCameraTransitionLookAt = this->balls[0]->getObject()->translation;
+
+            this->enterCameraTransitionState(&endCameraTransitionPosition, 
+                    endCameraTransitionLookAt, 
+                    0, 
+                    BilliardsGameState::ANIMATING_CUE_STICK);
         }
     }
-    else if (currentState == BilliardsGameState::ANIMATING_CUE_STICK) {
+    else if (this->currentState == BilliardsGameState::ANIMATING_CUE_STICK) {
         Vector3 *cueStickPosition = this->cueStick->getObject()->translation;                 
         if (cueStickPosition->x < -0.535) {
             cueStickPosition->x += 0.02 * cueStick->getHitPower();
@@ -200,7 +215,17 @@ void BilliardsGame::update(float dt) {
             this->currentState = BilliardsGameState::SIMULATING_BALLS_MOVING;
         }
     }
-    this->updateCamera();
+    else if (this->currentState == BilliardsGameState::TRANSITIONING_CAMERA) {
+        if (this->timesCameraTransitioned >= 25) {
+            this->currentState = this->stateAfterCameraTransition;
+        } 
+        else {
+            this->camera->position->addToThis(this->cameraTransitionPositionDelta);
+            this->camera->lookAt->addToThis(this->cameraTransitionLookAtDelta);
+            this->camera->updateViewMatrix();
+            this->timesCameraTransitioned++;
+        }
+    }
 }
 
 Scene *BilliardsGame::getScene() {
@@ -209,4 +234,20 @@ Scene *BilliardsGame::getScene() {
 
 Camera *BilliardsGame::getCamera() {
     return this->camera;
+}
+
+void BilliardsGame::enterCameraTransitionState(Vector3 *cameraTransitionEndPosition, 
+        Vector3 *cameraTransitionEndLookAt, 
+        Vector3 *cameraTransitionEndUp, 
+        BilliardsGameState stateAfterCameraTransition) {
+    this->timesCameraTransitioned = 0;
+
+    this->cameraTransitionPositionDelta = Vector3::subtract(cameraTransitionEndPosition, this->camera->position);
+    this->cameraTransitionPositionDelta->scaleThis(1.0/25.0);
+
+    this->cameraTransitionLookAtDelta = Vector3::subtract(cameraTransitionEndLookAt, this->camera->lookAt);
+    this->cameraTransitionLookAtDelta->scaleThis(1.0/25.0);
+
+    this->stateAfterCameraTransition = stateAfterCameraTransition;
+    this->currentState = BilliardsGameState::TRANSITIONING_CAMERA;
 }
