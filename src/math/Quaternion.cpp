@@ -23,8 +23,8 @@ Quaternion::Quaternion(float angle, float x, float y, float z) {
     this->normalizeThis();
 }
 
-Matrix4 *Quaternion::getMatrix() {
-    return new Matrix4(1.0 - 2.0 * y * y - 2.0 * z * z, 2.0 * x * y + 2.0 * w * z, 2.0 * x * z - 2.0 * w * y, 0.0,
+Matrix4 Quaternion::getMatrix() {
+    return Matrix4(1.0 - 2.0 * y * y - 2.0 * z * z, 2.0 * x * y + 2.0 * w * z, 2.0 * x * z - 2.0 * w * y, 0.0,
             2.0 * x * y - 2.0 * w * z, 1.0 - 2.0 * x * x - 2.0 * z * z, 2.0 * y * z + 2.0 * w * x, 0.0, 
             2.0 * x * z + 2.0 * w * y, 2.0 * y * z - 2.0 * w * x, 1.0 - 2.0 * x * x - 2.0 * y * y, 0.0, 
             0.0, 0.0, 0.0, 1.0);

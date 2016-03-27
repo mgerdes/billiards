@@ -57,7 +57,9 @@ void BilliardsGame::handleKeyInput() {
     if (this->isSpaceKeyDown) {
         float hitPower = this->cueStick->getHitPower();
         this->balls[0]->getVelocity()->setThis(hitPower, 0.0, 0.0);
-        this->balls[0]->getVelocity()->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle()));
+        
+        Matrix4 rotationMatrix = Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle());
+        this->balls[0]->getVelocity()->applyMatrix(&rotationMatrix);
     }
 }
 
@@ -157,11 +159,12 @@ void BilliardsGame::handlePositionCueStickState() {
 
     Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
 
-    Vector3 *temp = new Vector3(1.0, 0.5, 0.0);
-    temp->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
+    Vector3 temp = Vector3(1.0, 0.5, 0.0);
+    Matrix4 rotationMatrix = Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415);
+    temp.applyMatrix(&rotationMatrix);
 
     this->camera->position = cueBallPosition->clone(); 
-    this->camera->position->addToThis(temp);
+    this->camera->position->addToThis(&temp);
 
     this->camera->lookAt = cueBallPosition->clone();
     this->camera->updateViewMatrix();
@@ -200,10 +203,12 @@ void BilliardsGame::handleSimulatingBallsMovingState(float dt) {
     this->handleCollisions();
 
     if (!isAnyBallsMoving) {
-        Vector3 *temp = new Vector3(1.0, 0.5, 0.0);
-        temp->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
+        Vector3 temp = Vector3(1.0, 0.5, 0.0);
+        Matrix4 rotationMatrix = Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415);
+        temp.applyMatrix(&rotationMatrix);
+
         Vector3 *endCameraTransitionPosition = this->balls[0]->getObject()->translation->clone();
-        endCameraTransitionPosition->addToThis(temp);
+        endCameraTransitionPosition->addToThis(&temp);
 
         Vector3 endCameraTransitionLookAt = Vector3(0.0, 0.0, 0.0);
 

@@ -34,6 +34,9 @@ int main() {
         window.swapBuffers();
     }
 
+    delete billiardsGame;
+    delete renderer;
+
     glfwTerminate();
 
     return 0;

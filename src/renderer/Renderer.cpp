@@ -10,7 +10,8 @@ void Renderer::renderObject(Object3D *object, Matrix4 *modelMat) {
         return;
     }
 
-    modelMat = Matrix4::multiply(object->getModelMat(), modelMat);
+    Matrix4 temp = Matrix4::multiply(object->getModelMat(), modelMat);
+    modelMat = &temp;
 
     if (object->getIsMesh()) {
         Mesh *mesh = (Mesh*) object;
@@ -46,6 +47,7 @@ void Renderer::render() {
     int numObjects = this->scene->getNumObjects();
 
     for (int i = 0; i < numObjects; i++) {
-        renderObject(objects[i], Matrix4::identity());
+        Matrix4 identity = Matrix4::identity();
+        renderObject(objects[i], &identity);
     }
 }
