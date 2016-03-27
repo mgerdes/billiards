@@ -171,10 +171,10 @@ void BilliardsGame::handlePositionCueStickState() {
 
     if (this->isSpaceKeyDown) {
         Vector3 endCameraTransitionPosition = Vector3(1.0, 1.0, 1.0);
-        Vector3 *endCameraTransitionLookAt = this->balls[0]->getObject()->translation;
+        Vector3 endCameraTransitionLookAt = Vector3(0.0, 0.0, 0.0);
 
         this->enterCameraTransitionState(&endCameraTransitionPosition, 
-                endCameraTransitionLookAt, 
+                &endCameraTransitionLookAt, 
                 0, 
                 BilliardsGameState::ANIMATING_CUE_STICK);
     }
@@ -207,13 +207,13 @@ void BilliardsGame::handleSimulatingBallsMovingState(float dt) {
         Matrix4 rotationMatrix = Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415);
         temp.applyMatrix(&rotationMatrix);
 
-        Vector3 *endCameraTransitionPosition = new Vector3(*this->balls[0]->getObject()->translation);
-        endCameraTransitionPosition->addToThis(&temp);
+        Vector3 endCameraTransitionPosition = Vector3(*this->balls[0]->getObject()->translation);
+        endCameraTransitionPosition.addToThis(&temp);
 
-        Vector3 endCameraTransitionLookAt = Vector3(0.0, 0.0, 0.0);
+        Vector3 *endCameraTransitionLookAt = this->balls[0]->getObject()->translation;
 
-        this->enterCameraTransitionState(endCameraTransitionPosition, 
-                &endCameraTransitionLookAt, 
+        this->enterCameraTransitionState(&endCameraTransitionPosition, 
+                endCameraTransitionLookAt, 
                 0, 
                 BilliardsGameState::POSITIONING_CUE_STICK);
 
