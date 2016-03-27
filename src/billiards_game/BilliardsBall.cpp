@@ -17,7 +17,9 @@ BilliardsBall::BilliardsBall(int num) {
     this->ball->setQuaternion(new Quaternion());
     this->ball->updateModelMat();
 
-    this->velocity = new Vector3(0.2, 0.0, 0.2);
+    float vx = (rand() / (float) RAND_MAX) * 2 * 0.500 - 0.500;
+    float vz = (rand() / (float) RAND_MAX) * 2 * 0.500 - 0.500;
+    this->velocity = new Vector3(vx, 0.0, vz);
 }
 
 Object3D *BilliardsBall::getObject() {

@@ -40,12 +40,23 @@ void BilliardsGame::handleKeyInput() {
         this->cueStick->decreaseHitPower();
     }
     if (this->isWKeyDown) {
+
     }
     if (this->isSKeyDown) {
+
     }
     if (this->isAKeyDown) {
+
     }
     if (this->isDKeyDown) {
+
+    }
+    if (this->isSpaceKeyDown) {
+        for (int i = 0; i < 16; i++) {
+            float vx = (rand() / (float) RAND_MAX) * 2 * 0.500 - 0.500;
+            float vz = (rand() / (float) RAND_MAX) * 2 * 0.500 - 0.500;
+            this->balls[i]->getVelocity()->setThis(vx, 0.0, vz);
+        }
     }
 }
 

@@ -29,6 +29,7 @@ class BilliardsGame {
     public:
         bool isLeftKeyDown, isRightKeyDown, isUpKeyDown, isDownKeyDown;
         bool isWKeyDown, isAKeyDown, isSKeyDown, isDKeyDown;
+        bool isSpaceKeyDown;
 
         BilliardsGame();        
 

@@ -26,6 +26,7 @@ int main() {
         billiardsGame->isAKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_A);
         billiardsGame->isSKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_S);
         billiardsGame->isDKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_D);
+        billiardsGame->isSpaceKeyDown = glfwGetKey(window.glfwWindow, GLFW_KEY_SPACE);
 
         billiardsGame->update(timeDelta);
         renderer->render();
