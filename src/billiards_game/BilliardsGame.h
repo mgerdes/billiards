@@ -40,6 +40,14 @@ class BilliardsGame {
                 Vector3 *cameraTransitionEndLookAt, 
                 Vector3 *cameraTransitionEndUp, 
                 BilliardsGameState stateAfterCameraTransition);
+
+        void handlePositionCueStickState();
+
+        void handleAnimatingCueStickState();
+
+        void handleSimulatingBallsMovingState(float dt);
+
+        void handleTransitioningCameraState();
     public:
         bool isLeftKeyDown, isRightKeyDown, isUpKeyDown, isDownKeyDown;
         bool isWKeyDown, isAKeyDown, isSKeyDown, isDKeyDown;

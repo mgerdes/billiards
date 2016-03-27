@@ -151,80 +151,96 @@ void BilliardsGame::updateCueStick() {
     this->cueStick->getObject()->getChildren()[0]->updateModelMat();
 }
 
-void BilliardsGame::update(float dt) {
+void BilliardsGame::handlePositionCueStickState() {
+    this->handleKeyInput();
+    this->updateCueStick();
+
+    Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
+
+    Vector3 *temp = new Vector3(1.0, 0.5, 0.0);
+    temp->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
+
+    this->camera->position = cueBallPosition->clone(); 
+    this->camera->position->addToThis(temp);
+
+    this->camera->lookAt = cueBallPosition->clone();
+    this->camera->updateViewMatrix();
+
+    if (this->isSpaceKeyDown) {
+        Vector3 endCameraTransitionPosition = Vector3(1.0, 1.0, 1.0);
+        Vector3 *endCameraTransitionLookAt = this->balls[0]->getObject()->translation;
+
+        this->enterCameraTransitionState(&endCameraTransitionPosition, 
+                endCameraTransitionLookAt, 
+                0, 
+                BilliardsGameState::ANIMATING_CUE_STICK);
+    }
+}
+
+void BilliardsGame::handleAnimatingCueStickState() {
+    Vector3 *cueStickPosition = this->cueStick->getObject()->translation;                 
+    if (cueStickPosition->x < -0.535) {
+        cueStickPosition->x += 0.02 * cueStick->getHitPower();
+        this->cueStick->getObject()->updateModelMat();
+    }
+    else {
+        this->cueStick->getObject()->setIsVisible(false);
+        this->cueStick->increaseHitPower();
+        this->cueStick->decreaseHitPower();
+        this->currentState = BilliardsGameState::SIMULATING_BALLS_MOVING;
+    }
+}
+
+void BilliardsGame::handleSimulatingBallsMovingState(float dt) {
     bool isAnyBallsMoving = this->isAnyBallsMoving();
 
-    if (this->currentState == BilliardsGameState::SIMULATING_BALLS_MOVING) {
-        for (int i = 0; i < 16; i++) {
-            this->balls[i]->update(dt);
-        }
-        this->handleCollisions();
-
-        if (!isAnyBallsMoving) {
-            Vector3 *temp = new Vector3(1.0, 0.5, 0.0);
-            temp->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
-            Vector3 *endCameraTransitionPosition = this->balls[0]->getObject()->translation->clone();
-            endCameraTransitionPosition->addToThis(temp);
-
-            Vector3 *endCameraTransitionLookAt = this->balls[0]->getObject()->translation->clone();
-
-            this->enterCameraTransitionState(endCameraTransitionPosition, 
-                    endCameraTransitionLookAt, 
-                    0, 
-                    BilliardsGameState::POSITIONING_CUE_STICK);
-
-            this->updateCueStick();
-            this->cueStick->getObject()->setIsVisible(true);
-        }
+    for (int i = 0; i < 16; i++) {
+        this->balls[i]->update(dt);
     }
-    else if (this->currentState == BilliardsGameState::POSITIONING_CUE_STICK) {
-        this->handleKeyInput();
-        this->updateCueStick();
+    this->handleCollisions();
 
-        Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
-
+    if (!isAnyBallsMoving) {
         Vector3 *temp = new Vector3(1.0, 0.5, 0.0);
         temp->applyMatrix(Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415));
+        Vector3 *endCameraTransitionPosition = this->balls[0]->getObject()->translation->clone();
+        endCameraTransitionPosition->addToThis(temp);
 
-        this->camera->position = cueBallPosition->clone(); 
-        this->camera->position->addToThis(temp);
+        Vector3 endCameraTransitionLookAt = Vector3(0.0, 0.0, 0.0);
 
-        this->camera->lookAt = cueBallPosition->clone();
+        this->enterCameraTransitionState(endCameraTransitionPosition, 
+                &endCameraTransitionLookAt, 
+                0, 
+                BilliardsGameState::POSITIONING_CUE_STICK);
+
+        this->updateCueStick();
+        this->cueStick->getObject()->setIsVisible(true);
+    }
+}
+
+void BilliardsGame::handleTransitioningCameraState() {
+    if (this->timesCameraTransitioned >= 25) {
+        this->currentState = this->stateAfterCameraTransition;
+    } 
+    else {
+        this->camera->position->addToThis(this->cameraTransitionPositionDelta);
+        this->camera->lookAt->addToThis(this->cameraTransitionLookAtDelta);
         this->camera->updateViewMatrix();
+        this->timesCameraTransitioned++;
+    }
+}
 
-        if (this->isSpaceKeyDown) {
-            Vector3 endCameraTransitionPosition = Vector3(1.0, 1.0, 1.0);
-            Vector3 *endCameraTransitionLookAt = this->balls[0]->getObject()->translation;
-
-            this->enterCameraTransitionState(&endCameraTransitionPosition, 
-                    endCameraTransitionLookAt, 
-                    0, 
-                    BilliardsGameState::ANIMATING_CUE_STICK);
-        }
+void BilliardsGame::update(float dt) {
+    if (this->currentState == BilliardsGameState::SIMULATING_BALLS_MOVING) {
+        this->handleSimulatingBallsMovingState(dt);
+    }
+    else if (this->currentState == BilliardsGameState::POSITIONING_CUE_STICK) {
+        this->handlePositionCueStickState();
     }
     else if (this->currentState == BilliardsGameState::ANIMATING_CUE_STICK) {
-        Vector3 *cueStickPosition = this->cueStick->getObject()->translation;                 
-        if (cueStickPosition->x < -0.535) {
-            cueStickPosition->x += 0.02 * cueStick->getHitPower();
-            this->cueStick->getObject()->updateModelMat();
-        }
-        else {
-            this->cueStick->getObject()->setIsVisible(false);
-            this->cueStick->increaseHitPower();
-            this->cueStick->decreaseHitPower();
-            this->currentState = BilliardsGameState::SIMULATING_BALLS_MOVING;
-        }
+        this->handleAnimatingCueStickState();
     }
     else if (this->currentState == BilliardsGameState::TRANSITIONING_CAMERA) {
-        if (this->timesCameraTransitioned >= 25) {
-            this->currentState = this->stateAfterCameraTransition;
-        } 
-        else {
-            this->camera->position->addToThis(this->cameraTransitionPositionDelta);
-            this->camera->lookAt->addToThis(this->cameraTransitionLookAtDelta);
-            this->camera->updateViewMatrix();
-            this->timesCameraTransitioned++;
-        }
+        this->handleTransitioningCameraState();
     }
 }
 
