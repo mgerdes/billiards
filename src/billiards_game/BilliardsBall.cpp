@@ -16,7 +16,7 @@ BilliardsBall::BilliardsBall(int num) {
     this->ball->setQuaternion(new Quaternion());
     this->ball->updateModelMat();
 
-    this->velocity = new Vector3(0.1, 0.0, 0.1);
+    this->velocity = new Vector3(0.2, 0.0, 0.2);
 }
 
 Object3D *BilliardsBall::getObject() {
@@ -24,18 +24,26 @@ Object3D *BilliardsBall::getObject() {
 }
 
 void BilliardsBall::update(float dt) {
-    this->ball->translation->x += this->velocity->x * dt;
-    this->ball->translation->y += this->velocity->y * dt;
-    this->ball->translation->z += this->velocity->z * dt;
 
-    Vector3 *temp = this->velocity->clone();
-    temp->normalizeThis();
-    Vector3 yAxis = Vector3(0.0, 1.0, 0.0);
-    Vector3 *rotationVector = Vector3::cross(temp, &yAxis);
+    float speed = this->velocity->length();
+    if (speed < 0.005) {
+        this->velocity->setThis(0.0, 0.0, 0.0);
+    } else {
+        this->ball->translation->x += this->velocity->x * dt;
+        this->ball->translation->y += this->velocity->y * dt;
+        this->ball->translation->z += this->velocity->z * dt;
 
-    Quaternion *q = new Quaternion(2.5 * dt, rotationVector);
-    q->multiplyThisBy(this->ball->getQuaternion());
-    this->ball->setQuaternion(q);
+        Vector3 *temp = this->velocity->clone();
+        temp->normalizeThis();
+        Vector3 yAxis = Vector3(0.0, 1.0, 0.0);
+        Vector3 *rotationVector = Vector3::cross(temp, &yAxis);
+
+        Quaternion *q = new Quaternion(25 * dt * speed, rotationVector);
+        q->multiplyThisBy(this->ball->getQuaternion());
+        this->ball->setQuaternion(q);
+
+        this->velocity->addToThis(-0.3 * this->velocity->x * dt, 0.0, -0.3 * this->velocity->z * dt);
+    }
 
     this->ball->updateModelMat();
 }

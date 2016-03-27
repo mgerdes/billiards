@@ -20,13 +20,6 @@ void BilliardsGame::initScene() {
         this->balls[i] = new BilliardsBall(i);
         this->scene->addObject(this->balls[i]->getObject());
     }
-    //this->balls[0]->getObject()->translation->x = 0;
-    //this->balls[0]->getObject()->translation->z = -0.1;
-    //this->balls[0]->getObject()->updateModelMat();
-
-    //this->balls[1]->getObject()->translation->x = 0;
-    //this->balls[1]->getObject()->translation->z = 0.1;
-    //this->balls[1]->getObject()->updateModelMat();
 }
 
 void BilliardsGame::initCamera() {
