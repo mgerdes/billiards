@@ -1,8 +1,8 @@
 #include "Quaternion.h"
 
 Quaternion::Quaternion() {
-    this->w = this->x = this->y = this->z = 1;
-    this->normalizeThis();
+    w = x = y = z = 0;
+    normalizeThis();
 }
 
 Quaternion::Quaternion(float angle, Vector3 *rotationAxis) {
@@ -11,7 +11,7 @@ Quaternion::Quaternion(float angle, Vector3 *rotationAxis) {
     this->x = temp * rotationAxis->x;
     this->y = temp * rotationAxis->y;
     this->z = temp * rotationAxis->z;
-    this->normalizeThis();
+    normalizeThis();
 }
 
 Quaternion::Quaternion(float angle, float x, float y, float z) {
@@ -20,7 +20,7 @@ Quaternion::Quaternion(float angle, float x, float y, float z) {
     this->x = temp * x;
     this->y = temp * y;
     this->z = temp * z;
-    this->normalizeThis();
+    normalizeThis();
 }
 
 Matrix4 Quaternion::getMatrix() {
@@ -33,10 +33,11 @@ Matrix4 Quaternion::getMatrix() {
 void Quaternion::normalizeThis() {
     float mag = sqrt(w*w + x*x + y*y + z*z);
 
-    this->w /= mag;
-    this->x /= mag;
-    this->y /= mag;
-    this->z /= mag;
+    if (mag == 0) {
+        return;
+    }
+
+    setThis(this->w/mag, this->x/mag, this->y/mag, this->z/mag);
 }
 
 void Quaternion::multiplyThisBy(Quaternion *q) {
@@ -44,8 +45,12 @@ void Quaternion::multiplyThisBy(Quaternion *q) {
     float x = this->w * q->x + this->x * q->w - this->y * q->z + this->z * q->y;
     float y = this->w * q->y + this->x * q->z + this->y * q->w - this->z * q->x;
     float z = this->w * q->z - this->x * q->y + this->y * q->x + this->z * q->w;
-    this->setThis(w, x, y, z);
-    this->normalizeThis();
+    setThis(w, x, y, z);
+    normalizeThis();
+}
+
+void Quaternion::setThis(Quaternion *q) {
+    this->setThis(q->w, q->x, q->y, q->z);
 }
 
 void Quaternion::setThis(float w, float x, float y, float z) {

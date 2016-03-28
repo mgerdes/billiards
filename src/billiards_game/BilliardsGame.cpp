@@ -8,12 +8,12 @@ BilliardsGame::BilliardsGame() {
 
 void BilliardsGame::initScene() {
     this->table = ObjLoader::loadObject("resources/models/table.obj");
-    this->table->translation->y = -0.26;
-    this->table->translation->x = -0.150;
+    this->table->getTranslation()->y = -0.26;
+    this->table->getTranslation()->x = -0.150;
     this->table->updateModelMat();
 
     this->cueStick = new CueStick();
-    this->cueStick->getObject()->setIsVisible(false);
+    this->cueStick->getObject()->isVisible = false;
 
     this->scene = new Scene(18);
     this->scene->addObject(this->table);
@@ -65,7 +65,7 @@ void BilliardsGame::handleKeyInput() {
 
 void BilliardsGame::handleCollisions() {
     for (int i = 0; i < 16; i++) {
-        Vector3 *p1 = this->balls[i]->getObject()->translation;
+        Vector3 *p1 = this->balls[i]->getObject()->getTranslation();
         Vector3 *v1 = this->balls[i]->getVelocity();
 
         if (p1->x < -0.450) {
@@ -86,7 +86,7 @@ void BilliardsGame::handleCollisions() {
         }
 
         for (int j = i + 1; j < 16; j++) {
-            Vector3 *p2 = this->balls[j]->getObject()->translation;
+            Vector3 *p2 = this->balls[j]->getObject()->getTranslation();
             Vector3 *v2 = this->balls[j]->getVelocity();
 
             double radius = 0.014;
@@ -146,8 +146,8 @@ bool BilliardsGame::isAnyBallsMoving() {
 }
 
 void BilliardsGame::updateCueStick() {
-    Vector3 *cueStickPosition = this->cueStick->getObject()->getChildren()[0]->translation;
-    Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
+    Vector3 *cueStickPosition = this->cueStick->getObject()->getChildren()[0]->getTranslation();
+    Vector3 *cueBallPosition = this->balls[0]->getObject()->getTranslation();
     cueStickPosition->x = cueBallPosition->x;
     cueStickPosition->z = cueBallPosition->z;
     this->cueStick->getObject()->getChildren()[0]->updateModelMat();
@@ -157,7 +157,7 @@ void BilliardsGame::handlePositionCueStickState() {
     this->handleKeyInput();
     this->updateCueStick();
 
-    Vector3 *cueBallPosition = this->balls[0]->getObject()->translation;
+    Vector3 *cueBallPosition = this->balls[0]->getObject()->getTranslation();
 
     Vector3 temp = Vector3(1.0, 0.5, 0.0);
     Matrix4 rotationMatrix = Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415);
@@ -181,13 +181,13 @@ void BilliardsGame::handlePositionCueStickState() {
 }
 
 void BilliardsGame::handleAnimatingCueStickState() {
-    Vector3 *cueStickPosition = this->cueStick->getObject()->translation;                 
+    Vector3 *cueStickPosition = this->cueStick->getObject()->getTranslation();                 
     if (cueStickPosition->x < -0.535) {
         cueStickPosition->x += 0.02 * cueStick->getHitPower();
         this->cueStick->getObject()->updateModelMat();
     }
     else {
-        this->cueStick->getObject()->setIsVisible(false);
+        this->cueStick->getObject()->isVisible = false;
         this->cueStick->increaseHitPower();
         this->cueStick->decreaseHitPower();
         this->currentState = BilliardsGameState::SIMULATING_BALLS_MOVING;
@@ -207,10 +207,10 @@ void BilliardsGame::handleSimulatingBallsMovingState(float dt) {
         Matrix4 rotationMatrix = Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415);
         temp.applyMatrix(&rotationMatrix);
 
-        Vector3 endCameraTransitionPosition = Vector3(*this->balls[0]->getObject()->translation);
+        Vector3 endCameraTransitionPosition = Vector3(*this->balls[0]->getObject()->getTranslation());
         endCameraTransitionPosition.addToThis(&temp);
 
-        Vector3 *endCameraTransitionLookAt = this->balls[0]->getObject()->translation;
+        Vector3 *endCameraTransitionLookAt = this->balls[0]->getObject()->getTranslation();
 
         this->enterCameraTransitionState(&endCameraTransitionPosition, 
                 endCameraTransitionLookAt, 
@@ -218,7 +218,7 @@ void BilliardsGame::handleSimulatingBallsMovingState(float dt) {
                 BilliardsGameState::POSITIONING_CUE_STICK);
 
         this->updateCueStick();
-        this->cueStick->getObject()->setIsVisible(true);
+        this->cueStick->getObject()->isVisible = true;
     }
 }
 

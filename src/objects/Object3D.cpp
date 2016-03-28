@@ -1,20 +1,20 @@
 #include "Object3D.h"
 
-Object3D::Object3D(int maxNumChildren, bool isMesh) {
+Object3D::Object3D(int maxNumChildren) {
     this->maxNumChildren = maxNumChildren;
     this->numChildren = 0;
     if (maxNumChildren > 0) {
         this->children = new Object3D*[maxNumChildren];
     }
-    this->isMesh = isMesh;
+    this->isMesh = false;
     this->isVisible = true;
 
-    this->translation = new Vector3(0.0, 0.0, 0.0);
-    this->scale = new Vector3(1.0, 1.0, 1.0);
-    this->rotation = new Vector3(0.0, 0.0, 0.0);
-    this->quaternion = 0;
+    this->translation = Vector3(0.0, 0.0, 0.0);
+    this->scale = Vector3(1.0, 1.0, 1.0);
+    this->rotation = Vector3(0.0, 0.0, 0.0);
+    this->quaternion = Quaternion();
 
-    this->modelMat = new Matrix4(Matrix4::identity());
+    this->modelMat = Matrix4::identity();
 
     this->matrixMultOrder = MatrixMultOrder::T_R_S;
 }
@@ -24,48 +24,34 @@ void Object3D::addChildObject(Object3D *object) {
 }
 
 int Object3D::getNumChildren() {
-    return this->numChildren;
+    return numChildren;
 }
 
 Object3D **Object3D::getChildren() {
-    return this->children;
-}
-
-bool Object3D::getIsMesh() {
-    return this->isMesh;
-}
-
-bool Object3D::getIsVisible() {
-    return this->isVisible;
-}
-
-void Object3D::setIsVisible(bool isVisible) {
-    this->isVisible = isVisible;
+    return children;
 }
 
 void Object3D::updateModelMat() {
-    Matrix4 translationMat = Matrix4::translation(this->translation);
+    Matrix4 translationMat = Matrix4::translation(&this->translation);
     Matrix4 rotationMat;
-    if (quaternion) {
-        rotationMat = quaternion->getMatrix();
-    } else {
-        rotationMat = Matrix4::eulerRotation(this->rotation);
-    }
-    Matrix4 scaleMat = Matrix4::scale(this->scale);
+
+    Matrix4 rotationMat1 = quaternion.getMatrix();
+    Matrix4 rotationMat2 = Matrix4::eulerRotation(&this->rotation);
+    rotationMat = Matrix4::multiply(&rotationMat1, &rotationMat2);
+
+    Matrix4 scaleMat = Matrix4::scale(&this->scale);
 
     if (this->matrixMultOrder == MatrixMultOrder::T_R_S) {
         Matrix4 m1 = Matrix4::multiply(&rotationMat, &scaleMat);
-        Matrix4 m2 = Matrix4::multiply(&translationMat, &m1);
-        this->modelMat = new Matrix4(m2);
+        modelMat = Matrix4::multiply(&translationMat, &m1);
     } else if (this->matrixMultOrder == MatrixMultOrder::R_T_S) {
         Matrix4 m1 = Matrix4::multiply(&translationMat, &scaleMat);
-        Matrix4 m2 = Matrix4::multiply(&rotationMat, &m1);
-        this->modelMat = new Matrix4(m2);
+        modelMat = Matrix4::multiply(&rotationMat, &m1);
     }
 }
 
 Matrix4 *Object3D::getModelMat() {
-    return this->modelMat;
+    return &modelMat;
 }
 
 void Object3D::setMatrixMultOrder(MatrixMultOrder order) {
@@ -73,9 +59,17 @@ void Object3D::setMatrixMultOrder(MatrixMultOrder order) {
 }
 
 Quaternion *Object3D::getQuaternion() {
-    return this->quaternion;
+    return &quaternion;
 }
 
-void Object3D::setQuaternion(Quaternion *quaternion) {
-    this->quaternion = quaternion;
+Vector3 *Object3D::getTranslation() {
+    return &translation;
+}
+
+Vector3 *Object3D::getScale() {
+    return &scale;
+}
+
+Vector3 *Object3D::getRotation() {
+    return &rotation;
 }

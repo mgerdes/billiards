@@ -12,15 +12,15 @@ enum MatrixMultOrder {
 class Object3D {
     private:
         int numChildren, maxNumChildren;
-        bool isMesh, isVisible;
         Object3D **children;
-        Matrix4 *modelMat;
+        Matrix4 modelMat;
         MatrixMultOrder matrixMultOrder;
-        Quaternion *quaternion;
+        Quaternion quaternion;
+        Vector3 translation, scale, rotation;
     public:
-        Vector3 *translation, *scale, *rotation;
+        bool isMesh, isVisible;
 
-        Object3D(int maxNumChildren, bool isMesh);
+        Object3D(int maxNumChildren);
 
         void addChildObject(Object3D *object);
 
@@ -28,23 +28,19 @@ class Object3D {
 
         Object3D **getChildren();
 
-        bool getIsMesh();
-
-        bool getIsVisible();
-
-        void setIsVisible(bool isVisible);
-
         void updateModelMat();
 
         Matrix4 *getModelMat();
-
-        void setModelMat(Matrix4 *modelMat);
 
         void setMatrixMultOrder(MatrixMultOrder matrixMultOrder);
 
         Quaternion *getQuaternion();
 
-        void setQuaternion(Quaternion *quaternion);
+        Vector3 *getTranslation();
+
+        Vector3 *getScale();
+
+        Vector3 *getRotation();
 };
 
 #endif

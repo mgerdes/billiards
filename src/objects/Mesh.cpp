@@ -1,6 +1,8 @@
 #include "Mesh.h"
 
-Mesh::Mesh(Geometry *geometry, Material *material) : Object3D(0, true) {
+Mesh::Mesh(Geometry *geometry, Material *material) : Object3D(0) {
+    this->isMesh = true;   
+
     this->geometry = geometry;
     this->material = material;
 

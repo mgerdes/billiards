@@ -6,14 +6,14 @@ Renderer::Renderer(Scene *scene, Camera *camera) {
 }
 
 void Renderer::renderObject(Object3D *object, Matrix4 *modelMat) {
-    if (!object->getIsVisible()) {
+    if (!object->isVisible) {
         return;
     }
 
     Matrix4 temp = Matrix4::multiply(object->getModelMat(), modelMat);
     modelMat = &temp;
 
-    if (object->getIsMesh()) {
+    if (object->isMesh) {
         Mesh *mesh = (Mesh*) object;
 
         // Bind the necessary stuff.

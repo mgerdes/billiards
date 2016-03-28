@@ -17,7 +17,7 @@ Object3D *ObjLoader::loadObject(const char *fileName) {
     Util::log(Severity::INFO, std::to_string(scene->mNumMeshes) + " meshes");
     Util::log(Severity::INFO, std::to_string(scene->mNumTextures) + " textures");
 
-    Object3D *object = new Object3D(scene->mNumMeshes, false);
+    Object3D *object = new Object3D(scene->mNumMeshes);
 
     aiNode *rootNode = scene->mRootNode;
     for (int i = 0; i < rootNode->mNumChildren; i++) {

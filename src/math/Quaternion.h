@@ -19,6 +19,8 @@ class Quaternion {
 
         void normalizeThis();
 
+        void setThis(Quaternion *q);
+
         void setThis(float w, float x, float y, float z);
 
         void multiplyThisBy(Quaternion *q);
