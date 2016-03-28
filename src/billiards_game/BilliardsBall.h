@@ -9,7 +9,7 @@ class BilliardsBall {
     private:
         Object3D *ball;
 
-        Vector3 *velocity;
+        Vector3 velocity;
     public:
         BilliardsBall(int num);
 
