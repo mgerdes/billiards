@@ -163,10 +163,10 @@ void BilliardsGame::handlePositionCueStickState() {
     Matrix4 rotationMatrix = Matrix4::eulerRotation(0.0, 0.0, this->cueStick->getAngle() + 3.1415);
     temp.applyMatrix(&rotationMatrix);
 
-    this->camera->position = new Vector3(*cueBallPosition); 
-    this->camera->position->addToThis(&temp);
+    this->camera->getPosition()->setThis(cueBallPosition); 
+    this->camera->getPosition()->addToThis(&temp);
 
-    this->camera->lookAt = new Vector3(*cueBallPosition);
+    this->camera->getLookAt()->setThis(cueBallPosition); 
     this->camera->updateViewMatrix();
 
     if (this->isSpaceKeyDown) {
@@ -227,8 +227,8 @@ void BilliardsGame::handleTransitioningCameraState() {
         this->currentState = this->stateAfterCameraTransition;
     } 
     else {
-        this->camera->position->addToThis(this->cameraTransitionPositionDelta);
-        this->camera->lookAt->addToThis(this->cameraTransitionLookAtDelta);
+        this->camera->getPosition()->addToThis(this->cameraTransitionPositionDelta);
+        this->camera->getLookAt()->addToThis(this->cameraTransitionLookAtDelta);
         this->camera->updateViewMatrix();
         this->timesCameraTransitioned++;
     }
@@ -263,10 +263,12 @@ void BilliardsGame::enterCameraTransitionState(Vector3 *cameraTransitionEndPosit
         BilliardsGameState stateAfterCameraTransition) {
     this->timesCameraTransitioned = 0;
 
-    this->cameraTransitionPositionDelta = new Vector3(Vector3::subtract(cameraTransitionEndPosition, this->camera->position));
+    this->cameraTransitionPositionDelta = new Vector3(Vector3::subtract(cameraTransitionEndPosition, 
+                this->camera->getPosition()));
     this->cameraTransitionPositionDelta->scaleThis(1.0/25.0);
 
-    this->cameraTransitionLookAtDelta = new Vector3(Vector3::subtract(cameraTransitionEndLookAt, this->camera->lookAt));
+    this->cameraTransitionLookAtDelta = new Vector3(Vector3::subtract(cameraTransitionEndLookAt, 
+                this->camera->getLookAt()));
     this->cameraTransitionLookAtDelta->scaleThis(1.0/25.0);
 
     this->stateAfterCameraTransition = stateAfterCameraTransition;

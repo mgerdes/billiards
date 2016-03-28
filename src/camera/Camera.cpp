@@ -9,24 +9,24 @@ Camera::Camera(float fieldOfView, float aspectRatio, float near, float far) {
     this->near = near;
     this->far = far;
 
-    this->position = new Vector3(1.2, 1.2, 1.2);
-    this->lookAt = new Vector3(0.0, 0.0, 0.0);
-    this->up = new Vector3(0.0, 1.0, 0.0);
+    this->position = Vector3(1.2, 1.2, 1.2);
+    this->lookAt = Vector3(0.0, 0.0, 0.0);
+    this->up = Vector3(0.0, 1.0, 0.0);
 
-    this->viewMatrix = new Matrix4();
-    this->projectionMatrix = new Matrix4();
+    this->viewMatrix = Matrix4();
+    this->projectionMatrix = Matrix4();
 
     this->updateViewMatrix();
     this->updateProjectionMatrix();
 }
 
 void Camera::updateViewMatrix() {
-    Matrix4 p = Matrix4::translation(-position->x, -position->y, -position->z); 
+    Matrix4 p = Matrix4::translation(-position.x, -position.y, -position.z); 
 
-    Vector3 f = Vector3::subtract(lookAt, position);
+    Vector3 f = Vector3::subtract(&lookAt, &position);
     f.normalizeThis();
 
-    Vector3 r = Vector3::cross(&f, up);
+    Vector3 r = Vector3::cross(&f, &up);
     r.normalizeThis();
 
     Vector3 u = Vector3::cross(&r, &f);
@@ -43,11 +43,11 @@ void Camera::updateViewMatrix() {
     ori.m[6] = -f.y;
     ori.m[10] = -f.z;
 
-    viewMatrix = new Matrix4(Matrix4::multiply(&ori, &p));
+    viewMatrix = Matrix4::multiply(&ori, &p);
 }
 
 void Camera::updateProjectionMatrix() {
-    projectionMatrix->zeroOut();
+    projectionMatrix.zeroOut();
 
     float fieldOfViewRadians = fieldOfView * ONE_DEG_IN_RAD;
     float range = tan(fieldOfViewRadians / 2.0f) * near;
@@ -56,17 +56,29 @@ void Camera::updateProjectionMatrix() {
     float sz = -(far + near) / (far - near);
     float pz = -(2.0f * far * near) / (far - near);
 
-    projectionMatrix->m[0] = sx;
-    projectionMatrix->m[5] = sy;
-    projectionMatrix->m[10] = sz;
-    projectionMatrix->m[14] = pz;
-    projectionMatrix->m[11] = -1.0f;
+    projectionMatrix.m[0] = sx;
+    projectionMatrix.m[5] = sy;
+    projectionMatrix.m[10] = sz;
+    projectionMatrix.m[14] = pz;
+    projectionMatrix.m[11] = -1.0f;
 }
 
 Matrix4 *Camera::getProjectionMatrix() {
-    return projectionMatrix;
+    return &projectionMatrix;
 }
 
 Matrix4 *Camera::getViewMatrix() {
-    return viewMatrix;
+    return &viewMatrix;
+}
+
+Vector3 *Camera::getPosition() {
+    return &position;
+}
+
+Vector3 *Camera::getLookAt() {
+    return &lookAt;
+}
+
+Vector3 *Camera::getUp() {
+    return &up;
 }

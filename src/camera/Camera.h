@@ -8,10 +8,9 @@
 class Camera {
     private:
         float fieldOfView, aspectRatio, near, far;
-        Matrix4 *projectionMatrix, *viewMatrix;
+        Matrix4 projectionMatrix, viewMatrix;
+        Vector3 position, lookAt, up;
     public:
-        Vector3 *position, *lookAt, *up;
-
         Camera(float fieldOfView, float aspectRatio, float near, float far);
 
         void updateProjectionMatrix();
@@ -21,6 +20,12 @@ class Camera {
         Matrix4 *getProjectionMatrix();
 
         Matrix4 *getViewMatrix();
+
+        Vector3 *getPosition();
+
+        Vector3 *getLookAt();
+
+        Vector3 *getUp();
 };
 
 #endif 
